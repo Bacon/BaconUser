@@ -1,0 +1,41 @@
+{
+    "name": "bacon/bacon-user",
+    "description": "BaconUser provides simple user management",
+    "license" : "BSD-2-Clause",
+    "homepage": "https://github.com/Bacon/BaconUser",
+    "require": {
+        "php": ">=5.3.3",
+        "doctrine/doctrine-orm-module": "0.*",
+        "zendframework/zend-authentication": ">=2.1.0",
+        "zendframework/zend-crypt": ">=2.1.0",
+        "zendframework/zend-inputfilter": ">=2.1.0",
+        "zendframework/zend-modulemanager": ">=2.1.0",
+        "zendframework/zend-mvc": ">=2.1.0",
+        "zendframework/zend-servicemanager": ">=2.1.0",
+        "zendframework/zend-validator": ">=2.1.0",
+        "zendframework/zend-view": ">=2.1.0"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "3.7.*",
+        "doctrine/data-fixtures": "1.0.0-ALPHA3"
+    },
+    "suggest": {
+        "bacon/bacon-liquibase": "For liquibase database migrations"
+    },
+    "authors": [
+        {
+            "name": "Ben Scholzen 'DASPRiD'",
+            "email": "mail@dasprids.de",
+            "homepage": "http://www.dasprids.de",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "BaconUser": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
