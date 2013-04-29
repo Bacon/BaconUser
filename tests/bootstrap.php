@@ -16,5 +16,5 @@ if  (
 
 $loader->add('BaconUserTest\\', __DIR__);
 
-\DoctrineORMModuleTest\Util\ServiceManagerFactory::setConfig(require 'testing.config.php');
+\DoctrineORMModuleTest\Util\ServiceManagerFactory::setConfig(require 'bootstrap.config.php');
 var_dump(\DoctrineORMModuleTest\Util\ServiceManagerFactory::getServiceManager()->get('Config'));
