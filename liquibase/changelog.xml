@@ -12,9 +12,10 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="username" type="varchar(255)"/>
-            <column name="password" type="varchar(60)"/>
             <column name="email" type="varchar(255)"/>
+            <column name="password_hash" type="varchar(128)"/>
+            <column name="password_hashing_method" type="varchar(128)"/>
+            <column name="username" type="varchar(255)"/>
             <column name="display_name" type="varchar(255)"/>
         </createTable>
     </changeSet>

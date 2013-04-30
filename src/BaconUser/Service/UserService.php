@@ -2,7 +2,7 @@
 /**
  * BaconUser
  *
- * @link      http://github.com/Bacon/BaconStringUtils For the canonical source repository
+ * @link      http://github.com/Bacon/BaconUser For the canonical source repository
  * @copyright 2013 Ben Scholzen 'DASPRiD'
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
@@ -10,13 +10,11 @@
 namespace BaconUser\Service;
 
 use BaconUser\Entity\User;
-use Doctrine\ORM\EntityManager;
+use BaconUser\Options\UserServiceOptionsInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-/**
- * User service.
- */
 class UserService implements ServiceManagerAwareInterface
 {
     /**
@@ -25,9 +23,14 @@ class UserService implements ServiceManagerAwareInterface
     protected $serviceManager;
 
     /**
-     * @var EntityManager
+     * @var ObjectManager
      */
-    protected $entityManager;
+    protected $objectManager;
+
+    /**
+     * @var UserServiceOptionsInterface
+     */
+    protected $options;
 
     /**
      * Registers a new user.
@@ -37,20 +40,19 @@ class UserService implements ServiceManagerAwareInterface
      */
     public function register(array $data)
     {
-        $user = new User();
+        $class = $this->getOptions()->getUserEntityClass();
+        $user  = new $class();
         $user->getEmail('mail@dasprids.de');
         $user->setUsername('dasprid');
+        $user->setPassword('dasprid');
 
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($user);
+        $this->getObjectManager()->flush();
 
         return $user;
     }
 
     /**
-     * getServiceManager(): defined by ServiceManagerAwareInterface.
-     *
-     * @see    ServiceManagerAwareInterface::getServiceManager()
      * @return ServiceManager
      */
     public function getServiceManager()
@@ -59,9 +61,6 @@ class UserService implements ServiceManagerAwareInterface
     }
 
     /**
-     * setServiceManager(): defined by ServiceManagerAwareInterface.
-     *
-     * @see    ServiceManagerAwareInterface::setServiceManager()
      * @param  ServiceManager $serviceManager
      * @return UserService
      */
@@ -72,28 +71,46 @@ class UserService implements ServiceManagerAwareInterface
     }
 
     /**
-     * Gets the entity manager.
-     *
-     * @return EntityManager
+     * @return ObjectManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if ($this->entityManager === null) {
-            $this->entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        if ($this->objectManager === null) {
+            $this->setObjectManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
         }
 
         return $this->entityManager;
     }
 
     /**
-     * Sets the entity manager.
-     *
-     * @param  EntityManager $entityManager
+     * @param  ObjectManager $objectManager
      * @return UserService
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(ObjectManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
+        return $this;
+    }
+
+    /**
+     * @return UserServiceOptionsInterface
+     */
+    public function getOptions()
+    {
+        if ($this->options === null) {
+            $this->setOptions($this->getServiceManager()->get('baconuser_module_options'));
+        }
+
+        return $this->options;
+    }
+
+    /**
+     * @param  UserServiceOptionsInterface $options
+     * @return UserService
+     */
+    public function setOptions(UserServiceOptionsInterface $options)
+    {
+        $this->options = $options;
         return $this;
     }
 }

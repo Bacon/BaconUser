@@ -2,7 +2,7 @@
 /**
  * BaconUser
  *
- * @link      http://github.com/Bacon/BaconQrCode For the canonical source repository
+ * @link      http://github.com/Bacon/BaconUser For the canonical source repository
  * @copyright 2013 Ben 'DASPRiD' Scholzen
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
@@ -17,4 +17,3 @@ if  (
 $loader->add('BaconUserTest\\', __DIR__);
 
 \DoctrineORMModuleTest\Util\ServiceManagerFactory::setConfig(require 'bootstrap.config.php');
-var_dump(\DoctrineORMModuleTest\Util\ServiceManagerFactory::getServiceManager()->get('Config'));

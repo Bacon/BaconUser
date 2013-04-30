@@ -18,6 +18,7 @@ return array(
                 $em = $sm->get('doctrine.entitymanager.orm_default');
                 $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($em);
                 $schemaTool->createSchema($em->getMetadataFactory()->getAllMetadata());
+                var_dump($em->getConnection());
                 return new \Doctrine\Common\DataFixtures\Executor\ORMExecutor($em, new \Doctrine\Common\DataFixtures\Purger\ORMPurger($em));
             },
         ),

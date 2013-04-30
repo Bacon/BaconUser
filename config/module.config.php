@@ -13,4 +13,17 @@ return array(
             ),
         ),
     ),
+    'bacon_user' => array(
+        'password_manager' => array(
+            'default_hashing_method' => 'bcrypt',
+            'upgrade_hashes' => true,
+            'plugins' => array(
+                'invokables' => array(
+                    'bcrypt' => 'BaconUser\PasswordManager\Plugin\Bcrypt',
+                    'md5'    => 'BaconUser\PasswordManager\Plugin\Md5',
+                    'sha1'   => 'BaconUser\PasswordManager\Plugin\Sha1',
+                ),
+            ),
+        ),
+    ),
 );
