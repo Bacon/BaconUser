@@ -14,16 +14,34 @@ return array(
         ),
     ),
     'bacon_user' => array(
-        'password_manager' => array(
-            'default_hashing_method' => 'bcrypt',
-            'upgrade_hashes' => true,
-            'plugins' => array(
+        'password' => array(
+            'handler_manager' => array(
                 'invokables' => array(
-                    'bcrypt' => 'BaconUser\PasswordManager\Plugin\Bcrypt',
-                    'md5'    => 'BaconUser\PasswordManager\Plugin\Md5',
-                    'sha1'   => 'BaconUser\PasswordManager\Plugin\Sha1',
+                    'md5'  => 'BaconUser\Password\SimpleMd5',
+                    'sha1' => 'BaconUser\Password\SimpleSha1',
+                ),
+                'factories' => array(
+                    'bcrypt' => 'BaconUser\Factory\BcryptFactory',
                 ),
             ),
+            'handler_aggregate' => array(
+                'hashing_methods' => array(
+                    'bcrypt',
+                    'simple-sha1',
+                    'simple-md5',
+                ),
+                'default_hashing_method' => 'bcrypt',
+                'migrate_to_default_hashing_method' => true,
+            ),
+            'bcrypt' => array(
+                'cost' => 14,
+            ),
         ),
+    ),
+    'service_manager' => array(
+        'factories' => array(
+            'baconuser_password_handleraggregate' => 'BaconUser\Factory\HandlerAggregateFactory',
+            'baconuser_password_handlermanager'   => 'BaconUser\Factory\HandlerManagerFactory',
+        )
     ),
 );
