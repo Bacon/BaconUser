@@ -12,6 +12,9 @@ namespace BaconUser\Password;
 use BaconUser\Exception;
 use Zend\ServiceManager\AbstractPluginManager;
 
+/**
+ * Plugin manager for {@see HandlerAggregate}.
+ */
 class HandlerManager extends AbstractPluginManager
 {
     /**

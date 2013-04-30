@@ -15,8 +15,9 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'baconuser_password_handleraggregate' => 'BaconUser\Factory\HandlerAggregateFactory',
-            'baconuser_password_handlermanager'   => 'BaconUser\Factory\HandlerManagerFactory',
+            'BaconUser\Config'                    => 'BaconUser\Factory\ConfigFactory',
+            'BaconUser\Password\HandlerAggregate' => 'BaconUser\Factory\HandlerAggregateFactory',
+            'BaconUser\Password\HandlerManager'   => 'BaconUser\Factory\HandlerManagerFactory',
         )
     ),
 );

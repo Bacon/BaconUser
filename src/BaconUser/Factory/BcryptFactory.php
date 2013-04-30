@@ -14,6 +14,9 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 
+/**
+ * Service factory that instantiates {@see Bcrypt}.
+ */
 class BcryptFactory implements FactoryInterface
 {
     /**
@@ -28,13 +31,13 @@ class BcryptFactory implements FactoryInterface
         $bcrypt = new Bcrypt();
 
         if ($serviceLocator instanceof AbstractPluginManager) {
-            $config = $serviceLocator->getServiceLocator()->get('Config');
+            $config = $serviceLocator->getServiceLocator()->get('BaconUser\Config');
         } else {
-            $config = array();
+            $config = $serviceLocator->get('BaconUser\Config');
         }
 
-        if (isset($config['bacon_user']['password']['bcrypt'])) {
-            $config = $config['bacon_user']['password']['bcrypt'];
+        if (isset($config['password']['bcrypt'])) {
+            $config = $config['password']['bcrypt'];
 
             if (isset($config['cost'])) {
                 $bcrypt->getBackend()->setCost($config['cost']);

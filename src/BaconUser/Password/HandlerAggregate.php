@@ -9,6 +9,12 @@
 
 namespace BaconUser\Password;
 
+use BaconUser\Options\PasswordHandlerAggregateOptions;
+use BaconUser\Options\PasswordHandlerAggregateOptionsInterface;
+
+/**
+ * Aggregate password handler for using multiple hashing methods parallely.
+ */
 class HandlerAggregate implements HandlerInterface
 {
     /**
@@ -22,23 +28,9 @@ class HandlerAggregate implements HandlerInterface
     protected $handlerCache = array();
 
     /**
-     * @var array
+     * @var PasswordHandlerAggregateOptionsInterface
      */
-    protected $hashingMethods = array(
-        'bcrypt',
-        'simple-sha1',
-        'simple-md5',
-    );
-
-    /**
-     * @var string
-     */
-    protected $defaultHashingMethod = 'bcrypt';
-
-    /**
-     * @var bool
-     */
-    protected $migrateToDefaultHashingMethod = true;
+    protected $options;
 
     /**
      * supports(): defined by HandlerInterface.
@@ -61,7 +53,7 @@ class HandlerAggregate implements HandlerInterface
      */
     public function hash($password)
     {
-        return $this->getHandlerByName($this->getDefaultHashingMethod())->hash($password);
+        return $this->getHandlerByName($this->getOptions()->getDefaultHashingMethod())->hash($password);
     }
 
     /**
@@ -103,8 +95,8 @@ class HandlerAggregate implements HandlerInterface
             return true;
         }
 
-        if ($this->getMigrateToDefaultHashingMethod()) {
-            $defaultHandler = $this->getHandlerByName($this->getDefaultHashingMethod());
+        if ($this->getOptions()->getMigrateToDefaultHashingMethod()) {
+            $defaultHandler = $this->getHandlerByName($this->getOptions()->getDefaultHashingMethod());
 
             if ($handler !== $defaultHandler) {
                 return true;
@@ -115,42 +107,12 @@ class HandlerAggregate implements HandlerInterface
     }
 
     /**
-     * @param  string $hashingMethod
-     * @return HandlerInterface
-     */
-    public function getHandlerByName($hashingMethod)
-    {
-        if (!isset($this->hashCache[$hashingMethod])) {
-            $this->hashCache[$hashingMethod] = $this->getHandlerManager()->get($hashingMethod);
-        }
-
-        return $this->hashCache[$hashingMethod];
-    }
-
-    /**
-     * @param  string $hash
-     * @return HandlerInterface
-     */
-    public function getHandlerByHash($hash)
-    {
-        foreach ($this->getHashingMethods() as $hashingMethod) {
-            $handler = $this->getHandlerByName($hashingMethod);
-
-            if ($handler->supports($hash)) {
-                return $handler;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @return HashManager
      */
     public function getHandlerManager()
     {
         if ($this->handlerManager === null) {
-            $this->handlerManager = new HandlerManager();
+            $this->setHandlerManager(new HandlerManager());
         }
 
         return $this->handlerManager;
@@ -167,56 +129,54 @@ class HandlerAggregate implements HandlerInterface
     }
 
     /**
-     * @return array
+     * @return PasswordHandlerAggregateOptionsInterface
      */
-    public function getHashingMethods()
+    public function getOptions()
     {
-        return $this->hashingMethods;
+        if ($this->options === null) {
+            $this->setOptions(new PasswordHandlerAggregateOptions());
+        }
+
+        return $this->options;
     }
 
     /**
-     * @param  array $hashingMethods
+     * @param  PasswordHandlerAggregateOptionsInterface $options
      * @return HandlerAggregate
      */
-    public function setHashingMethods(array $hashingMethods)
+    public function setOptions(PasswordHandlerAggregateOptionsInterface $options)
     {
-        $this->hashingMethods = $hashingMethods;
+        $this->options = $options;
         return $this;
     }
 
     /**
-     * @return string
+     * @param  string $hashingMethod
+     * @return HandlerInterface
      */
-    public function getDefaultHashingMethod()
+    protected function getHandlerByName($hashingMethod)
     {
-        return $this->defaultHashingMethod;
+        if (!isset($this->hashCache[$hashingMethod])) {
+            $this->hashCache[$hashingMethod] = $this->getHandlerManager()->get($hashingMethod);
+        }
+
+        return $this->hashCache[$hashingMethod];
     }
 
     /**
-     * @param  string $defaultHashingMethod
-     * @return HandlerAggregate
+     * @param  string $hash
+     * @return HandlerInterface
      */
-    public function setDefaultHashingMethod($defaultHashingMethod)
+    protected function getHandlerByHash($hash)
     {
-        $this->defaultHashingMethod = $defaultHashingMethod;
-        return $this;
-    }
+        foreach ($this->getOptions()->getHashingMethods() as $hashingMethod) {
+            $handler = $this->getHandlerByName($hashingMethod);
 
-    /**
-     * @return bool
-     */
-    public function getMigrateToDefaultHashingMethod()
-    {
-        return $this->migrateToDefaultHashingMethod;
-    }
+            if ($handler->supports($hash)) {
+                return $handler;
+            }
+        }
 
-    /**
-     * @param  bool $migrateToDefaultHashingMethod
-     * @return HandlerAggregate
-     */
-    public function setMigrateToDefaultHashingMethod($migrateToDefaultHashingMethod)
-    {
-        $this->migrateToDefaultHashingMethod = (bool) $migrateToDefaultHashingMethod;
-        return $this;
+        return null;
     }
 }

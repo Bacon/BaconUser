@@ -18,21 +18,21 @@ class HandlerManagerTest extends TestCase
     public function testCreateSimpleMd5()
     {
         $manager = new HandlerManager();
-        $this->assertInstanceOf('BaconUser\Password\SimpleMd5', $manager->get('simple_md5'));
+        $this->assertInstanceOf('BaconUser\Password\SimpleMd5', $manager->get('SimpleMd5'));
     }
 
     public function testCreateSimpleSha1()
     {
         $manager = new HandlerManager();
-        $this->assertInstanceOf('BaconUser\Password\SimpleSha1', $manager->get('simple_sha1'));
+        $this->assertInstanceOf('BaconUser\Password\SimpleSha1', $manager->get('SimpleSha1'));
     }
 
     public function testCreateBcrypt()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('BaconUser\Config', array());
         $manager = new HandlerManager();
         $manager->setServiceLocator($serviceManager);
-        $this->assertInstanceOf('BaconUser\Password\Bcrypt', $manager->get('bcrypt'));
+        $this->assertInstanceOf('BaconUser\Password\Bcrypt', $manager->get('Bcrypt'));
     }
 }

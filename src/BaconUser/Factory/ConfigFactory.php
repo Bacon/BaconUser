@@ -9,32 +9,24 @@
 
 namespace BaconUser\Factory;
 
-use BaconUser\Password\HandlerManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see HandlerManager}.
+ * Service factory that instantiates the bacon_user config.
  */
-class HandlerManagerFactory implements FactoryInterface
+class ConfigFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return HandlerAggregate
+     * @return Bcrypt
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('BacoUser\Config');
-
-        if (isset($config['password']['handler_manager'])) {
-            $managerConfig = new ServiceManagerConfig($config['password']['handler_manager']);
-        } else {
-            $managerConfig = null;
-        }
-
-        return new HandlerManager($managerConfig);
+        $config = $serviceLocator->get('Config');
+        return $config['bacon_user'];
     }
 }

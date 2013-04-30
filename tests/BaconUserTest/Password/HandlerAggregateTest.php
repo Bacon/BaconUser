@@ -17,7 +17,7 @@ class HandlerAggregateTest extends TestCase
     public function testSupports()
     {
         $aggregate = new HandlerAggregate();
-        $aggregate->setHashingMethods(array());
+        $aggregate->getOptions()->setHashingMethods(array());
         $this->assertFalse($aggregate->supports('foobar'));
 
         $handler = $this->getMock('BaconUser\Password\HandlerInterface');
@@ -27,7 +27,7 @@ class HandlerAggregateTest extends TestCase
                 ->will($this->returnValue(true));
 
         $aggregate->getHandlerManager()->setService('foobar', $handler);
-        $aggregate->setHashingMethods(array('foobar'));
+        $aggregate->getOptions()->setHashingMethods(array('foobar'));
         $this->assertTrue($aggregate->supports('bazbat'));
     }
 
@@ -41,7 +41,7 @@ class HandlerAggregateTest extends TestCase
 
         $aggregate = new HandlerAggregate();
         $aggregate->getHandlerManager()->setService('foobar', $handler);
-        $aggregate->setDefaultHashingMethod('foobar');
+        $aggregate->getOptions()->setDefaultHashingMethod('foobar');
 
         $this->assertEquals('bazbat', $aggregate->hash('foobar'));
     }
@@ -49,7 +49,7 @@ class HandlerAggregateTest extends TestCase
     public function testCompare()
     {
         $aggregate = new HandlerAggregate();
-        $aggregate->setHashingMethods(array());
+        $aggregate->getOptions()->setHashingMethods(array());
         $this->assertFalse($aggregate->compare('foobar', 'bazbat'));
 
         $handler = $this->getMock('BaconUser\Password\HandlerInterface');
@@ -63,7 +63,7 @@ class HandlerAggregateTest extends TestCase
                 ->will($this->returnValue(true));
 
         $aggregate->getHandlerManager()->setService('foobar', $handler);
-        $aggregate->setHashingMethods(array('foobar'));
+        $aggregate->getOptions()->setHashingMethods(array('foobar'));
 
         $this->assertTrue($aggregate->compare('foobar', 'bazbat'));
     }
@@ -71,8 +71,8 @@ class HandlerAggregateTest extends TestCase
     public function testShouldRehash()
     {
         $aggregate = new HandlerAggregate();
-        $aggregate->setHashingMethods(array());
-        $aggregate->setDefaultHashingMethod('foobar');
+        $aggregate->getOptions()->setHashingMethods(array());
+        $aggregate->getOptions()->setDefaultHashingMethod('foobar');
         $this->assertTrue($aggregate->shouldRehash('bazbat'));
 
         $handler = $this->getMock('BaconUser\Password\HandlerInterface');
@@ -86,7 +86,7 @@ class HandlerAggregateTest extends TestCase
                 ->will($this->returnValue(false));
 
         $aggregate->getHandlerManager()->setService('foobar', $handler);
-        $aggregate->setHashingMethods(array('foobar'));
+        $aggregate->getOptions()->setHashingMethods(array('foobar'));
 
         $this->assertFalse($aggregate->shouldRehash('bazbat'));
     }

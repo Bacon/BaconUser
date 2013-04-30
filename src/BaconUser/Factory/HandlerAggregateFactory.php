@@ -9,10 +9,14 @@
 
 namespace BaconUser\Factory;
 
+use BaconUser\Options\PasswordHandlerAggregateOptions;
 use BaconUser\Password\HandlerAggregate;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Service factory that instantiates {@see HandlerAggregate}.
+ */
 class HandlerAggregateFactory implements FactoryInterface
 {
     /**
@@ -25,28 +29,16 @@ class HandlerAggregateFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $aggregate = new HandlerAggregate();
-        $aggregate->setHandlerManager($serviceLocator->get('baconuser_password_handlermanager'));
+        $aggregate->setHandlerManager($serviceLocator->get('BaconUser\Password\HandlerManager'));
 
-        if ($serviceLocator instanceof AbstractPluginManager) {
-            $config = $serviceLocator->getServiceLocator()->get('Config');
-        } else {
-            $config = array();
-        }
+        $config = $serviceLocator->get('BaconUser\Config');
 
-        if (isset($config['bacon_user']['password']['handler_aggregate'])) {
-            $config = $config['bacon_user']['password']['handler_aggregate'];
+        if (isset($config['password']['handler_aggregate'])) {
+            $options = new PasswordHandlerAggregateOptions(
+                $config['password']['handler_aggregate']
+            );
 
-            if (isset($config['hashing_methods'])) {
-                $aggregate->setHashingMethods($config['hashing_methods']);
-            }
-
-            if (isset($config['default_hashing_method'])) {
-                $aggregate->setDefaultHashingMethod($config['default_hashing_method']);
-            }
-
-            if (isset($config['migrate_to_default_hashing_method'])) {
-                $aggregate->setMigrateToDefaultHashingMethod($config['migrate_to_default_hashing_method']);
-            }
+            $aggregate->setOptions($options);
         }
 
         return $aggregate;

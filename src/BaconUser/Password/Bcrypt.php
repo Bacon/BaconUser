@@ -11,6 +11,9 @@ namespace BaconUser\Password;
 
 use Zend\Crypt\Password\Bcrypt as BcryptHasher;
 
+/**
+ * Password hashing handler backed by Bcrypt.
+ */
 class Bcrypt implements HandlerInterface
 {
     /**
