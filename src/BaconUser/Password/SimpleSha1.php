@@ -27,7 +27,7 @@ class SimpleSha1 implements HandlerInterface
      */
     public function supports($hash)
     {
-        return (bool) preg_match('(^\$simple-sha1\$[a-zA-Z0-9]{32}$)', $hash);
+        return (bool) preg_match('(^\$simple-sha1\$[a-zA-Z0-9]{40}$)', $hash);
     }
 
     /**

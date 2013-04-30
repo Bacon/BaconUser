@@ -39,7 +39,7 @@ class Bcrypt implements HandlerInterface
      */
     public function hash($password)
     {
-        return $this->getHasher()->create($password);
+        return $this->getBackend()->create($password);
     }
 
     /**
@@ -52,7 +52,7 @@ class Bcrypt implements HandlerInterface
      */
     public function compare($password, $hash)
     {
-        return $this->getHasher()->verify($password, $hash);
+        return $this->getBackend()->verify($password, $hash);
     }
 
     /**
@@ -64,7 +64,7 @@ class Bcrypt implements HandlerInterface
      */
     public function shouldRehash($hash)
     {
-        $cost   = $this->getHasher()->getCost();
+        $cost   = $this->getBackend()->getCost();
         $values = explode('$', $hash);
 
         if (count($values) < 3) {
