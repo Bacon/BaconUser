@@ -9,6 +9,9 @@
 
 namespace BaconUser\Password;
 
+/**
+ * Interface for password handlers.
+ */
 interface HandlerInterface
 {
     /**
@@ -28,7 +31,8 @@ interface HandlerInterface
     public function hash($password);
 
     /**
-     * Compares a password with a hash.
+     * Compares a password with a hash and returns true if both match, false
+     * otherwise.
      *
      * @param  string $password
      * @param  string $hash
