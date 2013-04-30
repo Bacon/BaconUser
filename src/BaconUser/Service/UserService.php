@@ -42,7 +42,7 @@ class UserService implements ServiceManagerAwareInterface
     {
         $class = $this->getOptions()->getUserEntityClass();
         $user  = new $class();
-        $user->getEmail('mail@dasprids.de');
+        $user->setEmail('mail@dasprids.de');
         $user->setUsername('dasprid');
         $user->setPassword('dasprid');
 
