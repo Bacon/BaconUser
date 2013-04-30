@@ -13,7 +13,7 @@ use BaconUser\Password\HandlerAggregate;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class HandlerAggegateFactory implements FactoryInterface
+class HandlerAggregateFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
@@ -25,9 +25,13 @@ class HandlerAggegateFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $aggregate = new HandlerAggregate();
-        $config    = $serviceLocator->get('Config');
-
         $aggregate->setHandlerManager($serviceLocator->get('baconuser_password_handlermanager'));
+
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $config = $serviceLocator->getServiceLocator()->get('Config');
+        } else {
+            $config = array();
+        }
 
         if (isset($config['bacon_user']['password']['handler_aggregate'])) {
             $config = $config['bacon_user']['password']['handler_aggregate'];

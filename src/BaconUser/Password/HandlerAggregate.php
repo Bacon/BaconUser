@@ -121,7 +121,7 @@ class HandlerAggregate implements HandlerInterface
     public function getHandlerByName($hashingMethod)
     {
         if (!isset($this->hashCache[$hashingMethod])) {
-            $this->hashCache[$hashingMethod] = $this->getHashManager()->get($hashingMethod);
+            $this->hashCache[$hashingMethod] = $this->getHandlerManager()->get($hashingMethod);
         }
 
         return $this->hashCache[$hashingMethod];
@@ -134,10 +134,10 @@ class HandlerAggregate implements HandlerInterface
     public function getHandlerByHash($hash)
     {
         foreach ($this->getHashingMethods() as $hashingMethod) {
-            $hash = $this->getHash($hashingMethod);
+            $handler = $this->getHandlerByName($hashingMethod);
 
-            if ($hash->supports($hash)) {
-                return $hash;
+            if ($handler->supports($hash)) {
+                return $handler;
             }
         }
 
@@ -207,7 +207,7 @@ class HandlerAggregate implements HandlerInterface
      */
     public function getMigrateToDefaultHashingMethod()
     {
-        return $this->migrateToDefaultHash;
+        return $this->migrateToDefaultHashingMethod;
     }
 
     /**

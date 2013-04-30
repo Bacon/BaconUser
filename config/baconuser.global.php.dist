@@ -1,0 +1,36 @@
+<?php
+return array(
+    /*
+    'bacon_user' => array(
+        // Password settings
+        'password' => array(
+            // Handler manager plugins
+            'handler_manager' => array(
+                'invokables' => array(
+                    'my-hash-method' => 'My\Hash\Method',
+                ),
+            ),
+
+            // Handler aggregate
+            'handler_aggregate' => array(
+                // Supported hash methods
+                'hashing_methods' => array(
+                    'my-hash-method',
+                ),
+
+                // Default hash method to use
+                'default_hashing_method' => 'my-hash-method',
+
+                // Whether to migrate other hashes to default hashing method
+                'migrate_to_default_hashing_method' => true,
+            ),
+
+            // Bcrypt hashing method settings
+            'bcrypt' => array(
+                // Cost factor
+                'cost' => 14,
+            ),
+        ),
+    ),
+    */
+);

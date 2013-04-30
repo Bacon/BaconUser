@@ -13,31 +13,6 @@ return array(
             ),
         ),
     ),
-    'bacon_user' => array(
-        'password' => array(
-            'handler_manager' => array(
-                'invokables' => array(
-                    'md5'  => 'BaconUser\Password\SimpleMd5',
-                    'sha1' => 'BaconUser\Password\SimpleSha1',
-                ),
-                'factories' => array(
-                    'bcrypt' => 'BaconUser\Factory\BcryptFactory',
-                ),
-            ),
-            'handler_aggregate' => array(
-                'hashing_methods' => array(
-                    'bcrypt',
-                    'simple-sha1',
-                    'simple-md5',
-                ),
-                'default_hashing_method' => 'bcrypt',
-                'migrate_to_default_hashing_method' => true,
-            ),
-            'bcrypt' => array(
-                'cost' => 14,
-            ),
-        ),
-    ),
     'service_manager' => array(
         'factories' => array(
             'baconuser_password_handleraggregate' => 'BaconUser\Factory\HandlerAggregateFactory',

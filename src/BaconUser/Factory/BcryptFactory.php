@@ -12,8 +12,9 @@ namespace BaconUser\Factory;
 use BaconUser\Password\Bcrypt;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 
-class BcryptPasswordFactory implements FactoryInterface
+class BcryptFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
@@ -25,7 +26,12 @@ class BcryptPasswordFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $bcrypt = new Bcrypt();
-        $config = $serviceLocator->get('Config');
+
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $config = $serviceLocator->getServiceLocator()->get('Config');
+        } else {
+            $config = array();
+        }
 
         if (isset($config['bacon_user']['password']['bcrypt'])) {
             $config = $config['bacon_user']['password']['bcrypt'];

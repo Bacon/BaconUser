@@ -15,6 +15,27 @@ use Zend\ServiceManager\AbstractPluginManager;
 class HandlerManager extends AbstractPluginManager
 {
     /**
+     * $invokableClasses: defined by AbstractPluginManager.
+     *
+     * @see AbstractPluginManager::$invokableClasses
+     * @var array
+     */
+    protected $invokableClasses = array(
+        'simplemd5'  => 'BaconUser\Password\SimpleMd5',
+        'simplesha1' => 'BaconUser\Password\SimpleSha1',
+    );
+
+    /**
+     * $factories: defined by AbstractPluginManager.
+     *
+     * @see AbstractPluginManager::$factories
+     * @var array
+     */
+    protected $factories = array(
+        'bcrypt' => 'BaconUser\Factory\BcryptFactory',
+    );
+
+    /**
      * validatePlugin(): defined by AbstractPluginManager.
      *
      * @see    AbstractPluginManager::validatePlugin()

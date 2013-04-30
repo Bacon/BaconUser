@@ -24,7 +24,11 @@ class HandlerManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $config = $serviceLocator->getServiceLocator()->get('Config');
+        } else {
+            $config = array();
+        }
 
         if (isset($config['bacon_user']['password']['handler_manager'])) {
             $managerConfig = new ServiceManagerConfig($config['bacon_user']['password']['handler_manager']);
