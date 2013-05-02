@@ -7,4 +7,4 @@ php:
 before_script:
    - composer install --dev --prefer-source
 
-script: phpunit --bootstrap tests/bootstrap.php --configuration tests/phpunit.xml tests
+script: php vendor/bin/phpunit --bootstrap tests/bootstrap.php --configuration tests/phpunit.xml tests
