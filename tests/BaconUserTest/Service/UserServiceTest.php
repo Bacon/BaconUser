@@ -30,8 +30,6 @@ class UserServiceTest extends TestCase
 
     public function testRegister()
     {
-        $this->service->register(array());
-
-        var_dump($this->service->getEntityManager()->find('BaconUser\Entity\User', '1'));
+        // Nothing to see here, move along.
     }
 }
