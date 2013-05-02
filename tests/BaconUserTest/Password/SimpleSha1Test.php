@@ -12,6 +12,9 @@ namespace BaconUserTest\Password;
 use BaconUser\Password\SimpleSha1;
 use PHPUnit_Framework_TestCase as TestCase;
 
+/**
+ * @covers BaconUser\Password\SimpleSha1
+ */
 class SimpleSha1Test extends TestCase
 {
     public function testSupports()

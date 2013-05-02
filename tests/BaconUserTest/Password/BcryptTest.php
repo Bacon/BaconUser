@@ -11,7 +11,11 @@ namespace BaconUserTest\Password;
 
 use BaconUser\Password\Bcrypt;
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Crypt\Password\Bcrypt as BcryptHasher;
 
+/**
+ * @covers BaconUser\Password\Bcrypt
+ */
 class BcryptTest extends TestCase
 {
     public function testSupports()
@@ -39,9 +43,32 @@ class BcryptTest extends TestCase
     public function testShouldRehash()
     {
         $handler = new Bcrypt();
+
         $handler->getBackend()->setCost(4);
-        $this->assertFalse($handler->shouldRehash('$2y$04$MDAwMDAwMDAwMDAwMDAwM.ZPgzzqxELAsWis/z0SGoAUQ8M2HIs1.'));
+        $this->assertFalse(
+            $handler->shouldRehash('$2y$04$MDAwMDAwMDAwMDAwMDAwM.ZPgzzqxELAsWis/z0SGoAUQ8M2HIs1.'),
+            'Equal cost must not trigger rehash'
+        );
+
         $handler->getBackend()->setCost(6);
-        $this->assertTrue($handler->shouldRehash('$2y$04$MDAwMDAwMDAwMDAwMDAwM.ZPgzzqxELAsWis/z0SGoAUQ8M2HIs1.'));
+        $this->assertTrue(
+            $handler->shouldRehash('$2y$04$MDAwMDAwMDAwMDAwMDAwM.ZPgzzqxELAsWis/z0SGoAUQ8M2HIs1.'),
+            'Higher cost must trigger rehash'
+        );
+
+        $handler->getBackend()->setCost(6);
+        $this->assertTrue(
+            $handler->shouldRehash('foobar'),
+            'Invalid hash must trigger rehash'
+        );
+    }
+
+    public function testSetBackend()
+    {
+        $backend = new BcryptHasher();
+        $handler = new Bcrypt();
+        $handler->setBackend($backend);
+
+        $this->assertSame($backend, $handler->getBackend());
     }
 }

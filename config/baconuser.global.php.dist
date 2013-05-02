@@ -1,36 +1,41 @@
 <?php
 return array(
-    /*
     'bacon_user' => array(
         // Password settings
         'password' => array(
-            // Handler manager plugins
+            // This is a Zend\ServiceManager compatible configuration containing
+            // the various password hashing handlers. Add your own handler here
+            // if your password hashing technique differs from the provided
+            // ones.
             'handler_manager' => array(
                 'invokables' => array(
                     'my-hash-method' => 'My\Hash\Method',
                 ),
             ),
 
-            // Handler aggregate
+            // Configuration for the aggregate handler. Aggregate handler is the
+            // default password handler that decides which password hashing
+            // technique to use based on the handler manager.
             'handler_aggregate' => array(
-                // Supported hash methods
+                // Sorted list of password hashing techniques to use to check
+                // stored hashes.
                 'hashing_methods' => array(
                     'my-hash-method',
                 ),
 
-                // Default hash method to use
+                // Default hash method to use.
                 'default_hashing_method' => 'my-hash-method',
 
-                // Whether to migrate other hashes to default hashing method
+                // Whether to migrate other hashes to default hashing method.
                 'migrate_to_default_hashing_method' => true,
             ),
 
-            // Bcrypt hashing method settings
+            // Bcrypt hashing method settings. These settings are for the
+            // provided BcryptFactory.
             'bcrypt' => array(
-                // Cost factor
+                // Cost factor. Higher value means slower hashing.
                 'cost' => 14,
             ),
         ),
     ),
-    */
 );

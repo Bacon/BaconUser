@@ -11,8 +11,12 @@ namespace BaconUserTest\Password;
 
 use BaconUser\Password\HandlerManager;
 use PHPUnit_Framework_TestCase as TestCase;
+use stdClass;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * @covers BaconUser\Password\HandlerManager
+ */
 class HandlerManagerTest extends TestCase
 {
     public function testCreateSimpleMd5()
@@ -34,5 +38,16 @@ class HandlerManagerTest extends TestCase
         $manager = new HandlerManager();
         $manager->setServiceLocator($serviceManager);
         $this->assertInstanceOf('BaconUser\Password\Bcrypt', $manager->get('Bcrypt'));
+    }
+
+    public function testCreateInvalidHandler()
+    {
+        $this->setExpectedException(
+            'BaconUser\Exception\RuntimeException',
+            'Plugin of type stdClass is invalid; must implement BaconUser\Password\HandlerInterface'
+        );
+
+        $manager = new HandlerManager();
+        $manager->setService('invalid', new stdClass());
     }
 }

@@ -12,6 +12,9 @@ namespace BaconUserTest\Password;
 use BaconUser\Password\SimpleMd5;
 use PHPUnit_Framework_TestCase as TestCase;
 
+/**
+ * @covers BaconUser\Password\SimpleMd5
+ */
 class SimpleMd5Test extends TestCase
 {
     public function testSupports()
