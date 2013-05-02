@@ -29,28 +29,6 @@ class Module
         );
     }
 
-    public function getServiceConfig()
-    {
-        return array(
-            'factories' => array(
-                'baconuser_passwordmanager_passwordmanager' => function ($sm) {
-                    $passwordManager = new PasswordManager\PasswordManager();
-                    $passwordManager->setPluginManager($sm->get('baconuser_passwordmanager_pluginmanager'));
-                    return $passwordManager;
-                },
-                'baconuser_passwordmanager_pluginmanager' => function ($sm) {
-                    $config = $sm->get('Config');
-                    if (isset($config['bacon_user']['password_manager']['plugins'])) {
-                        $pluginConfig = new ServiceManagerConfig($config['bacon_user']['password_manager']['plugins']);
-                    } else {
-                        $pluginConfig = null;
-                    }
-                    return new PasswordManager\PluginManager($pluginConfig);
-                },
-            ),
-        );
-    }
-
     public function getLiquibasePath()
     {
         return __DIR__ . '/liquibase/changelog.xml';
