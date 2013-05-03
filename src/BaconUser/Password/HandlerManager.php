@@ -35,7 +35,7 @@ class HandlerManager extends AbstractPluginManager
      * @var array
      */
     protected $factories = array(
-        'bcrypt' => 'BaconUser\Factory\BcryptFactory',
+        'bcrypt' => 'BaconUser\Password\Factory\BcryptFactory',
     );
 
     /**

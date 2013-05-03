@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Options;
+namespace BaconUser\Password\Options;
 
 interface PasswordHandlerAggregateOptionsInterface
 {
