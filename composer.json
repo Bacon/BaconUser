@@ -17,7 +17,8 @@
     },
     "require-dev": {
         "phpunit/PHPUnit": "3.7.*",
-        "doctrine/data-fixtures": "1.0.0-ALPHA3"
+        "doctrine/data-fixtures": "1.0.0-ALPHA3",
+        "satooshi/php-coveralls": "dev-master"
     },
     "suggest": {
         "bacon/bacon-liquibase": "For liquibase database migrations"
