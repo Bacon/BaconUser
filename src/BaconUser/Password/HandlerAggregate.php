@@ -9,8 +9,8 @@
 
 namespace BaconUser\Password;
 
-use BaconUser\Options\PasswordHandlerAggregateOptions;
-use BaconUser\Options\PasswordHandlerAggregateOptionsInterface;
+use BaconUser\Password\Options\PasswordHandlerAggregateOptions;
+use BaconUser\Password\Options\PasswordHandlerAggregateOptionsInterface;
 
 /**
  * Aggregate password handler for using multiple hashing methods parallely.
