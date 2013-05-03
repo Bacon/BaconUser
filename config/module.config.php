@@ -14,6 +14,9 @@ return array(
         ),
     ),
     'service_manager' => array(
+        'aliases' => array(
+            'BaconUser\Password\HandlerInterface' => 'BaconUser\Password\HandlerAggregate',
+        ),
         'factories' => array(
             'BaconUser\Config'                    => 'BaconUser\Factory\ConfigFactory',
             'BaconUser\Password\HandlerAggregate' => 'BaconUser\Password\Factory\HandlerAggregateFactory',
