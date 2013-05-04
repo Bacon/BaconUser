@@ -9,7 +9,7 @@ before_script:
 
 script:
   - mkdir -p builds/logs
-  - php vendor/bin/phpunit --bootstrap tests/bootstrap.php --configuration tests/travis.phpunit.xml tests
+  - php vendor/bin/phpunit --bootstrap tests/bootstrap.php --configuration .travis/phpunit.xml tests
 
 after_script:
   - php vendor/bin/coveralls
