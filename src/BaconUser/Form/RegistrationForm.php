@@ -9,13 +9,14 @@
 
 namespace BaconUser\Form;
 
+use BaconUser\Options\UserOptions;
 use Zend\Form\Form;
 
-class RegistrationForm extends Form implements RegistrationFormInterface
+class RegistrationForm extends Form
 {
-    public function __construct($name, UserOptions $options)
+    public function __construct(UserOptions $options)
     {
-        parent::__construct($name);
+        parent::__construct(null);
 
         if ($options->getEnableUsername()) {
             $this->add(array(
@@ -62,7 +63,7 @@ class RegistrationForm extends Form implements RegistrationFormInterface
         ));
 
         $this->add(array(
-            'name' => 'passwordVerify',
+            'name' => 'password_verification',
             'options' => array(
                 'label' => 'Verify password',
             ),

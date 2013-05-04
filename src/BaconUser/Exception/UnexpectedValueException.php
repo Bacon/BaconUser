@@ -7,11 +7,8 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Form;
+namespace BaconUser\Exception;
 
-use Zend\Form\FormInterface;
-
-interface RegistrationFormInterface extends FormInterface
+class UnexpectedValueException extends \UnexpectedValueException implements ExceptionInterface
 {
-    public function __construct($name, UserOptions $options);
 }

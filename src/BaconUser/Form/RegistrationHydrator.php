@@ -12,22 +12,15 @@ namespace BaconUser\Form;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
-class RegistrationFormHydrator extends ClassMethods
+class RegistrationHydrator extends ClassMethods
 {
     /**
-     * __construct(): defined by ClassMethods.
-     *
-     * @see   ClassMethods::__construct()
-     * @param bool             $underscoreSeparatedKeys
      * @param PasswordStrategy $passwordStrategy
      */
-    public function __construct($underscoreSeparatedKeys = true, StrategyInterface $passwordHashingStrategy = null)
+    public function __construct(StrategyInterface $passwordHashingStrategy)
     {
-        parent::__construct($underscoreSeparatedKeys);
-
-        if ($passwordHashingStrategy !== null) {
-            $this->addStrategy('password_hash', $passwordHashingStrategy);
-        }
+        parent::__construct(true);
+        $this->addStrategy('password_hash', $passwordHashingStrategy);
     }
 
     /**
@@ -44,6 +37,6 @@ class RegistrationFormHydrator extends ClassMethods
             $data['password_hash'] = $data['password'];
         }
 
-        parent::hydrate($data, $object);
+        return parent::hydrate($data, $object);
     }
 }

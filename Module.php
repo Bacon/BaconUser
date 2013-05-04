@@ -9,8 +9,6 @@
 
 namespace BaconUser;
 
-use Zend\ServiceManager\Config as ServiceManagerConfig;
-
 class Module
 {
     public function getConfig()

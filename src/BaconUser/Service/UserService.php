@@ -9,18 +9,18 @@
 
 namespace BaconUser\Service;
 
-use BaconUser\Entity\User;
-use BaconUser\Options\UserServiceOptionsInterface;
+use BaconUser\Entity\UserInterface;
+use BaconUser\Exception;
+use BaconUser\Options\UserOptionsInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Zend\Form\FormInterface;
 
-class UserService implements ServiceManagerAwareInterface
+class UserService
 {
     /**
-     * @var ServiceManager
+     * @var RegistrationForm
      */
-    protected $serviceManager;
+    protected $registrationForm;
 
     /**
      * @var ObjectManager
@@ -28,89 +28,55 @@ class UserService implements ServiceManagerAwareInterface
     protected $objectManager;
 
     /**
-     * @var UserServiceOptionsInterface
+     * @var UserOptionsInterface
      */
     protected $options;
+
+    /**
+     * @param FormInterface        $registrationForm
+     * @param UserOptionsInterface $options
+     * @param ObjectManager        $objectManager
+     */
+    public function __construct(
+        FormInterface $registrationForm,
+        ObjectManager $objectManager,
+        UserOptionsInterface $options
+    ) {
+        $this->registrationForm = $registrationForm;
+        $this->objectManager    = $objectManager;
+        $this->options          = $options;
+    }
 
     /**
      * Registers a new user.
      *
      * @param  array $data
-     * @return User
+     * @return null|UserInterface
      */
     public function register(array $data)
     {
-        $class = $this->getOptions()->getUserEntityClass();
-        $user  = new $class();
-        $user->getEmail('mail@dasprids.de');
-        $user->setUsername('dasprid');
-        $user->setPassword('dasprid');
+        $userEntityClass = $this->options->getUserEntityClass();
 
-        $this->getObjectManager()->persist($user);
-        $this->getObjectManager()->flush();
+        $this->registrationForm->bind(new $userEntityClass());
+        $this->registrationForm->setData($data);
+
+        if (!$this->registrationForm->isValid()) {
+            return null;
+        }
+
+        $user = $this->registrationForm->getData();
+
+        if (!$user instanceof UserInterface) {
+            throw new Exception\UnexpectedValueException('Received user is not an instance of UserInterface');
+        }
+
+        if ($this->options->getEnableUserState()) {
+            $user->setState($this->options->getDefaultUserState());
+        }
+
+        $this->objectManager->persist($user);
+        $this->objectManager->flush();
 
         return $user;
-    }
-
-    /**
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * @param  ServiceManager $serviceManager
-     * @return UserService
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-        return $this;
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    public function getObjectManager()
-    {
-        if ($this->objectManager === null) {
-            $this->setObjectManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
-        }
-
-        return $this->entityManager;
-    }
-
-    /**
-     * @param  ObjectManager $objectManager
-     * @return UserService
-     */
-    public function setObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-        return $this;
-    }
-
-    /**
-     * @return UserServiceOptionsInterface
-     */
-    public function getOptions()
-    {
-        if ($this->options === null) {
-            $this->setOptions($this->getServiceManager()->get('baconuser_module_options'));
-        }
-
-        return $this->options;
-    }
-
-    /**
-     * @param  UserServiceOptionsInterface $options
-     * @return UserService
-     */
-    public function setOptions(UserServiceOptionsInterface $options)
-    {
-        $this->options = $options;
-        return $this;
     }
 }

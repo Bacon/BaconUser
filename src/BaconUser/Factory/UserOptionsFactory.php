@@ -9,29 +9,30 @@
 
 namespace BaconUser\Factory;
 
-use BaconUser\Form\RegistrationForm;
+use BaconUser\Options\UserOptions;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see RegistrationForm}.
+ * Service factory that instantiates {@see UserOptions}.
  */
-class RegistrationFormFactory implements FactoryInterface
+class UserOptionsFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return RegistrationForm
+     * @return UserOptions
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $options = $serviceLocator->get('BaconUser\Options\RegistrationOptions');
+        $config = $serviceLocator->get('BaconUser\Config');
 
-        $form = new RegistrationForm(null, $options);
-        $form->setHydrator($serviceLocator->get('BaconUser\Form\RegistrationFormHydrator'));
-        $form->setInputFilter($serviceLocator->get('BaconUser\Form\RegistrationFormFilter'));
-
-        return $form;
+        if (isset($config['user'])) {
+            return new UserOptions($config['user']);
+        } else {
+            return new UserOptions();
+        }
     }
 }

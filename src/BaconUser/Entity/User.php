@@ -27,11 +27,6 @@ class User implements UserInterface
     protected $passwordHash;
 
     /**
-     * @var string
-     */
-    protected $passwordHashingMethod;
-
-    /**
      * @var string|null
      */
     protected $username;
@@ -40,6 +35,11 @@ class User implements UserInterface
      * @var string|null
      */
     protected $displayName;
+
+    /**
+     * @var int|null
+     */
+    protected $state;
 
     /**
      * @return mixed
@@ -86,24 +86,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
-     */
-    public function getPasswordHashingMethod()
-    {
-        return $this->passwordHashingMethod;
-    }
-
-    /**
-     * @param  string $passwordHash
-     * @return User
-     */
-    public function setPasswordHashingMethod($passwordHashingMethod)
-    {
-        $this->passwordHashingMethod = $passwordHashingMethod;
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getUsername()
@@ -136,6 +118,24 @@ class User implements UserInterface
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param  int|null $state
+     * @return User
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
         return $this;
     }
 }

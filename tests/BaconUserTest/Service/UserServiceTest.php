@@ -9,6 +9,7 @@
 
 namespace BaconUserTest\Service;
 
+use BaconUser\Options\UserOptions;
 use BaconUser\Service\UserService;
 use DoctrineORMModuleTest\Util\ServiceManagerFactory;
 use PHPUnit_Framework_TestCase as TestCase;
@@ -20,16 +21,44 @@ class UserServiceTest extends TestCase
      */
     protected $service;
 
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    protected $entityManager;
+
     public function setUp()
     {
         $sm = ServiceManagerFactory::getServiceManager();
-        $this->service = new UserService();
-        $this->service->setServiceManager($sm);
         $sm->get('Doctrine\Common\DataFixtures\Executor\AbstractExecutor');
+
+        $this->entityManager = $sm->get('BaconUser\EntityManager');
+
+        $this->service = new UserService(
+            $sm->get('BaconUser\Form\RegistrationForm'),
+            $this->entityManager,
+            new UserOptions()
+        );
     }
 
     public function testRegister()
     {
-        // Nothing to see here, move along.
+        $result = $this->service->register(array(
+            'username'              => 'foobar',
+            'email'                 => 'foobar@example.com',
+            'password'              => 'bazbat',
+            'password_verification' => 'bazbat',
+            'display_name'          => 'Foo Bar'
+        ));
+
+        $this->assertNotNull($result, 'Data validation failed');
+
+        $user = $this->entityManager->getRepository('BaconUser\Entity\User')
+                                    ->findOneBy(array('username' => 'foobar'));
+
+        $this->assertInstanceOf('BaconUser\Entity\User', $user);
+        $this->assertEquals('foobar', $user->getUsername());
+        $this->assertEquals('foobar@example.com', $user->getEmail());
+        $this->assertEquals('Foo Bar', $user->getDisplayName());
+        $this->assertNotNull($user->getPasswordHash(), 'Password not set');
     }
 }

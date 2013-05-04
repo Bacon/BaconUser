@@ -22,11 +22,16 @@ class ConfigFactory implements FactoryInterface
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return Bcrypt
+     * @return array
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        return $config['bacon_user'];
+
+        if (isset($config['bacon_user'])) {
+            return $config['bacon_user'];
+        } else {
+            return array();
+        }
     }
 }
