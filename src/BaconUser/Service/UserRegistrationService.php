@@ -15,7 +15,7 @@ use BaconUser\Options\UserOptionsInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Zend\Form\FormInterface;
 
-class UserService
+class UserRegistrationService
 {
     /**
      * @var RegistrationForm
@@ -67,7 +67,7 @@ class UserService
         $user = $this->registrationForm->getData();
 
         if (!$user instanceof UserInterface) {
-            throw new Exception\UnexpectedValueException('Received user is not an instance of UserInterface');
+            throw new Exception\UnexpectedValueException('Received user is not an instance of BaconUser\Entity\UserInterface');
         }
 
         if ($this->options->getEnableUserState()) {
