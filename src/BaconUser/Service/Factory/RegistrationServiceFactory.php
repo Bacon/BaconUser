@@ -7,16 +7,16 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Factory;
+namespace BaconUser\Service\Factory;
 
-use BaconUser\Options\UserOptions;
+use BaconUser\Service\RegistrationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see UserOptions}.
+ * Service factory that instantiates {@see RegistrationService}.
  */
-class UserOptionsFactory implements FactoryInterface
+class RegistrationServiceFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
@@ -27,12 +27,14 @@ class UserOptionsFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('BaconUser\Config');
+        $registrationService = new RegistrationService(
+            $serviceLocator->get('BaconUser\Form\RegistrationForm'),
+            $serviceLocator->get('BaconUser\ObjectManager'),
+            $serviceLocator->get('BaconUser\Options\UserOptions')
+        );
 
-        if (isset($config['user'])) {
-            return new UserOptions($config['user']);
-        }
+        $registrationService->setUserPrototype($serviceLocator->get('BaconUser\Entity\UserPrototype'));
 
-        return new UserOptions();
+        return $registrationService;
     }
 }

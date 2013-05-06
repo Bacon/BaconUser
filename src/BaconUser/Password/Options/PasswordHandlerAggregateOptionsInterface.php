@@ -9,6 +9,9 @@
 
 namespace BaconUser\Password\Options;
 
+/**
+ * Options for the password aggregate handler.
+ */
 interface PasswordHandlerAggregateOptionsInterface
 {
     /**

@@ -13,25 +13,25 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates the bacon_user config.
+ * Service factory that instantiates {@see \Doctrine\Common\Persistence\ObjectRepository}.
  */
-class ConfigFactory implements FactoryInterface
+class UserRepositoryFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return array
+     * @return \Doctrine\Common\Persistence\ObjectRepository
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        $options = $serviceLocator->get('BaconUser\Options\UserOptions');
 
-        if (isset($config['bacon_user'])) {
-            return $config['bacon_user'];
-        }
+        $userRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
+            $options->getUserEntityClass()
+        );
 
-        return array();
+        return $userRepository;
     }
 }

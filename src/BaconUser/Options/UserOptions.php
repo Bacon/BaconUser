@@ -9,23 +9,13 @@
 
 namespace BaconUser\Options;
 
-use BaconUser\Exception;
 use Zend\Stdlib\AbstractOptions;
 
+/**
+ * @see UserOptionsInterface
+ */
 class UserOptions extends AbstractOptions implements UserOptionsInterface
 {
-    /**
-     * Disable strict option mode.
-     *
-     * @var bool
-     */
-    protected $__strictMode__ = false;
-
-    /**
-     * @var string
-     */
-    protected $userEntityClass = 'BaconUser\Entity\User';
-
     /**
      * @var bool
      */
@@ -50,29 +40,6 @@ class UserOptions extends AbstractOptions implements UserOptionsInterface
      * @var array
      */
     protected $allowedLoginStates = array(null, 1);
-
-    /**
-     * @return string
-     */
-    public function getUserEntityClass()
-    {
-        return $this->userEntityClass;
-    }
-
-    /**
-     * @param  string $userEntityClass
-     * @return UserOptions
-     * @throws Exception\InvalidArgumentException
-     */
-    public function setUserEntityClass($userEntityClass)
-    {
-        if (!is_subclass_of($userEntityClass, 'BaconUser\Entity\UserInterface')) {
-            throw new Exception\InvalidArgumentException('%s does not implement BaconUser\Entity\UserInterface');
-        }
-
-        $this->userEntityClass = $userEntityClass;
-        return $this;
-    }
 
     /**
      * @return bool

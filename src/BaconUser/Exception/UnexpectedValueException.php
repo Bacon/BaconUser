@@ -11,4 +11,17 @@ namespace BaconUser\Exception;
 
 class UnexpectedValueException extends \UnexpectedValueException implements ExceptionInterface
 {
+    /**
+     * @param  mixed $user
+     * @return UnexpectedValueException
+     */
+    public static function invalidUserEntity($user)
+    {
+        return new static(
+            sprintf(
+                '%s does not implement BaconUser\Entity\UserInterface',
+                is_object($user) ? get_class($user) : gettype($user)
+            )
+        );
+    }
 }

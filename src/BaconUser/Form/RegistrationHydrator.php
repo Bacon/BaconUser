@@ -12,6 +12,9 @@ namespace BaconUser\Form;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
+/**
+ * Hydrator for the {@see RegistrationForm}.
+ */
 class RegistrationHydrator extends ClassMethods
 {
     /**

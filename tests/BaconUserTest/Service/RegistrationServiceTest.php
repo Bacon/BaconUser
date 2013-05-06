@@ -11,13 +11,13 @@ namespace BaconUserTest\Service;
 
 use BaconUser\Entity\User;
 use BaconUser\Options\UserOptions;
-use BaconUser\Service\UserRegistrationService;
+use BaconUser\Service\RegistrationService;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * @covers BaconUser\Service\UserRegistrationService
+ * @covers BaconUser\Service\RegistrationService
  */
-class UserRegistrationServiceTest extends TestCase
+class RegistrationServiceTest extends TestCase
 {
     public function testEntityIsBoundToForm()
     {
@@ -28,7 +28,7 @@ class UserRegistrationServiceTest extends TestCase
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $service = new UserRegistrationService($form, $objectManager, new UserOptions());
+        $service = new RegistrationService($form, $objectManager, new UserOptions());
         $service->register(array());
     }
 
@@ -46,7 +46,7 @@ class UserRegistrationServiceTest extends TestCase
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $service = new UserRegistrationService($form, $objectManager, new UserOptions());
+        $service = new RegistrationService($form, $objectManager, new UserOptions());
         $service->register($data);
     }
 
@@ -69,7 +69,7 @@ class UserRegistrationServiceTest extends TestCase
         $objectManager->expects($this->once())
                       ->method('flush');
 
-        $service = new UserRegistrationService($form, $objectManager, new UserOptions());
+        $service = new RegistrationService($form, $objectManager, new UserOptions());
         $result  = $service->register(array());
         $this->assertSame($user, $result);
     }
@@ -87,7 +87,7 @@ class UserRegistrationServiceTest extends TestCase
         $objectManager->expects($this->never())
                       ->method('flush');
 
-        $service = new UserRegistrationService($form, $objectManager, new UserOptions());
+        $service = new RegistrationService($form, $objectManager, new UserOptions());
         $result  = $service->register(array());
         $this->assertNull($result);
     }
@@ -96,7 +96,7 @@ class UserRegistrationServiceTest extends TestCase
     {
         $this->setExpectedException(
             'BaconUser\Exception\UnexpectedValueException',
-            'Received user is not an instance of BaconUser\Entity\UserInterface'
+            'array does not implement BaconUser\Entity\UserInterface'
         );
 
         $form = $this->getMock('Zend\Form\FormInterface');
@@ -113,7 +113,7 @@ class UserRegistrationServiceTest extends TestCase
         $objectManager->expects($this->never())
                       ->method('flush');
 
-        $service = new UserRegistrationService($form, $objectManager, new UserOptions());
+        $service = new RegistrationService($form, $objectManager, new UserOptions());
         $service->register(array());
     }
 
@@ -132,7 +132,7 @@ class UserRegistrationServiceTest extends TestCase
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $options = new UserOptions(array('enable_user_state' => true, 'default_user_state' => 2));
-        $service = new UserRegistrationService($form, $objectManager, $options);
+        $service = new RegistrationService($form, $objectManager, $options);
         $result  = $service->register(array());
         $this->assertSame($user, $result);
         $this->assertEquals(2, $result->getState());
@@ -153,7 +153,7 @@ class UserRegistrationServiceTest extends TestCase
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $options = new UserOptions(array('enable_user_state' => false, 'default_user_state' => 2));
-        $service = new UserRegistrationService($form, $objectManager, $options);
+        $service = new RegistrationService($form, $objectManager, $options);
         $result  = $service->register(array());
         $this->assertSame($user, $result);
         $this->assertNull($result->getState());

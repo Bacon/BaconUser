@@ -9,11 +9,7 @@
 
 namespace BaconUser\Form\Factory;
 
-use BaconUser\Form\PasswordHashingStrategy;
-use BaconUser\Form\RegistrationFilter;
 use BaconUser\Form\RegistrationForm;
-use BaconUser\Form\RegistrationHydrator;
-use DoctrineModule\Validator\NoObjectExists;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -33,29 +29,9 @@ class RegistrationFormFactory implements FactoryInterface
     {
         $options = $serviceLocator->get('BaconUser\Options\UserOptions');
 
-        $hydrator = new RegistrationHydrator(
-            new PasswordHashingStrategy($serviceLocator->get('BaconUser\Password\HandlerInterface'))
-        );
-
-        $userRepository = $serviceLocator->get('BaconUser\EntityManager')->getRepository(
-            $options->getUserEntityClass()
-        );
-
-        $inputFilter = new RegistrationFilter(
-            new NoObjectExists(array(
-                'object_repository' => $userRepository,
-                'fields'            => 'email',
-            )),
-            new NoObjectExists(array(
-                'object_repository' => $userRepository,
-                'fields'            => 'username',
-            )),
-            $options
-        );
-
         $form = new RegistrationForm($options);
-        $form->setHydrator($hydrator);
-        $form->setInputFilter($inputFilter);
+        $form->setHydrator($serviceLocator->get('BaconUser\Form\RegistrationHydrator'));
+        $form->setInputFilter($serviceLocator->get('BaconUser\Form\RegistrationFilter'));
 
         return $form;
     }

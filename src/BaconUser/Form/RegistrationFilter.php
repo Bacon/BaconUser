@@ -13,6 +13,9 @@ use BaconUser\Options\UserOptions;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator\ValidatorInterface;
 
+/**
+ * Input filter for the {@see RegistrationForm}.
+ */
 class RegistrationFilter extends InputFilter
 {
     public function __construct(

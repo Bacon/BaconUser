@@ -9,6 +9,9 @@
 
 namespace BaconUser\Entity;
 
+/**
+ * Generic user interface.
+ */
 interface UserInterface
 {
     /**

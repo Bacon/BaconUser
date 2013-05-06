@@ -9,15 +9,11 @@
 
 namespace BaconUser\Options;
 
+/**
+ * General user options.
+ */
 interface UserOptionsInterface
 {
-    /**
-     * Returns the fully quallified classname of the user entity.
-     *
-     * @return string
-     */
-    public function getUserEntityClass();
-
     /**
      * Returns whether username are enabled.
      *

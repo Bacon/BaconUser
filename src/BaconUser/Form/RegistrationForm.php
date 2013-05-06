@@ -12,6 +12,9 @@ namespace BaconUser\Form;
 use BaconUser\Options\UserOptions;
 use Zend\Form\Form;
 
+/**
+ * Generic registration form.
+ */
 class RegistrationForm extends Form
 {
     public function __construct(UserOptions $options)

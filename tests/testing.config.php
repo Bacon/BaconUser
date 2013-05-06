@@ -17,7 +17,7 @@ return array(
             'handler_aggregate' => array(
                 'default_hashing_method' => 'simple-sha1',
                 'hashing_methods' => array(
-                    'simple-sha1'
+                    'simple-sha1',
                 ),
             ),
         ),

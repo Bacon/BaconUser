@@ -9,6 +9,9 @@
 
 namespace BaconUser\Entity;
 
+/**
+ * @see UserInterface
+ */
 class User implements UserInterface
 {
     /**
@@ -63,7 +66,7 @@ class User implements UserInterface
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = (string) $email;
         return $this;
     }
 
@@ -81,7 +84,7 @@ class User implements UserInterface
      */
     public function setPasswordHash($passwordHash)
     {
-        $this->passwordHash = $passwordHash;
+        $this->passwordHash = (string) $passwordHash;
         return $this;
     }
 
@@ -99,7 +102,7 @@ class User implements UserInterface
      */
     public function setUsername($username)
     {
-        $this->username = $username;
+        $this->username = ($username === null ? null : (string) $username);
         return $this;
     }
 
@@ -117,7 +120,7 @@ class User implements UserInterface
      */
     public function setDisplayName($displayName)
     {
-        $this->displayName = $displayName;
+        $this->displayName = ($displayName === null ? null : (string) $displayName);
         return $this;
     }
 
@@ -135,7 +138,7 @@ class User implements UserInterface
      */
     public function setState($state)
     {
-        $this->state = $state;
+        $this->state = ($state === null ? null : (int) $state);
         return $this;
     }
 }
