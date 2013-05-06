@@ -9,6 +9,9 @@
 
 namespace BaconUser\Entity;
 
+/**
+ * Generic user interface.
+ */
 interface UserInterface
 {
     /**
@@ -38,16 +41,6 @@ interface UserInterface
     public function setPasswordHash($passwordHash);
 
     /**
-     * @return string
-     */
-    public function getPasswordHashingMethod();
-
-    /**
-     * @param string $passwordHashingMethod
-     */
-    public function setPasswordHashingMethod($passwordHashingMethod);
-
-    /**
      * @return string|null
      */
     public function getUsername();
@@ -68,4 +61,15 @@ interface UserInterface
      * @return UserInterface
      */
     public function setDisplayName($displayName);
+
+    /**
+     * @return string|null
+     */
+    public function getState();
+
+    /**
+     * @param  int|null $state
+     * @return UserInterface
+     */
+    public function setState($state);
 }

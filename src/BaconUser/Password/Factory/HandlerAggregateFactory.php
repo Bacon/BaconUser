@@ -9,8 +9,8 @@
 
 namespace BaconUser\Password\Factory;
 
-use BaconUser\Options\PasswordHandlerAggregateOptions;
 use BaconUser\Password\HandlerAggregate;
+use BaconUser\Password\Options\PasswordHandlerAggregateOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

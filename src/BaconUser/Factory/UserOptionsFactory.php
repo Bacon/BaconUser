@@ -9,29 +9,30 @@
 
 namespace BaconUser\Factory;
 
+use BaconUser\Options\UserOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates the bacon_user config.
+ * Service factory that instantiates {@see UserOptions}.
  */
-class ConfigFactory implements FactoryInterface
+class UserOptionsFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return array
+     * @return UserOptions
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        $config = $serviceLocator->get('BaconUser\Config');
 
-        if (isset($config['bacon_user'])) {
-            return $config['bacon_user'];
+        if (isset($config['user'])) {
+            return new UserOptions($config['user']);
         }
 
-        return array();
+        return new UserOptions();
     }
 }
