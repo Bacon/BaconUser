@@ -26,10 +26,8 @@ class UserRepositoryFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $options = $serviceLocator->get('BaconUser\Options\UserOptions');
-
         $userRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
-            $options->getUserEntityClass()
+            'BaconUser\Entity\User'
         );
 
         return $userRepository;

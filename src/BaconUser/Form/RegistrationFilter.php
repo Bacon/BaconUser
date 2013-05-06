@@ -9,7 +9,7 @@
 
 namespace BaconUser\Form;
 
-use BaconUser\Options\UserOptions;
+use BaconUser\Options\UserOptionsInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator\ValidatorInterface;
 
@@ -19,9 +19,9 @@ use Zend\Validator\ValidatorInterface;
 class RegistrationFilter extends InputFilter
 {
     public function __construct(
-        ValidatorInterface $emailUniqueValidator,
-        ValidatorInterface $usernameUniqueValidator,
-        UserOptions        $options
+        ValidatorInterface   $emailUniqueValidator,
+        ValidatorInterface   $usernameUniqueValidator,
+        UserOptionsInterface $options
     ) {
         if ($options->getEnableUsername()) {
             $this->add(array(
@@ -36,7 +36,7 @@ class RegistrationFilter extends InputFilter
                             'max' => 255,
                         ),
                     ),
-                    $emailUniqueValidator,
+                    $usernameUniqueValidator,
                 ),
             ));
         }
@@ -49,7 +49,7 @@ class RegistrationFilter extends InputFilter
                 array(
                     'name' => 'EmailAddress'
                 ),
-                $usernameUniqueValidator
+                $emailUniqueValidator,
             ),
         ));
 

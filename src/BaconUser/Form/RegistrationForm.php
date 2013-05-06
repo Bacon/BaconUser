@@ -9,7 +9,7 @@
 
 namespace BaconUser\Form;
 
-use BaconUser\Options\UserOptions;
+use BaconUser\Options\UserOptionsInterface;
 use Zend\Form\Form;
 
 /**
@@ -17,7 +17,7 @@ use Zend\Form\Form;
  */
 class RegistrationForm extends Form
 {
-    public function __construct(UserOptions $options)
+    public function __construct(UserOptionsInterface $options)
     {
         parent::__construct(null);
 
