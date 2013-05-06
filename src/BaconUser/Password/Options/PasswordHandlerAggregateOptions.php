@@ -11,15 +11,11 @@ namespace BaconUser\Password\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
+/**
+ * @see PasswordHandlerAggregateOptionsInterface
+ */
 class PasswordHandlerAggregateOptions extends AbstractOptions implements PasswordHandlerAggregateOptionsInterface
 {
-    /**
-     * Disable strict option mode.
-     *
-     * @var bool
-     */
-    protected $__strictMode__ = false;
-
     /**
      * @var array
      */

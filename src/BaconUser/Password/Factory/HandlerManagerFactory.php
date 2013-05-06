@@ -27,7 +27,7 @@ class HandlerManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('BacoUser\Config');
+        $config = $serviceLocator->get('BaconUser\Config');
 
         if (isset($config['password']['handler_manager'])) {
             $managerConfig = new ServiceManagerConfig($config['password']['handler_manager']);

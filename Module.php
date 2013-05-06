@@ -9,9 +9,12 @@
 
 namespace BaconUser;
 
-use Zend\ServiceManager\Config as ServiceManagerConfig;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
-class Module
+class Module implements
+    AutoloaderProviderInterface,
+    ConfigProviderInterface
 {
     public function getConfig()
     {

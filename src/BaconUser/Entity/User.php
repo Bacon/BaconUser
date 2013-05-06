@@ -9,6 +9,9 @@
 
 namespace BaconUser\Entity;
 
+/**
+ * @see UserInterface
+ */
 class User implements UserInterface
 {
     /**
@@ -27,11 +30,6 @@ class User implements UserInterface
     protected $passwordHash;
 
     /**
-     * @var string
-     */
-    protected $passwordHashingMethod;
-
-    /**
      * @var string|null
      */
     protected $username;
@@ -40,6 +38,11 @@ class User implements UserInterface
      * @var string|null
      */
     protected $displayName;
+
+    /**
+     * @var int|null
+     */
+    protected $state;
 
     /**
      * @return mixed
@@ -63,7 +66,7 @@ class User implements UserInterface
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = (string) $email;
         return $this;
     }
 
@@ -81,25 +84,7 @@ class User implements UserInterface
      */
     public function setPasswordHash($passwordHash)
     {
-        $this->passwordHash = $passwordHash;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPasswordHashingMethod()
-    {
-        return $this->passwordHashingMethod;
-    }
-
-    /**
-     * @param  string $passwordHash
-     * @return User
-     */
-    public function setPasswordHashingMethod($passwordHashingMethod)
-    {
-        $this->passwordHashingMethod = $passwordHashingMethod;
+        $this->passwordHash = (string) $passwordHash;
         return $this;
     }
 
@@ -117,7 +102,7 @@ class User implements UserInterface
      */
     public function setUsername($username)
     {
-        $this->username = $username;
+        $this->username = ($username === null ? null : (string) $username);
         return $this;
     }
 
@@ -135,7 +120,25 @@ class User implements UserInterface
      */
     public function setDisplayName($displayName)
     {
-        $this->displayName = $displayName;
+        $this->displayName = ($displayName === null ? null : (string) $displayName);
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param  int|null $state
+     * @return User
+     */
+    public function setState($state)
+    {
+        $this->state = ($state === null ? null : (int) $state);
         return $this;
     }
 }
