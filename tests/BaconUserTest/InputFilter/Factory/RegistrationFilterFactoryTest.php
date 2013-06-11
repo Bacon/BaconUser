@@ -15,7 +15,7 @@ use Zend\InputFilter\InputFilterPluginManager;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * @covers BaconUser\Form\Factory\RegistrationFilterFactory
+ * @covers BaconUser\InputFilter\Factory\RegistrationFilterFactory
  */
 class RegistrationFilterFactoryTest extends TestCase
 {

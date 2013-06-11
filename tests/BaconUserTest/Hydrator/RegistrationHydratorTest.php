@@ -14,7 +14,7 @@ use BaconUser\Hydrator\RegistrationHydrator;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * @covers BaconUser\Form\RegistrationHydrator
+ * @covers BaconUser\Hydrator\RegistrationHydrator
  */
 class RegistrationHydratorTest extends TestCase
 {

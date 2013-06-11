@@ -14,7 +14,7 @@ use BaconUser\Options\UserOptions;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * @covers BaconUser\Form\RegistrationFilter
+ * @covers BaconUser\InputFilter\RegistrationFilter
  */
 class RegistrationFilterTest extends TestCase
 {

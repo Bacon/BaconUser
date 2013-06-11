@@ -15,7 +15,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\Hydrator\HydratorPluginManager;
 
 /**
- * @covers BaconUser\Form\Factory\RegistrationHydratorFactory
+ * @covers BaconUser\Hydrator\Factory\RegistrationHydratorFactory
  */
 class RegistrationHydratorFactoryTest extends TestCase
 {
