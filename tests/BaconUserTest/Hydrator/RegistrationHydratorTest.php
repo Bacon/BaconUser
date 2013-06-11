@@ -7,10 +7,10 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUserTest\Form;
+namespace BaconUserTest\Hydrator;
 
 use BaconUser\Entity\User;
-use BaconUser\Form\RegistrationHydrator;
+use BaconUser\Hydrator\RegistrationHydrator;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**

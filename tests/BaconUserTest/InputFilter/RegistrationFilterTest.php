@@ -7,9 +7,9 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUserTest\Form;
+namespace BaconUserTest\InputFilter;
 
-use BaconUser\Form\RegistrationFilter;
+use BaconUser\InputFilter\RegistrationFilter;
 use BaconUser\Options\UserOptions;
 use PHPUnit_Framework_TestCase as TestCase;
 
