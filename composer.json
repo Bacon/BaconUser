@@ -5,7 +5,7 @@
     "homepage": "https://github.com/Bacon/BaconUser",
     "require": {
         "php": ">=5.3.3",
-        "doctrine/doctrine-common": ">=2.3,<=2.5",
+        "doctrine/common": "~2.3",
         "zendframework/zend-authentication": ">=2.1.0",
         "zendframework/zend-crypt": ">=2.1.0",
         "zendframework/zend-form": ">=2.1.0",
