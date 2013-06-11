@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Form;
+namespace BaconUser\InputFilter;
 
 use BaconUser\Options\UserOptionsInterface;
 use Zend\InputFilter\InputFilter;
@@ -18,6 +18,11 @@ use Zend\Validator\ValidatorInterface;
  */
 class RegistrationFilter extends InputFilter
 {
+    /**
+     * @param ValidatorInterface   $emailUniqueValidator
+     * @param ValidatorInterface   $usernameUniqueValidator
+     * @param UserOptionsInterface $options
+     */
     public function __construct(
         ValidatorInterface   $emailUniqueValidator,
         ValidatorInterface   $usernameUniqueValidator,
