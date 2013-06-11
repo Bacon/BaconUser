@@ -1,6 +1,7 @@
 <?php
 return array(
     'modules' => array(
+        'DoctrineModule',
         'BaconUser',
     ),
     'module_listener_options' => array(
