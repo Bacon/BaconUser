@@ -2,8 +2,6 @@
 return array(
     'modules' => array(
         'BaconUser',
-        'DoctrineORMModule',
-        'DoctrineModule',
     ),
     'module_listener_options' => array(
         'module_paths' => array(),
