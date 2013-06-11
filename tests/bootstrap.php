@@ -15,5 +15,3 @@ if  (
 }
 
 $loader->add('BaconUserTest\\', __DIR__);
-
-\DoctrineORMModuleTest\Util\ServiceManagerFactory::setConfig(require 'bootstrap.config.php');
