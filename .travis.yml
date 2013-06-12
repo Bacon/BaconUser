@@ -8,7 +8,6 @@ before_script:
   - .travis/load-vendor.sh
 
 script:
-  - composer update
   - mkdir -p builds/logs
   - php vendor/bin/phpunit --bootstrap tests/bootstrap.php --configuration .travis/phpunit.xml tests
 
