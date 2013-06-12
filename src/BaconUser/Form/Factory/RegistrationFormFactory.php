@@ -27,11 +27,12 @@ class RegistrationFormFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $options = $serviceLocator->get('BaconUser\Options\UserOptions');
+        $parentLocator = $serviceLocator->getServiceLocator();
+        $options       = $parentLocator->get('BaconUser\Options\UserOptions');
 
         $form = new RegistrationForm($options);
-        $form->setHydrator($serviceLocator->get('BaconUser\Form\RegistrationHydrator'));
-        $form->setInputFilter($serviceLocator->get('BaconUser\Form\RegistrationFilter'));
+        $form->setHydrator($parentLocator->get('HydratorManager')->get('BaconUser\Hydrator\RegistrationHydrator'));
+        $form->setInputFilter($parentLocator->get('InputFilterManager')->get('BaconUser\InputFilter\RegistrationFilter'));
 
         return $form;
     }
