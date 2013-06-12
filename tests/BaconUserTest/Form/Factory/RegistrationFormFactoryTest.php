@@ -11,7 +11,10 @@ namespace BaconUserTest\Form\Factory;
 
 use BaconUser\Form\Factory\RegistrationFormFactory;
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Form\FormElementManager;
+use Zend\InputFilter\InputFilterPluginManager;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Stdlib\Hydrator\HydratorPluginManager;
 
 /**
  * @covers BaconUser\Form\Factory\RegistrationFormFactory
@@ -24,13 +27,25 @@ class RegistrationFormFactoryTest extends TestCase
         $hydrator    = $this->getMock('Zend\Stdlib\Hydrator\HydratorInterface');
         $inputFilter = $this->getMock('Zend\InputFilter\InputFilterInterface');
 
-        $locator = new ServiceManager();
-        $locator->setService('BaconUser\Form\RegistrationHydrator', $hydrator);
-        $locator->setService('BaconUser\Form\RegistrationFilter', $inputFilter);
-        $locator->setService('BaconUser\Options\UserOptions', $options);
+        $parentLocator = new ServiceManager();
+        $parentLocator->setService('BaconUser\Options\UserOptions', $options);
+
+        $hydratorManager = new HydratorPluginManager();
+        $hydratorManager->setServiceLocator($parentLocator);
+        $hydratorManager->setService('BaconUser\Hydrator\RegistrationHydrator', $hydrator);
+
+        $inputFilterManager = new InputFilterPluginManager();
+        $inputFilterManager->setServiceLocator($parentLocator);
+        $inputFilterManager->setService('BaconUser\InputFilter\RegistrationFilter', $inputFilter);
+
+        $parentLocator->setService('HydratorManager', $hydratorManager);
+        $parentLocator->setService('InputFilterManager', $inputFilterManager);
+
+        $formManager = new FormElementManager();
+        $formManager->setServiceLocator($parentLocator);
 
         $factory = new RegistrationFormFactory();
-        $factory->createService($locator);
+        $factory->createService($formManager);
         // Expect no exceptions or errors.
     }
 }
