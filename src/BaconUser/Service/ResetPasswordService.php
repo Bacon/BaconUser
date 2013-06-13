@@ -18,6 +18,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Crypt\Utils;
 
 /**
  * Service that allows to generate and verify reset passwords
@@ -113,15 +114,16 @@ class ResetPasswordService implements EventManagerAwareInterface
         }
 
         /** @var ResetPassword|null $resetPassword */
-        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email, 'token' => $token));
+        $resetPasswords = $this->resetPasswordRepository->findBy(array('email' => $email));
 
         $now = new DateTime();
 
-        if (null === $resetPassword || $resetPassword->getExpirationDate() > $now) {
-            return false;
+        foreach ($resetPassword as $resetPassword) {
+            if ($resetPassword->getExpirationDate() > $now && Utils::compareStrings($resetPassword->getToken(), $token)) {
+                return true;
+            }
         }
-
-        return true;
+        return false;
     }
 
     /**
