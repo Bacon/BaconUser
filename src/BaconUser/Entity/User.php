@@ -45,7 +45,7 @@ class User implements UserInterface
     protected $state;
 
     /**
-     * @return mixed
+     * {@inheritDoc}
      */
     public function getId()
     {
@@ -53,7 +53,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getEmail()
     {
@@ -61,8 +61,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  string $email
-     * @return User
+     * {@inheritDoc}
      */
     public function setEmail($email)
     {
@@ -71,7 +70,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getPasswordHash()
     {
@@ -79,8 +78,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  string $passwordHash
-     * @return User
+     * {@inheritDoc}
      */
     public function setPasswordHash($passwordHash)
     {
@@ -89,7 +87,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * {@inheritDoc}
      */
     public function getUsername()
     {
@@ -97,8 +95,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  string|null $username
-     * @return User
+     * {@inheritDoc}
      */
     public function setUsername($username)
     {
@@ -107,7 +104,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * {@inheritDoc}
      */
     public function getDisplayName()
     {
@@ -115,8 +112,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  string|null $displayName
-     * @return User
+     * {@inheritDoc}
      */
     public function setDisplayName($displayName)
     {
@@ -125,7 +121,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return int|null
+     * {@inheritDoc}
      */
     public function getState()
     {
@@ -133,8 +129,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  int|null $state
-     * @return User
+     * {@inheritDoc}
      */
     public function setState($state)
     {
