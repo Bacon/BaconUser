@@ -9,30 +9,30 @@
 
 namespace BaconUser\Factory;
 
-use BaconUser\Options\UserOptions;
+use BaconUser\Options\ResetPasswordOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see UserOptions}.
+ * Service factory that instantiates {@see ResetPasswordOptions}.
  */
-class UserOptionsFactory implements FactoryInterface
+class ResetPasswordOptionsFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return UserOptions
+     * @return ResetPasswordOptions
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('BaconUser\Config');
 
-        if (isset($config['bacon_user']['user'])) {
-            return new UserOptions($config['bacon_user']['user']);
+        if (isset($config['bacon_user']['reset_password'])) {
+            return new ResetPasswordOptions($config['bacon_user']['reset_password']);
         }
 
-        return new UserOptions();
+        return new ResetPasswordOptions();
     }
 }

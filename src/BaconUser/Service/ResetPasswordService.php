@@ -14,6 +14,7 @@ use BaconUser\Exception;
 use BaconUser\Options\ResetPasswordOptionsInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
@@ -39,18 +40,28 @@ class ResetPasswordService implements EventManagerAwareInterface
     protected $objectManager;
 
     /**
+     * @var ObjectRepository
+     */
+    protected $resetPasswordRepository;
+
+    /**
      * @var ResetPasswordOptionsInterface
      */
     protected $resetPasswordOptions;
 
     /**
      * @param ObjectManager                 $objectManager
+     * @param ObjectRepository              $resetPasswordRepository
      * @param ResetPasswordOptionsInterface $resetPasswordOptions
      */
-    public function __construct(ObjectManager $objectManager, ResetPasswordOptionsInterface $resetPasswordOptions)
-    {
-        $this->objectManager        = $objectManager;
-        $this->resetPasswordOptions = $resetPasswordOptions;
+    public function __construct(
+        ObjectManager $objectManager,
+        ObjectRepository $resetPasswordRepository,
+        ResetPasswordOptionsInterface $resetPasswordOptions
+    ) {
+        $this->objectManager           = $objectManager;
+        $this->resetPasswordRepository = $resetPasswordRepository;
+        $this->resetPasswordOptions    = $resetPasswordOptions;
     }
 
     /**
@@ -65,7 +76,7 @@ class ResetPasswordService implements EventManagerAwareInterface
         $resetPassword->setEmail($email)
                       ->setToken(sha1(uniqid() . $email));
 
-        $now              = new DateTime('now');
+        $now              = new DateTime();
         $validityInterval = $this->resetPasswordOptions->getTokenValidityInterval();
 
         $resetPassword->setExpirationDate($now->add($validityInterval));
@@ -87,22 +98,26 @@ class ResetPasswordService implements EventManagerAwareInterface
      *
      * @param  string $email
      * @param  string $token
-     * @throws Exception\NotFoundException
+     * @throws Exception\InvalidArgumentException
      * @return bool
      */
     public function isTokenValid($email, $token)
     {
-        /** @var \BaconUser\Entity\ResetPassword $resetPassword */
-        $resetPassword = $this->objectManager->getRepository('BaconUser\Entity\ResetPassword')
-                                             ->findOneBy(array('email' => $email, 'token' => $token));
+        $className = $this->resetPasswordRepository->getClassName();
 
-        if (null === $resetPassword) {
-            throw Exception\NotFoundException::notFoundResetPasswordEntity($email, $token);
+        if (is_subclass_of($className, 'BaconUser\Entity\ResetPassword')) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'An invalid repository was given in %s',
+                __CLASS__
+            ));
         }
 
-        $now = new DateTime('now');
+        /** @var ResetPassword|null $resetPassword */
+        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email, 'token' => $token));
 
-        if ($resetPassword->getExpirationDate() > $now) {
+        $now = new DateTime();
+
+        if (null === $resetPassword || $resetPassword->getExpirationDate() > $now) {
             return false;
         }
 

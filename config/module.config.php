@@ -23,11 +23,15 @@ return array(
             'BaconUser\Entity\UserPrototype' => 'BaconUser\Entity\User',
         ),
         'factories' => array(
-            'BaconUser\Config'                           => 'BaconUser\Factory\ConfigFactory',
-            'BaconUser\Options\UserOptions'              => 'BaconUser\Factory\UserOptionsFactory',
-            'BaconUser\Password\HandlerAggregate'        => 'BaconUser\Password\Factory\HandlerAggregateFactory',
-            'BaconUser\Password\HandlerManager'          => 'BaconUser\Password\Factory\HandlerManagerFactory',
-            'BaconUser\Repository\UserRepositoryFactory' => 'BaconUser\Factory\UserRepositoryFactory',
+            'BaconUser\Config'                             => 'BaconUser\Factory\ConfigFactory',
+            'BaconUser\Options\ResetPasswordOptions'       => 'BaconUser\Factory\ResetPasswordOptionsFactory',
+            'BaconUser\Options\UserOptions'                => 'BaconUser\Factory\UserOptionsFactory',
+            'BaconUser\Password\HandlerAggregate'          => 'BaconUser\Password\Factory\HandlerAggregateFactory',
+            'BaconUser\Password\HandlerManager'            => 'BaconUser\Password\Factory\HandlerManagerFactory',
+            'BaconUser\Repository\UserRepository'          => 'BaconUser\Factory\UserRepositoryFactory',
+            'BaconUser\Repository\ResetPasswordRepository' => 'BaconUser\Factory\ResetPasswordRepositoryFactory',
+            'BaconUser\Service\RegistrationService'        => 'BaconUser\Service\Factory\RegistrationServiceFactory',
+            'BaconUser\Service\ResetPasswordService'       => 'BaconUser\Service\Factory\ResetPasswordServiceFactory'
         )
     ),
 
