@@ -121,7 +121,7 @@ class ResetPasswordService implements EventManagerAwareInterface
         }
 
         /** @var ResetPassword|null $resetPassword */
-        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email, 'token' => $token));
+        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email));
 
         if (null === $resetPassword) {
             return false;
