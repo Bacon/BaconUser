@@ -78,11 +78,18 @@ class ResetPasswordService implements EventManagerAwareInterface
 
         if (null === $resetPassword) {
             $resetPassword = new ResetPassword();
-            $resetPassword->setEmail($email)
-                          ->setToken(sha1(uniqid() . $email));
+            $resetPassword->setEmail($email);
         }
 
-        $now              = new DateTime();
+        // If the token does not exist OR is expirated (which is the case when the same reset password
+        // request is reused
+        $now            = new DateTime();
+        $expirationDate = $resetPassword->getExpirationDate();
+
+        if (null === $expirationDate || $expirationDate < $now) {
+            $resetPassword->setToken(sha1(uniqid() . $email));
+        }
+
         $validityInterval = $this->resetPasswordOptions->getTokenValidityInterval();
 
         $resetPassword->setExpirationDate($now->add($validityInterval));
