@@ -89,10 +89,9 @@ class ResetPasswordService implements EventManagerAwareInterface
 
         // If the token does not exist OR is expirated (which is the case when the same reset password
         // request is reused
-        $now            = new DateTime();
-        $expirationDate = $resetPassword->getExpirationDate();
+        $now = new DateTime();
 
-        if (null === $expirationDate || $expirationDate < $now) {
+        if ($resetPassword->isTokenExpirated($now)) {
             $resetPassword->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
 
@@ -142,7 +141,7 @@ class ResetPasswordService implements EventManagerAwareInterface
 
         $now = new DateTime();
 
-        if ($resetPassword->getExpirationDate() > $now && Utils::compareStrings($resetPassword->getToken(), $token)) {
+        if (!$resetPassword->isTokenExpirated($now) && Utils::compareStrings($resetPassword->getToken(), $token)) {
             return true;
         }
 

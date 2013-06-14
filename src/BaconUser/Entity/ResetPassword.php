@@ -97,4 +97,19 @@ class ResetPassword
         $this->expirationDate = clone $expirationDate;
         return $this;
     }
+
+    /**
+     * Compare the expiration date of the request to a given date to check if it is expirated
+     *
+     * @param  DateTime $date
+     * @return bool
+     */
+    public function isTokenExpirated(DateTime $date)
+    {
+        if (null === $this->expirationDate) {
+            return true;
+        }
+
+        return $this->expirationDate < $date;
+    }
 }
