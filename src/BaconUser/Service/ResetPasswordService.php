@@ -18,6 +18,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Crypt\Utils;
 
 /**
  * Service that allows to generate and verify reset passwords
@@ -73,7 +74,7 @@ class ResetPasswordService implements EventManagerAwareInterface
     public function createResetPasswordRequest($email)
     {
         // We first check if a token already exists for the given mail, so that we can reuse it
-        $resetPassword = $this->resetPasswordRepository->findBy(array('email' => $email));
+        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email));
 
         if (null === $resetPassword) {
             $resetPassword = new ResetPassword();
@@ -98,8 +99,10 @@ class ResetPasswordService implements EventManagerAwareInterface
     }
 
     /**
-     * Check if a token is valid for a given email. This checks among other tings the time expiration. This
-     * method should be called before allowing the user to restore a new password to prevent unwanted reset
+     * Check if a token is valid for a given email
+     *
+     * This checks among other tings the time expiration. This method should be called before allowing
+     * the user to restore a new password to prevent unwanted reset
      *
      * @param  string $email
      * @param  string $token
@@ -120,13 +123,17 @@ class ResetPasswordService implements EventManagerAwareInterface
         /** @var ResetPassword|null $resetPassword */
         $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email, 'token' => $token));
 
-        $now = new DateTime();
-
-        if (null === $resetPassword || $resetPassword->getExpirationDate() > $now) {
+        if (null === $resetPassword) {
             return false;
         }
 
-        return true;
+        $now = new DateTime();
+
+        if ($resetPassword->getExpirationDate() > $now && Utils::compareStrings($resetPassword->getToken(), $token)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

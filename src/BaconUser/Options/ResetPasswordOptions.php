@@ -22,12 +22,17 @@ class ResetPasswordOptions implements ResetPasswordOptionsInterface
     protected $tokenValidityInterval;
 
     /**
-     * @param  string $tokenValidityInterval
+     * @param  DateInterval|string $tokenValidityInterval
      * @return ResetPasswordOptions
      */
     public function setTokenValidityInterval($tokenValidityInterval)
     {
-        $this->tokenValidityInterval = DateInterval::createFromDateString($tokenValidityInterval);
+        if ($tokenValidityInterval instanceof DateInterval) {
+            $this->tokenValidityInterval = $tokenValidityInterval;
+        } else {
+            $this->tokenValidityInterval = DateInterval::createFromDateString($tokenValidityInterval);
+        }
+
         return $this;
     }
 
