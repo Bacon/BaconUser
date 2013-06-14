@@ -72,9 +72,14 @@ class ResetPasswordService implements EventManagerAwareInterface
      */
     public function createResetPasswordRequest($email)
     {
-        $resetPassword = new ResetPassword();
-        $resetPassword->setEmail($email)
-                      ->setToken(sha1(uniqid() . $email));
+        // We first check if a token already exists for the given mail, so that we can reuse it
+        $resetPassword = $this->resetPasswordRepository->findBy(array('email' => $email));
+
+        if (null === $resetPassword) {
+            $resetPassword = new ResetPassword();
+            $resetPassword->setEmail($email)
+                          ->setToken(sha1(uniqid() . $email));
+        }
 
         $now              = new DateTime();
         $validityInterval = $this->resetPasswordOptions->getTokenValidityInterval();
