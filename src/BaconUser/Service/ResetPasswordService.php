@@ -19,12 +19,18 @@ use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Crypt\Utils;
+use Zend\Math;
 
 /**
  * Service that allows to generate and verify reset passwords
  */
 class ResetPasswordService implements EventManagerAwareInterface
 {
+    /**
+     * Valid characters for token generation
+     */
+    const HASH_CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
     /**
      * Event names
      */
@@ -87,7 +93,7 @@ class ResetPasswordService implements EventManagerAwareInterface
         $expirationDate = $resetPassword->getExpirationDate();
 
         if (null === $expirationDate || $expirationDate < $now) {
-            $resetPassword->setToken(sha1(uniqid() . $email));
+            $resetPassword->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
 
         $validityInterval = $this->resetPasswordOptions->getTokenValidityInterval();

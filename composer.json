@@ -11,6 +11,7 @@
         "zendframework/zend-crypt": "~2.2",
         "zendframework/zend-form": "~2.2",
         "zendframework/zend-inputfilter": "~2.2",
+        "zendframework/zend-math": "~2.2",
         "zendframework/zend-modulemanager": "~2.2",
         "zendframework/zend-mvc": "~2.2",
         "zendframework/zend-servicemanager": "~2.2",
