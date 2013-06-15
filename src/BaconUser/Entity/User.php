@@ -45,7 +45,7 @@ class User implements UserInterface
     protected $state;
 
     /**
-     * {@inheritDoc}
+     * @return mixed
      */
     public function getId()
     {
