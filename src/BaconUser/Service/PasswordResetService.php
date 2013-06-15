@@ -105,7 +105,7 @@ class PasswordResetService implements EventManagerAwareInterface
         $passwordReset->setExpirationDate($now->add($validityInterval));
 
         $this->objectManager->persist($passwordReset);
-        $this->objectManager->flush();
+        $this->objectManager->flush($passwordReset);
 
         // Trigger an event so that user can send a mail to the user in response
         $this->getEventManager()->trigger(new PasswordResetEvent($passwordReset));
