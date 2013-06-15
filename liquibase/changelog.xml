@@ -24,5 +24,20 @@
             <column name="display_name" type="varchar(255)"/>
             <column name="state" type="tinyint(3)"/>
         </createTable>
+
+        <createTable tableName="reset_password">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="token" type="varchar(24)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

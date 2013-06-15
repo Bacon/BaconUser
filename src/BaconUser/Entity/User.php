@@ -53,7 +53,7 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getEmail()
     {
@@ -61,7 +61,8 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param  string $email
+     * @return User
      */
     public function setEmail($email)
     {
@@ -70,7 +71,7 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getPasswordHash()
     {
@@ -78,7 +79,8 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param  string $passwordHash
+     * @return User
      */
     public function setPasswordHash($passwordHash)
     {
@@ -87,7 +89,7 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return null|string
      */
     public function getUsername()
     {
@@ -95,7 +97,8 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param  null|string $username
+     * @return User
      */
     public function setUsername($username)
     {
@@ -104,7 +107,7 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return null|string
      */
     public function getDisplayName()
     {
@@ -112,7 +115,8 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param  null|string $displayName
+     * @return User
      */
     public function setDisplayName($displayName)
     {
@@ -121,7 +125,7 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return int|null
      */
     public function getState()
     {
@@ -129,7 +133,8 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param  int|null $state
+     * @return User
      */
     public function setState($state)
     {

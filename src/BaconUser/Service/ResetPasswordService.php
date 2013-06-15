@@ -32,11 +32,6 @@ class ResetPasswordService implements EventManagerAwareInterface
     const HASH_CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     /**
-     * Event names
-     */
-    const EVENT_RESET_PASSWORD_CREATED = 'resetPasswordCreated';
-
-    /**
      * @var EventManagerInterface
      */
     protected $eventManager;
@@ -57,9 +52,10 @@ class ResetPasswordService implements EventManagerAwareInterface
     protected $resetPasswordOptions;
 
     /**
-     * @param ObjectManager                 $objectManager
-     * @param ObjectRepository              $resetPasswordRepository
-     * @param ResetPasswordOptionsInterface $resetPasswordOptions
+     * @param  ObjectManager                 $objectManager
+     * @param  ObjectRepository              $resetPasswordRepository
+     * @param  ResetPasswordOptionsInterface $resetPasswordOptions
+     * @throws Exception\InvalidArgumentException
      */
     public function __construct(
         ObjectManager $objectManager,
@@ -69,6 +65,16 @@ class ResetPasswordService implements EventManagerAwareInterface
         $this->objectManager           = $objectManager;
         $this->resetPasswordRepository = $resetPasswordRepository;
         $this->resetPasswordOptions    = $resetPasswordOptions;
+
+        // Check that the repository handles the right entity
+        $className = $this->resetPasswordRepository->getClassName();
+
+        if (is_subclass_of($className, 'BaconUser\Entity\ResetPassword')) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'An invalid repository was given in %s',
+                __CLASS__
+            ));
+        }
     }
 
     /**
@@ -87,14 +93,13 @@ class ResetPasswordService implements EventManagerAwareInterface
             $resetPassword->setEmail($email);
         }
 
-        // If the token does not exist OR is expirated (which is the case when the same reset password
-        // request is reused
-        $now = new DateTime();
-
-        if ($resetPassword->isTokenExpirated($now)) {
+        // If the token does not exist OR has expired (which is the case when the same reset password
+        // request is reused)
+        if ($resetPassword->hasTokenExpired()) {
             $resetPassword->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
 
+        $now              = new DateTime();
         $validityInterval = $this->resetPasswordOptions->getTokenValidityInterval();
 
         $resetPassword->setExpirationDate($now->add($validityInterval));
@@ -103,9 +108,7 @@ class ResetPasswordService implements EventManagerAwareInterface
         $this->objectManager->flush();
 
         // Trigger an event so that user can send a mail to the user in response
-        $this->eventManager->trigger(self::EVENT_RESET_PASSWORD_CREATED, null, array(
-            'resetPassword' => $resetPassword
-        ));
+        $this->eventManager->trigger(new ResetPasswordEvent($resetPassword));
 
         return $resetPassword;
     }
@@ -118,20 +121,10 @@ class ResetPasswordService implements EventManagerAwareInterface
      *
      * @param  string $email
      * @param  string $token
-     * @throws Exception\InvalidArgumentException
      * @return bool
      */
     public function isTokenValid($email, $token)
     {
-        $className = $this->resetPasswordRepository->getClassName();
-
-        if (is_subclass_of($className, 'BaconUser\Entity\ResetPassword')) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'An invalid repository was given in %s',
-                __CLASS__
-            ));
-        }
-
         /** @var ResetPassword|null $resetPassword */
         $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email));
 
@@ -139,9 +132,7 @@ class ResetPasswordService implements EventManagerAwareInterface
             return false;
         }
 
-        $now = new DateTime();
-
-        if (!$resetPassword->isTokenExpirated($now) && Utils::compareStrings($resetPassword->getToken(), $token)) {
+        if (!$resetPassword->hasTokenExpired() && Utils::compareStrings($resetPassword->getToken(), $token)) {
             return true;
         }
 
@@ -149,7 +140,8 @@ class ResetPasswordService implements EventManagerAwareInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param  EventManagerInterface $eventManager
+     * @return void
      */
     public function setEventManager(EventManagerInterface $eventManager)
     {
@@ -162,7 +154,7 @@ class ResetPasswordService implements EventManagerAwareInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return EventManagerInterface
      */
     public function getEventManager()
     {
