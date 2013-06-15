@@ -14,7 +14,7 @@ use DateInterval;
 /**
  * General options for password resets
  */
-interface ResetPasswordOptionsInterface
+interface PasswordResetOptionsInterface
 {
     /**
      * Get the interval for which the token is considered as valid

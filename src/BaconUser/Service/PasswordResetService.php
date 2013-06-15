@@ -9,9 +9,9 @@
 
 namespace BaconUser\Service;
 
-use BaconUser\Entity\ResetPassword;
+use BaconUser\Entity\PasswordResetRequest;
 use BaconUser\Exception;
-use BaconUser\Options\ResetPasswordOptionsInterface;
+use BaconUser\Options\PasswordResetOptionsInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -22,9 +22,9 @@ use Zend\Crypt\Utils;
 use Zend\Math;
 
 /**
- * Service that allows to generate and verify reset passwords
+ * Service that allows to generate and verify reset password requests
  */
-class ResetPasswordService implements EventManagerAwareInterface
+class PasswordResetService implements EventManagerAwareInterface
 {
     /**
      * Valid characters for token generation
@@ -44,32 +44,32 @@ class ResetPasswordService implements EventManagerAwareInterface
     /**
      * @var ObjectRepository
      */
-    protected $resetPasswordRepository;
+    protected $passwordResetRepository;
 
     /**
-     * @var ResetPasswordOptionsInterface
+     * @var PasswordResetOptionsInterface
      */
-    protected $resetPasswordOptions;
+    protected $passwordResetOptions;
 
     /**
      * @param  ObjectManager                 $objectManager
-     * @param  ObjectRepository              $resetPasswordRepository
-     * @param  ResetPasswordOptionsInterface $resetPasswordOptions
+     * @param  ObjectRepository              $passwordResetRepository
+     * @param  PasswordResetOptionsInterface $passwordResetOptions
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
         ObjectManager $objectManager,
-        ObjectRepository $resetPasswordRepository,
-        ResetPasswordOptionsInterface $resetPasswordOptions
+        ObjectRepository $passwordResetRepository,
+        PasswordResetOptionsInterface $passwordResetOptions
     ) {
         $this->objectManager           = $objectManager;
-        $this->resetPasswordRepository = $resetPasswordRepository;
-        $this->resetPasswordOptions    = $resetPasswordOptions;
+        $this->passwordResetRepository = $passwordResetRepository;
+        $this->passwordResetOptions    = $passwordResetOptions;
 
         // Check that the repository handles the right entity
-        $className = $this->resetPasswordRepository->getClassName();
+        $className = $this->passwordResetRepository->getClassName();
 
-        if (is_subclass_of($className, 'BaconUser\Entity\ResetPassword')) {
+        if (is_subclass_of($className, 'BaconUser\Entity\PasswordResetRequest')) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'An invalid repository was given in %s',
                 __CLASS__
@@ -81,36 +81,36 @@ class ResetPasswordService implements EventManagerAwareInterface
      * Create a new reset password request for a given email, and saves it to the database
      *
      * @param  string $email
-     * @return ResetPassword
+     * @return PasswordResetRequest
      */
     public function createResetPasswordRequest($email)
     {
         // We first check if a token already exists for the given mail, so that we can reuse it
-        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email));
+        $passwordReset = $this->passwordResetRepository->findOneBy(array('email' => $email));
 
-        if (null === $resetPassword) {
-            $resetPassword = new ResetPassword();
-            $resetPassword->setEmail($email);
+        if (null === $passwordReset) {
+            $passwordReset = new PasswordResetRequest();
+            $passwordReset->setEmail($email);
         }
 
         // If the token does not exist OR has expired (which is the case when the same reset password
         // request is reused)
-        if ($resetPassword->hasTokenExpired()) {
-            $resetPassword->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
+        if ($passwordReset->hasTokenExpired()) {
+            $passwordReset->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
 
         $now              = new DateTime();
-        $validityInterval = $this->resetPasswordOptions->getTokenValidityInterval();
+        $validityInterval = $this->passwordResetOptions->getTokenValidityInterval();
 
-        $resetPassword->setExpirationDate($now->add($validityInterval));
+        $passwordReset->setExpirationDate($now->add($validityInterval));
 
-        $this->objectManager->persist($resetPassword);
+        $this->objectManager->persist($passwordReset);
         $this->objectManager->flush();
 
         // Trigger an event so that user can send a mail to the user in response
-        $this->eventManager->trigger(new ResetPasswordEvent($resetPassword));
+        $this->eventManager->trigger(new PasswordResetEvent($passwordReset));
 
-        return $resetPassword;
+        return $passwordReset;
     }
 
     /**
@@ -125,14 +125,14 @@ class ResetPasswordService implements EventManagerAwareInterface
      */
     public function isTokenValid($email, $token)
     {
-        /** @var ResetPassword|null $resetPassword */
-        $resetPassword = $this->resetPasswordRepository->findOneBy(array('email' => $email));
+        /** @var PasswordResetRequest|null $resetPassword */
+        $passwordReset = $this->passwordResetRepository->findOneBy(array('email' => $email));
 
-        if (null === $resetPassword) {
+        if (null === $passwordReset) {
             return false;
         }
 
-        if (!$resetPassword->hasTokenExpired() && Utils::compareStrings($resetPassword->getToken(), $token)) {
+        if (!$passwordReset->hasTokenExpired() && Utils::compareStrings($passwordReset->getToken(), $token)) {
             return true;
         }
 

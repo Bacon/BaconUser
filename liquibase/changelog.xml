@@ -25,7 +25,7 @@
             <column name="state" type="tinyint(3)"/>
         </createTable>
 
-        <createTable tableName="reset_password">
+        <createTable tableName="password_reset_request">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

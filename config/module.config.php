@@ -24,14 +24,14 @@ return array(
         ),
         'factories' => array(
             'BaconUser\Config'                             => 'BaconUser\Factory\ConfigFactory',
-            'BaconUser\Options\ResetPasswordOptions'       => 'BaconUser\Factory\ResetPasswordOptionsFactory',
+            'BaconUser\Options\PasswordResetOptions'       => 'BaconUser\Factory\PasswordResetOptionsFactory',
             'BaconUser\Options\UserOptions'                => 'BaconUser\Factory\UserOptionsFactory',
             'BaconUser\Password\HandlerAggregate'          => 'BaconUser\Password\Factory\HandlerAggregateFactory',
             'BaconUser\Password\HandlerManager'            => 'BaconUser\Password\Factory\HandlerManagerFactory',
             'BaconUser\Repository\UserRepository'          => 'BaconUser\Factory\UserRepositoryFactory',
-            'BaconUser\Repository\ResetPasswordRepository' => 'BaconUser\Factory\ResetPasswordRepositoryFactory',
+            'BaconUser\Repository\PasswordResetRepository' => 'BaconUser\Factory\PasswordResetRepositoryFactory',
             'BaconUser\Service\RegistrationService'        => 'BaconUser\Service\Factory\RegistrationServiceFactory',
-            'BaconUser\Service\ResetPasswordService'       => 'BaconUser\Service\Factory\ResetPasswordServiceFactory'
+            'BaconUser\Service\PasswordResetService'       => 'BaconUser\Service\Factory\PasswordResetServiceFactory'
         )
     ),
 

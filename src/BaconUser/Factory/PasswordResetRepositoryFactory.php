@@ -27,7 +27,7 @@ class ResetPasswordRepositoryFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $resetPasswordRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
-            'BaconUser\Entity\ResetPassword'
+            'BaconUser\Entity\PasswordResetRequest'
         );
 
         return $resetPasswordRepository;

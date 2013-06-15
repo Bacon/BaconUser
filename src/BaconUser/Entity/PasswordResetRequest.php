@@ -12,9 +12,9 @@ namespace BaconUser\Entity;
 use DateTime;
 
 /**
- * Entity that stores various information about a password reset
+ * Entity that stores various information about a password reset request
  */
-class ResetPassword
+class PasswordResetRequest
 {
     /**
      * @var mixed
@@ -54,7 +54,7 @@ class ResetPassword
 
     /**
      * @param  string $email
-     * @return ResetPassword
+     * @return PasswordResetRequest
      */
     public function setEmail($email)
     {
@@ -72,7 +72,7 @@ class ResetPassword
 
     /**
      * @param  string $token
-     * @return ResetPassword
+     * @return PasswordResetRequest
      */
     public function setToken($token)
     {
@@ -90,7 +90,7 @@ class ResetPassword
 
     /**
      * @param  DateTime $expirationDate
-     * @return ResetPassword
+     * @return PasswordResetRequest
      */
     public function setExpirationDate(DateTime $expirationDate)
     {

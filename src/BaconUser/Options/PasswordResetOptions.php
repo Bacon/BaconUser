@@ -14,7 +14,7 @@ use DateInterval;
 /**
  * General options for password resets
  */
-class ResetPasswordOptions implements ResetPasswordOptionsInterface
+class PasswordResetOptions implements PasswordResetOptionsInterface
 {
     /**
      * @var DateInterval
@@ -23,7 +23,7 @@ class ResetPasswordOptions implements ResetPasswordOptionsInterface
 
     /**
      * @param  DateInterval|string $tokenValidityInterval
-     * @return ResetPasswordOptions
+     * @return PasswordResetOptions
      */
     public function setTokenValidityInterval($tokenValidityInterval)
     {
@@ -37,7 +37,7 @@ class ResetPasswordOptions implements ResetPasswordOptionsInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return DateInterval
      */
     public function getTokenValidityInterval()
     {
