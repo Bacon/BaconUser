@@ -39,7 +39,7 @@ return array(
         ),
 
         // Reset password settings
-        'reset_password' => array(
+        'password_reset' => array(
             // The time interval for which a token is valid (for security reasons, do not
             // set a very high interval)
             'token_validity_interval' => '+24 hours'
