@@ -69,7 +69,7 @@ class PasswordResetService implements EventManagerAwareInterface
         // Check that the repository handles the right entity
         $className = $this->passwordResetRepository->getClassName();
 
-        if (is_subclass_of($className, 'BaconUser\Entity\PasswordResetRequest')) {
+        if (!is_a($className, 'BaconUser\Entity\PasswordResetRequest', true)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'An invalid repository was given in %s',
                 __CLASS__
@@ -108,7 +108,7 @@ class PasswordResetService implements EventManagerAwareInterface
         $this->objectManager->flush();
 
         // Trigger an event so that user can send a mail to the user in response
-        $this->eventManager->trigger(new PasswordResetEvent($passwordReset));
+        $this->getEventManager()->trigger(new PasswordResetEvent($passwordReset));
 
         return $passwordReset;
     }

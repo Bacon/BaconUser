@@ -85,7 +85,7 @@ class PasswordResetRequest
      */
     public function getExpirationDate()
     {
-        return clone $this->expirationDate;
+        return $this->expirationDate ? clone $this->expirationDate : null;
     }
 
     /**

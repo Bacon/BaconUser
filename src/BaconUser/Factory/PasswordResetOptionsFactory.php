@@ -29,8 +29,8 @@ class PasswordResetOptionsFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('BaconUser\Config');
 
-        if (isset($config['bacon_user']['password_reset'])) {
-            return new PasswordResetOptions($config['bacon_user']['password_reset']);
+        if (isset($config['password_reset'])) {
+            return new PasswordResetOptions($config['password_reset']);
         }
 
         return new PasswordResetOptions();

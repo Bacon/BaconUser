@@ -10,11 +10,12 @@
 namespace BaconUser\Options;
 
 use DateInterval;
+use Zend\Stdlib\AbstractOptions;
 
 /**
  * General options for password resets
  */
-class PasswordResetOptions implements PasswordResetOptionsInterface
+class PasswordResetOptions extends AbstractOptions implements PasswordResetOptionsInterface
 {
     /**
      * @var DateInterval

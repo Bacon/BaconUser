@@ -15,7 +15,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Service factory that instantiates {@see \Doctrine\Common\Persistence\ObjectRepository}.
  */
-class ResetPasswordRepositoryFactory implements FactoryInterface
+class PasswordResetRepositoryFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
@@ -26,10 +26,10 @@ class ResetPasswordRepositoryFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $resetPasswordRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
+        $passwordResetRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
             'BaconUser\Entity\PasswordResetRequest'
         );
 
-        return $resetPasswordRepository;
+        return $passwordResetRepository;
     }
 }

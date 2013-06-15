@@ -29,8 +29,8 @@ class UserOptionsFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('BaconUser\Config');
 
-        if (isset($config['bacon_user']['user'])) {
-            return new UserOptions($config['bacon_user']['user']);
+        if (isset($config['user'])) {
+            return new UserOptions($config['user']);
         }
 
         return new UserOptions();
