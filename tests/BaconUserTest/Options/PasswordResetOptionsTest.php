@@ -19,8 +19,19 @@ class PasswordResetOptionsTest extends TestCase
 {
     public function testSetValues()
     {
+        // With string
         $options = new PasswordResetOptions(array(
             'token_validity_interval' => '+2 days'
+        ));
+
+        $tokenValidity = $options->getTokenValidityInterval();
+
+        $this->assertInstanceOf('DateInterval', $tokenValidity, 'token_validity_interval must be a DateInterval object');
+        $this->assertEquals(2, $tokenValidity->d);
+
+        // With concrete instance
+        $options = new PasswordResetOptions(array(
+            'token_validity_interval' => new \DateInterval('P2D')
         ));
 
         $tokenValidity = $options->getTokenValidityInterval();

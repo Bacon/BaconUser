@@ -28,4 +28,15 @@ class PasswordResetOptionsFactoryTest extends TestCase
         $factory = new PasswordResetOptionsFactory();
         $this->assertInstanceOf('DateInterval', $factory->createService($locator)->getTokenValidityInterval());
     }
+
+    public function testFactoryReturnsDefaultOptionsWithoutConfig()
+    {
+        $config = array();
+
+        $locator = new ServiceManager();
+        $locator->setService('BaconUser\Config', $config);
+
+        $factory = new PasswordResetOptionsFactory();
+        $this->assertEquals(24, $factory->createService($locator)->getTokenValidityInterval()->h);
+    }
 }

@@ -42,6 +42,10 @@ class PasswordResetOptions extends AbstractOptions implements PasswordResetOptio
      */
     public function getTokenValidityInterval()
     {
+        if (null === $this->tokenValidityInterval) {
+            $this->tokenValidityInterval = DateInterval::createFromDateString('+24 hours');
+        }
+
         return $this->tokenValidityInterval;
     }
 }
