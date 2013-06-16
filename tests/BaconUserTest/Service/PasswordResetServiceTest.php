@@ -17,6 +17,7 @@ use DateInterval;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectRepository;
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\EventManager\EventManager;
 
 /**
  * @covers BaconUser\Service\PasswordResetService
@@ -124,5 +125,13 @@ class PasswordResetServiceTest extends TestCase
 
         $this->assertTrue($this->service->isTokenValid('test@example.com', 'valid-token'));
         $this->assertFalse($this->service->isTokenValid('test@example.com', 'invalid-token'));
+    }
+
+    public function testIdentifiersAreAddedToEventManager()
+    {
+        $eventManager = new EventManager();
+        $this->service->setEventManager($eventManager);
+
+        $this->assertContains('BaconUser\Service\PasswordResetService', $eventManager->getIdentifiers());
     }
 }

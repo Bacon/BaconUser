@@ -15,6 +15,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @covers BaconUser\Service\Factory\PasswordResetServiceFactory
+ * @covers BaconUser\Service\PasswordResetService
  */
 class PasswordResetServiceFactoryTest extends TestCase
 {
