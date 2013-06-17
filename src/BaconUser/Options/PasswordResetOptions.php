@@ -18,9 +18,9 @@ use Zend\Stdlib\AbstractOptions;
 class PasswordResetOptions extends AbstractOptions implements PasswordResetOptionsInterface
 {
     /**
-     * @var DateInterval
+     * @var DateInterval|string
      */
-    protected $tokenValidityInterval;
+    protected $tokenValidityInterval = '+24 hours';
 
     /**
      * @param  DateInterval|string $tokenValidityInterval
@@ -28,12 +28,7 @@ class PasswordResetOptions extends AbstractOptions implements PasswordResetOptio
      */
     public function setTokenValidityInterval($tokenValidityInterval)
     {
-        if ($tokenValidityInterval instanceof DateInterval) {
-            $this->tokenValidityInterval = $tokenValidityInterval;
-        } else {
-            $this->tokenValidityInterval = DateInterval::createFromDateString($tokenValidityInterval);
-        }
-
+        $this->tokenValidityInterval = $tokenValidityInterval;
         return $this;
     }
 
@@ -42,8 +37,8 @@ class PasswordResetOptions extends AbstractOptions implements PasswordResetOptio
      */
     public function getTokenValidityInterval()
     {
-        if (null === $this->tokenValidityInterval) {
-            $this->tokenValidityInterval = DateInterval::createFromDateString('+24 hours');
+        if (!$this->tokenValidityInterval instanceof DateInterval) {
+            $this->tokenValidityInterval = DateInterval::createFromDateString($this->tokenValidityInterval);
         }
 
         return $this->tokenValidityInterval;
