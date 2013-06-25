@@ -9,32 +9,30 @@
 
 namespace BaconUser\Service\Factory;
 
-use BaconUser\Service\RegistrationService;
+use BaconUser\Service\PasswordResetService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see RegistrationService}.
+ * Service factory that instantiates {@see PasswordResetService}.
  */
-class RegistrationServiceFactory implements FactoryInterface
+class PasswordResetServiceFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return RegistrationService
+     * @return PasswordResetService
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $registrationService = new RegistrationService(
-            $serviceLocator->get('BaconUser\Form\RegistrationForm'),
+        $passwordResetService = new PasswordResetService(
             $serviceLocator->get('BaconUser\ObjectManager'),
-            $serviceLocator->get('BaconUser\Options\UserOptions')
+            $serviceLocator->get('BaconUser\Repository\PasswordResetRepository'),
+            $serviceLocator->get('BaconUser\Options\PasswordResetOptions')
         );
 
-        $registrationService->setUserPrototype($serviceLocator->get('BaconUser\Entity\UserPrototype'));
-
-        return $registrationService;
+        return $passwordResetService;
     }
 }
