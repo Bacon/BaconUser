@@ -9,6 +9,7 @@
 
 namespace BaconUser\Factory;
 
+use BaconUser\Repository\PasswordResetRepository;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -22,14 +23,14 @@ class PasswordResetRepositoryFactory implements FactoryInterface
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return PasswordResetRepository
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $passwordResetRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
+        $repository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
             'BaconUser\Entity\PasswordResetRequest'
         );
 
-        return $passwordResetRepository;
+        return new PasswordResetRepository($repository);
     }
 }

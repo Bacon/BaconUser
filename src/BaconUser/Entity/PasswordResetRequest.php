@@ -58,7 +58,7 @@ class PasswordResetRequest
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = (string) $email;
         return $this;
     }
 
@@ -76,7 +76,7 @@ class PasswordResetRequest
      */
     public function setToken($token)
     {
-        $this->token = $token;
+        $this->token = (string) $token;
         return $this;
     }
 
@@ -103,7 +103,7 @@ class PasswordResetRequest
      *
      * @return bool
      */
-    public function hasTokenExpired()
+    public function isExpired()
     {
         return $this->expirationDate < (new DateTime());
     }

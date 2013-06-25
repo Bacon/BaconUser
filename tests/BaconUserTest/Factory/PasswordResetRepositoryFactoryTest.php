@@ -30,6 +30,6 @@ class PasswordResetRepositoryFactoryTest extends TestCase
         $locator->setService('BaconUser\ObjectManager', $objectManager);
 
         $factory = new PasswordResetRepositoryFactory();
-        $this->assertEquals('foo', $factory->createService($locator));
+        $this->assertInstanceOf('BaconUser\Repository\PasswordResetRepositoryInterface', $factory->createService($locator));
     }
 }

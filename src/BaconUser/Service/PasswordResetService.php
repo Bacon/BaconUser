@@ -12,9 +12,9 @@ namespace BaconUser\Service;
 use BaconUser\Entity\PasswordResetRequest;
 use BaconUser\Exception;
 use BaconUser\Options\PasswordResetOptionsInterface;
+use BaconUser\Repository\PasswordResetRepositoryInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
@@ -42,7 +42,7 @@ class PasswordResetService implements EventManagerAwareInterface
     protected $objectManager;
 
     /**
-     * @var ObjectRepository
+     * @var PasswordResetRepositoryInterface
      */
     protected $passwordResetRepository;
 
@@ -52,29 +52,19 @@ class PasswordResetService implements EventManagerAwareInterface
     protected $passwordResetOptions;
 
     /**
-     * @param  ObjectManager                 $objectManager
-     * @param  ObjectRepository              $passwordResetRepository
-     * @param  PasswordResetOptionsInterface $passwordResetOptions
+     * @param  ObjectManager                    $objectManager
+     * @param  PasswordResetRepositoryInterface $passwordResetRepository
+     * @param  PasswordResetOptionsInterface    $passwordResetOptions
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
         ObjectManager $objectManager,
-        ObjectRepository $passwordResetRepository,
+        PasswordResetRepositoryInterface $passwordResetRepository,
         PasswordResetOptionsInterface $passwordResetOptions
     ) {
         $this->objectManager           = $objectManager;
         $this->passwordResetRepository = $passwordResetRepository;
         $this->passwordResetOptions    = $passwordResetOptions;
-
-        // Check that the repository handles the right entity
-        $className = $this->passwordResetRepository->getClassName();
-
-        if (!is_a($className, 'BaconUser\Entity\PasswordResetRequest', true)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'An invalid repository was given in %s',
-                __CLASS__
-            ));
-        }
     }
 
     /**
@@ -86,7 +76,7 @@ class PasswordResetService implements EventManagerAwareInterface
     public function createResetPasswordRequest($email)
     {
         // We first check if a token already exists for the given mail, so that we can reuse it
-        $passwordReset = $this->passwordResetRepository->findOneBy(array('email' => $email));
+        $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
 
         if (null === $passwordReset) {
             $passwordReset = new PasswordResetRequest();
@@ -95,7 +85,7 @@ class PasswordResetService implements EventManagerAwareInterface
 
         // If the token does not exist OR has expired (which is the case when the same reset password
         // request is reused)
-        if ($passwordReset->hasTokenExpired()) {
+        if ($passwordReset->isExpired()) {
             $passwordReset->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
 
@@ -125,14 +115,13 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function isTokenValid($email, $token)
     {
-        /** @var PasswordResetRequest|null $resetPassword */
-        $passwordReset = $this->passwordResetRepository->findOneBy(array('email' => $email));
+        $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
 
         if (null === $passwordReset) {
             return false;
         }
 
-        if (!$passwordReset->hasTokenExpired() && Utils::compareStrings($passwordReset->getToken(), $token)) {
+        if (!$passwordReset->isExpired() && Utils::compareStrings($passwordReset->getToken(), $token)) {
             return true;
         }
 
@@ -159,7 +148,7 @@ class PasswordResetService implements EventManagerAwareInterface
     public function getEventManager()
     {
         if (null === $this->eventManager) {
-            $this->eventManager = new EventManager();
+            $this->setEventManager(new EventManager());
         }
 
         return $this->eventManager;

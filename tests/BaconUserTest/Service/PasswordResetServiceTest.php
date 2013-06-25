@@ -37,11 +37,7 @@ class PasswordResetServiceTest extends TestCase
     public function setUp()
     {
         $objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-
-        $this->repository->expects($this->once())
-                         ->method('getClassName')
-                         ->will($this->returnValue('BaconUser\Entity\PasswordResetRequest'));
+        $this->repository = $this->getMock('BaconUser\Repository\PasswordResetRepositoryInterface');
 
         $this->service = new PasswordResetService($objectManager, $this->repository, new PasswordResetOptions(array(
             'token_validity_interval' => '+24 hours'
@@ -51,8 +47,8 @@ class PasswordResetServiceTest extends TestCase
     public function testCanCreatePasswordResetRequest()
     {
         $this->repository->expects($this->once())
-                         ->method('findOneBy')
-                         ->with(array('email' => 'test@example.com'))
+                         ->method('findOneByEmail')
+                         ->with('test@example.com')
                          ->will($this->returnValue(null));
 
         $passwordRequest = $this->service->createResetPasswordRequest('test@example.com');
@@ -67,8 +63,8 @@ class PasswordResetServiceTest extends TestCase
         $existingPasswordReset->setEmail('test@example.com');
 
         $this->repository->expects($this->once())
-                         ->method('findOneBy')
-                         ->with(array('email' => 'test@example.com'))
+                         ->method('findOneByEmail')
+                         ->with('test@example.com')
                          ->will($this->returnValue($existingPasswordReset));
 
         $passwordRequest = $this->service->createResetPasswordRequest('test@example.com');
@@ -88,8 +84,8 @@ class PasswordResetServiceTest extends TestCase
         });
 
         $this->repository->expects($this->once())
-                         ->method('findOneBy')
-                         ->with(array('email' => 'test@example.com'))
+                         ->method('findOneByEmail')
+                         ->with('test@example.com')
                          ->will($this->returnValue(null));
 
         $this->service->createResetPasswordRequest('test@example.com');
@@ -100,8 +96,8 @@ class PasswordResetServiceTest extends TestCase
     public function testNotFoundResetRequestDoesNotValidateToken()
     {
         $this->repository->expects($this->once())
-                         ->method('findOneBy')
-                         ->with(array('email' => 'test@example.com'))
+                         ->method('findOneByEmail')
+                         ->with('test@example.com')
                          ->will($this->returnValue(null));
 
         $this->assertFalse($this->service->isTokenValid('test@example.com', 'my-token'));

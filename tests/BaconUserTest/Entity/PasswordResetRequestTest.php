@@ -71,11 +71,11 @@ class PasswordResetRequestTest extends TestCase
         $expirationInFuture = new DateTime();
         $expirationInFuture->add(new DateInterval('P1D'));
         $passwordResetRequest->setExpirationDate($expirationInFuture);
-        $this->assertFalse($passwordResetRequest->hasTokenExpired());
+        $this->assertFalse($passwordResetRequest->isExpired());
 
         $expirationInPast = new DateTime();
         $expirationInPast->sub(new DateInterval('P1D'));
         $passwordResetRequest->setExpirationDate($expirationInPast);
-        $this->assertTrue($passwordResetRequest->hasTokenExpired());
+        $this->assertTrue($passwordResetRequest->isExpired());
     }
 }
