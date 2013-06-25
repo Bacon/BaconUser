@@ -81,7 +81,7 @@ class PasswordResetRequest
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getExpirationDate()
     {
@@ -99,7 +99,7 @@ class PasswordResetRequest
     }
 
     /**
-     * Compares the expiration date to the current time in order to check if it has expired
+     * Compares the expiration date to the current time to check if it has expired.
      *
      * @return bool
      */

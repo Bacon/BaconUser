@@ -27,7 +27,7 @@ use Zend\Math;
 class PasswordResetService implements EventManagerAwareInterface
 {
     /**
-     * Valid characters for token generation
+     * Valid characters for token generation.
      */
     const HASH_CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -55,7 +55,6 @@ class PasswordResetService implements EventManagerAwareInterface
      * @param  ObjectManager                    $objectManager
      * @param  PasswordResetRepositoryInterface $passwordResetRepository
      * @param  PasswordResetOptionsInterface    $passwordResetOptions
-     * @throws Exception\InvalidArgumentException
      */
     public function __construct(
         ObjectManager $objectManager,

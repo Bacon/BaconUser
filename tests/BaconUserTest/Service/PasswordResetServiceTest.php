@@ -97,8 +97,7 @@ class PasswordResetServiceTest extends TestCase
     {
         $this->repository->expects($this->once())
                          ->method('findOneByEmail')
-                         ->with('test@example.com')
-                         ->will($this->returnValue(null));
+                         ->with('test@example.com');
 
         $this->assertFalse($this->service->isTokenValid('test@example.com', 'my-token'));
     }
@@ -115,8 +114,8 @@ class PasswordResetServiceTest extends TestCase
                               ->setExpirationDate($expirationDateInFuture);
 
         $this->repository->expects($this->exactly(2))
-                         ->method('findOneBy')
-                         ->with(array('email' => 'test@example.com'))
+                         ->method('findOneByEmail')
+                         ->with('test@example.com')
                          ->will($this->returnValue($existingPasswordReset));
 
         $this->assertTrue($this->service->isTokenValid('test@example.com', 'valid-token'));

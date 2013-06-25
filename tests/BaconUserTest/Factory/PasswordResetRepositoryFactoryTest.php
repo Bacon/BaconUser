@@ -24,7 +24,7 @@ class PasswordResetRepositoryFactoryTest extends TestCase
         $objectManager->expects($this->once())
                       ->method('getRepository')
                       ->with($this->equalTo('BaconUser\Entity\PasswordResetRequest'))
-                      ->will($this->returnValue('foo'));
+                      ->will($this->returnValue($this->getMock('Doctrine\Common\Persistence\ObjectRepository')));
 
         $locator = new ServiceManager();
         $locator->setService('BaconUser\ObjectManager', $objectManager);

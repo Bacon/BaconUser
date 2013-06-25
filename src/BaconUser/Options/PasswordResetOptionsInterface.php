@@ -17,7 +17,7 @@ use DateInterval;
 interface PasswordResetOptionsInterface
 {
     /**
-     * Get the interval for which the token is considered as valid
+     * Get the interval for which the token is considered as valid.
      *
      * @return DateInterval
      */
