@@ -71,27 +71,5 @@ class UserFieldset extends Fieldset
                 'required' => 'required'
             )
         ));
-/*
-        $this->add(array(
-            'name' => 'password_verification',
-            'options' => array(
-                'label' => 'Verify password',
-            ),
-            'attributes' => array(
-                'type' => 'password'
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'submit',
-            'options' => array(
-                'label' => 'Register',
-            ),
-            'attributes' => array(
-                'type' => 'submit',
-            ),
-        ), array(
-            'priority' => -100
-        ));*/
     }
 }

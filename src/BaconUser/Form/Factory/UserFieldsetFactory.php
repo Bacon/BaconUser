@@ -32,7 +32,6 @@ class UserFieldsetFactory implements FactoryInterface
 
         $fieldset = new UserFieldset($options);
         $fieldset->setHydrator($parentLocator->get('HydratorManager')->get('BaconUser\Hydrator\RegistrationHydrator'));
-        //$fieldset->setInputFilter($parentLocator->get('InputFilterManager')->get('BaconUser\InputFilter\RegistrationFilter'));
 
         return $fieldset;
     }
