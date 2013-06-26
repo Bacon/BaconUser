@@ -10,13 +10,12 @@
 namespace BaconUser\InputFilter;
 
 use BaconUser\Options\UserOptionsInterface;
-use Zend\InputFilter\InputFilter;
 use Zend\Validator\ValidatorInterface;
 
 /**
  * Input filter for the {@see RegistrationForm}.
  */
-class RegistrationFilter extends InputFilter
+class RegistrationFilter extends UserFilter
 {
     /**
      * @param ValidatorInterface   $emailUniqueValidator
@@ -28,85 +27,33 @@ class RegistrationFilter extends InputFilter
         ValidatorInterface   $usernameUniqueValidator,
         UserOptionsInterface $options
     ) {
-        if ($options->getEnableUsername()) {
-            $this->add(array(
-                'name' => 'username',
-                'required' => true,
-                'filters' => array(array('name' => 'StringTrim')),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'min' => 3,
-                            'max' => 255,
-                        ),
-                    ),
-                    $usernameUniqueValidator,
-                ),
-            ));
-        }
+        parent::__construct($options);
 
         $this->add(array(
-            'name' => 'email',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
+            'name'       => 'password_verification',
+            'required'   => true,
+            'filters'    => array(array('name' => 'StringTrim')),
             'validators' => array(
                 array(
-                    'name' => 'EmailAddress'
-                ),
-                $emailUniqueValidator,
-            ),
-        ));
-
-        if ($options->getEnableDisplayName()) {
-            $this->add(array(
-                'name' => 'display_name',
-                'required' => false,
-                'filters' => array(array('name' => 'StringTrim')),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'min' => 3,
-                            'max' => 255,
-                        ),
-                    ),
-                ),
-            ));
-        }
-
-        $this->add(array(
-            'name' => 'password',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'min' => 6,
-                    ),
-                ),
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'password_verification',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
+                    'name'    => 'StringLength',
                     'options' => array(
                         'min' => 6,
                     ),
                 ),
                 array(
-                    'name' => 'Identical',
+                    'name'    => 'Identical',
                     'options' => array(
                         'token' => 'password',
                     ),
                 ),
             ),
         ));
+
+        // Add specific validation rules
+        $usernameValidators = $this->get('username')->getValidatorChain();
+        $usernameValidators->addValidator($usernameUniqueValidator);
+
+        $emailValidators = $this->get('email')->getValidatorChain();
+        $emailValidators->addValidator($emailUniqueValidator);
     }
 }

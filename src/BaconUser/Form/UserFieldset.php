@@ -10,16 +10,21 @@
 namespace BaconUser\Form;
 
 use BaconUser\Options\UserOptionsInterface;
-use Zend\Form\Form;
+use Zend\Form\Fieldset;
 
 /**
- * Generic registration form.
+ * Base fieldset for user
  */
-class RegistrationForm extends Form
+class UserFieldset extends Fieldset
 {
+    /**
+     * Constructor
+     *
+     * @param UserOptionsInterface $options
+     */
     public function __construct(UserOptionsInterface $options)
     {
-        parent::__construct(null);
+        parent::__construct('user');
 
         if ($options->getEnableUsername()) {
             $this->add(array(
@@ -28,19 +33,20 @@ class RegistrationForm extends Form
                     'label' => 'Username',
                 ),
                 'attributes' => array(
-                    'type' => 'text',
+                    'required' => 'required',
                 ),
             ));
         }
 
         $this->add(array(
+            'type' => 'Email',
             'name' => 'email',
             'options' => array(
                 'label' => 'Email',
             ),
             'attributes' => array(
-                'type' => 'text'
-            ),
+                'required' => 'required'
+            )
         ));
 
         if ($options->getEnableDisplayName()) {
@@ -50,21 +56,22 @@ class RegistrationForm extends Form
                     'label' => 'Display name',
                 ),
                 'attributes' => array(
-                    'type' => 'text'
+                    'required' => 'required'
                 ),
             ));
         }
 
         $this->add(array(
+            'type' => 'Password',
             'name' => 'password',
             'options' => array(
                 'label' => 'Password',
             ),
             'attributes' => array(
-                'type' => 'password'
-            ),
+                'required' => 'required'
+            )
         ));
-
+/*
         $this->add(array(
             'name' => 'password_verification',
             'options' => array(
@@ -85,6 +92,6 @@ class RegistrationForm extends Form
             ),
         ), array(
             'priority' => -100
-        ));
+        ));*/
     }
 }
