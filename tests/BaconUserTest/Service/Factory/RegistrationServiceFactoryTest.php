@@ -20,13 +20,11 @@ class RegistrationServiceFactoryTest extends TestCase
 {
     public function testFactoryProcessesWithoutErrors()
     {
-        $registrationForm = $this->getMock('Zend\Form\FormInterface');
         $objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $options          = $this->getMock('BaconUser\Options\UserOptionsInterface');
         $userPrototype    = $this->getMock('BaconUser\Entity\UserInterface');
 
         $locator = new ServiceManager();
-        $locator->setService('BaconUser\Form\RegistrationForm', $registrationForm);
         $locator->setService('BaconUser\ObjectManager', $objectManager);
         $locator->setService('BaconUser\Options\UserOptions', $options);
         $locator->setService('BaconUser\Entity\UserPrototype', $userPrototype);

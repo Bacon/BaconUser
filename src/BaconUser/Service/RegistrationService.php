@@ -22,11 +22,6 @@ use Zend\Form\FormInterface;
 class RegistrationService
 {
     /**
-     * @var RegistrationForm
-     */
-    protected $registrationForm;
-
-    /**
      * @var ObjectManager
      */
     protected $objectManager;
@@ -42,41 +37,23 @@ class RegistrationService
     protected $userPrototype;
 
     /**
-     * @param FormInterface        $registrationForm
      * @param UserOptionsInterface $options
      * @param ObjectManager        $objectManager
      */
-    public function __construct(
-        FormInterface $registrationForm,
-        ObjectManager $objectManager,
-        UserOptionsInterface $options
-    ) {
-        $this->registrationForm = $registrationForm;
-        $this->objectManager    = $objectManager;
-        $this->options          = $options;
+    public function __construct(ObjectManager $objectManager, UserOptionsInterface $options)
+    {
+        $this->objectManager = $objectManager;
+        $this->options       = $options;
     }
 
     /**
      * Registers a new user.
      *
-     * @param  array $data
+     * @param  UserInterface $user
      * @return null|UserInterface
      */
-    public function register(array $data)
+    public function register(UserInterface $user)
     {
-        $this->registrationForm->bind(clone $this->getUserPrototype());
-        $this->registrationForm->setData($data);
-
-        if (!$this->registrationForm->isValid()) {
-            return null;
-        }
-
-        $user = $this->registrationForm->getData();
-
-        if (!$user instanceof UserInterface) {
-            throw Exception\UnexpectedValueException::invalidUserEntity($user);
-        }
-
         if ($this->options->getEnableUserState()) {
             $user->setState($this->options->getDefaultUserState());
         }
