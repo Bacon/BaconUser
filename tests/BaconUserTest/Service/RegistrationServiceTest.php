@@ -58,4 +58,14 @@ class RegistrationServiceTest extends TestCase
 
         $this->assertSame($user, $service->getUserPrototype());
     }
+
+    public function testDefaultUserPrototype()
+    {
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $options = new UserOptions(array('enable_user_state' => false, 'default_user_state' => 2));
+        $service = new RegistrationService($objectManager, $options);
+
+        $this->assertInstanceOf('BaconUser\Entity\UserInterface', $service->getUserPrototype());
+    }
 }
