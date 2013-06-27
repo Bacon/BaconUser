@@ -9,7 +9,7 @@
 
     <changeSet id="1" author="dasprid">
         <createTable tableName="user">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="user_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="email" type="varchar(255)">
@@ -23,6 +23,21 @@
             </column>
             <column name="display_name" type="varchar(255)"/>
             <column name="state" type="tinyint(3)"/>
+        </createTable>
+
+        <createTable tableName="password_reset_request">
+            <column name="password_reset_request_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="token" type="varchar(24)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

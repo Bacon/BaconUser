@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Form;
+namespace BaconUser\Hydrator;
 
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
@@ -18,7 +18,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 class RegistrationHydrator extends ClassMethods
 {
     /**
-     * @param PasswordStrategy $passwordStrategy
+     * @param StrategyInterface $passwordHashingStrategy
      */
     public function __construct(StrategyInterface $passwordHashingStrategy)
     {

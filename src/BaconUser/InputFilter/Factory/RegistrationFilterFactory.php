@@ -7,9 +7,9 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Form\Factory;
+namespace BaconUser\InputFilter\Factory;
 
-use BaconUser\Form\RegistrationFilter;
+use BaconUser\InputFilter\RegistrationFilter;
 use DoctrineModule\Validator\NoObjectExists;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -28,8 +28,9 @@ class RegistrationFilterFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $userRepository = $serviceLocator->get('BaconUser\Repository\UserRepository');
-        $options        = $serviceLocator->get('BaconUser\Options\UserOptions');
+        $parentLocator  = $serviceLocator->getServiceLocator();
+        $userRepository = $parentLocator->get('BaconUser\Repository\UserRepository');
+        $options        = $parentLocator->get('BaconUser\Options\UserOptions');
 
         $inputFilter = new RegistrationFilter(
             new NoObjectExists(array(

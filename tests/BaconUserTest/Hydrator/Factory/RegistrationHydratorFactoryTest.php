@@ -7,14 +7,15 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUserTest\Form\Factory;
+namespace BaconUserTest\Hydrator\Factory;
 
-use BaconUser\Form\Factory\RegistrationHydratorFactory;
+use BaconUser\Hydrator\Factory\RegistrationHydratorFactory;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Stdlib\Hydrator\HydratorPluginManager;
 
 /**
- * @covers BaconUser\Form\Factory\RegistrationHydratorFactory
+ * @covers BaconUser\Hydrator\Factory\RegistrationHydratorFactory
  */
 class RegistrationHydratorFactoryTest extends TestCase
 {
@@ -22,11 +23,14 @@ class RegistrationHydratorFactoryTest extends TestCase
     {
         $handler = $this->getMock('BaconUser\Password\HandlerInterface');
 
-        $locator = new ServiceManager();
-        $locator->setService('BaconUser\Password\HandlerInterface', $handler);
+        $parentLocator = new ServiceManager();
+        $parentLocator->setService('BaconUser\Password\HandlerInterface', $handler);
+
+        $hydratorManager = new HydratorPluginManager();
+        $hydratorManager->setServiceLocator($parentLocator);
 
         $factory = new RegistrationHydratorFactory();
-        $factory->createService($locator);
+        $factory->createService($hydratorManager);
         // Expect no exceptions or errors.
     }
 }

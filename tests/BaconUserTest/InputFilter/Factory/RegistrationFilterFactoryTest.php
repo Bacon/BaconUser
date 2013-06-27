@@ -7,14 +7,15 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUserTest\Form\Factory;
+namespace BaconUserTest\InputFilter\Factory;
 
-use BaconUser\Form\Factory\RegistrationFilterFactory;
+use BaconUser\InputFilter\Factory\RegistrationFilterFactory;
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\InputFilter\InputFilterPluginManager;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * @covers BaconUser\Form\Factory\RegistrationFilterFactory
+ * @covers BaconUser\InputFilter\Factory\RegistrationFilterFactory
  */
 class RegistrationFilterFactoryTest extends TestCase
 {
@@ -23,12 +24,15 @@ class RegistrationFilterFactoryTest extends TestCase
         $userRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $options        = $this->getMock('BaconUser\Options\UserOptionsInterface');
 
-        $locator = new ServiceManager();
-        $locator->setService('BaconUser\Repository\UserRepository', $userRepository);
-        $locator->setService('BaconUser\Options\UserOptions', $options);
+        $parentLocator = new ServiceManager();
+        $parentLocator->setService('BaconUser\Repository\UserRepository', $userRepository);
+        $parentLocator->setService('BaconUser\Options\UserOptions', $options);
+
+        $inputFilterManager = new InputFilterPluginManager();
+        $inputFilterManager->setServiceLocator($parentLocator);
 
         $factory = new RegistrationFilterFactory();
-        $factory->createService($locator);
+        $factory->createService($inputFilterManager);
         // Expect no exceptions or errors.
     }
 }

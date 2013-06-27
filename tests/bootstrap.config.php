@@ -1,9 +1,8 @@
 <?php
 return array(
     'modules' => array(
-        'BaconUser',
-        'DoctrineORMModule',
         'DoctrineModule',
+        'BaconUser',
     ),
     'module_listener_options' => array(
         'module_paths' => array(),
