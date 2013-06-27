@@ -89,7 +89,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getUsername()
     {
@@ -97,7 +97,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  string|null $username
+     * @param  null|string $username
      * @return User
      */
     public function setUsername($username)
@@ -107,7 +107,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getDisplayName()
     {
@@ -115,7 +115,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param  string|null $displayName
+     * @param  null|string $displayName
      * @return User
      */
     public function setDisplayName($displayName)

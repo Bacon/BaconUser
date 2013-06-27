@@ -23,7 +23,7 @@ class RegistrationServiceFactory implements FactoryInterface
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return UserOptions
+     * @return RegistrationService
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

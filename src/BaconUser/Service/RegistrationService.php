@@ -12,6 +12,7 @@ namespace BaconUser\Service;
 use BaconUser\Entity\User;
 use BaconUser\Entity\UserInterface;
 use BaconUser\Exception;
+use BaconUser\Form\RegistrationForm;
 use BaconUser\Options\UserOptionsInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Zend\Form\FormInterface;
@@ -60,6 +61,7 @@ class RegistrationService
      * Registers a new user.
      *
      * @param  array $data
+     * @throws Exception\UnexpectedValueException
      * @return null|UserInterface
      */
     public function register(array $data)
