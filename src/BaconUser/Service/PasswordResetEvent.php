@@ -13,13 +13,16 @@ use BaconUser\Entity\PasswordResetRequest;
 use Zend\EventManager\Event;
 
 /**
- * Event triggers
+ * Password reset event.
  */
 class PasswordResetEvent extends Event
 {
     const EVENT_CREATED = 'passwordResetCreated';
 
     /**
+     * $name: defined by Event.
+     *
+     * @see Event::$name
      * @var string
      */
     protected $name = self::EVENT_CREATED;

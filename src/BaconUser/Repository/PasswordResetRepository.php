@@ -13,7 +13,7 @@ use BaconUser\Entity\PasswordResetRequest;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 /**
- * Password reset repository
+ * Password reset repository.
  */
 class PasswordResetRepository implements PasswordResetRepositoryInterface
 {
@@ -31,6 +31,9 @@ class PasswordResetRepository implements PasswordResetRepositoryInterface
     }
 
     /**
+     * findOneByEmail(): defined by PasswordResetRepositoryInterface.
+     *
+     * @see    PasswordResetRepositoryInterface::findOneByEmail()
      * @param  string $email
      * @return PasswordResetRequest|null
      */

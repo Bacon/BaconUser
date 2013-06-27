@@ -12,11 +12,13 @@ namespace BaconUser\Repository;
 use BaconUser\Entity\PasswordResetRequest;
 
 /**
- * Interface that acts as an adapter for a concrete repository
+ * Generic interface for password reset repositories.
  */
 interface PasswordResetRepositoryInterface
 {
     /**
+     * Finds a single password request by email address.
+     *
      * @param  string $email
      * @return PasswordResetRequest|null
      */

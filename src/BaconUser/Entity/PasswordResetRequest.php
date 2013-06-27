@@ -12,7 +12,7 @@ namespace BaconUser\Entity;
 use DateTime;
 
 /**
- * Entity that stores various information about a password reset request
+ * Entity that stores various information about a password reset request.
  */
 class PasswordResetRequest
 {

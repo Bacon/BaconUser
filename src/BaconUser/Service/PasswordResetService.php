@@ -10,7 +10,6 @@
 namespace BaconUser\Service;
 
 use BaconUser\Entity\PasswordResetRequest;
-use BaconUser\Exception;
 use BaconUser\Options\PasswordResetOptionsInterface;
 use BaconUser\Repository\PasswordResetRepositoryInterface;
 use DateTime;
@@ -22,7 +21,7 @@ use Zend\Crypt\Utils;
 use Zend\Math;
 
 /**
- * Service that allows to generate and verify reset password requests
+ * Service that allows to generate and verify reset password requests.
  */
 class PasswordResetService implements EventManagerAwareInterface
 {
@@ -67,14 +66,14 @@ class PasswordResetService implements EventManagerAwareInterface
     }
 
     /**
-     * Create a new reset password request for a given email, and saves it to the database
+     * Creates a new reset password request for a given email, and saves it to the database.
      *
      * @param  string $email
      * @return PasswordResetRequest
      */
     public function createResetPasswordRequest($email)
     {
-        // We first check if a token already exists for the given mail, so that we can reuse it
+        // We first check if a token already exists for the given mail, so that we can reuse it.
         $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
 
         if (null === $passwordReset) {
@@ -83,7 +82,7 @@ class PasswordResetService implements EventManagerAwareInterface
         }
 
         // If the token does not exist OR has expired (which is the case when the same reset password
-        // request is reused)
+        // request is reused).
         if ($passwordReset->isExpired()) {
             $passwordReset->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
@@ -96,14 +95,14 @@ class PasswordResetService implements EventManagerAwareInterface
         $this->objectManager->persist($passwordReset);
         $this->objectManager->flush($passwordReset);
 
-        // Trigger an event so that user can send a mail to the user in response
+        // Trigger an event so that user can send a mail to the user in response.
         $this->getEventManager()->trigger(new PasswordResetEvent($passwordReset));
 
         return $passwordReset;
     }
 
     /**
-     * Check if a token is valid for a given email
+     * Checks if a token is valid for a given email.
      *
      * This checks among other tings the time expiration. This method should be called before allowing
      * the user to restore a new password to prevent unwanted reset
@@ -128,6 +127,9 @@ class PasswordResetService implements EventManagerAwareInterface
     }
 
     /**
+     * setEventManager(): defined by EventManagerAwareInterface.
+     *
+     * @see    EventManagerAwareInterface::setEventManager()
      * @param  EventManagerInterface $eventManager
      * @return void
      */
@@ -142,6 +144,9 @@ class PasswordResetService implements EventManagerAwareInterface
     }
 
     /**
+     * getEventManager(): defined by EventManagerAwareInterface.
+     *
+     * @see    EventManagerAwareInterface::getEventManager()
      * @return EventManagerInterface
      */
     public function getEventManager()
