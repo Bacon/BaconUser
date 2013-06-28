@@ -12,6 +12,7 @@ namespace BaconUser\Service;
 use BaconUser\Entity\PasswordResetRequest;
 use BaconUser\Options\PasswordResetOptionsInterface;
 use BaconUser\Repository\PasswordResetRepositoryInterface;
+use BaconUser\Repository\UserRepositoryInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Zend\EventManager\EventManager;
@@ -46,21 +47,29 @@ class PasswordResetService implements EventManagerAwareInterface
     protected $passwordResetRepository;
 
     /**
+     * @var UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    /**
      * @var PasswordResetOptionsInterface
      */
     protected $passwordResetOptions;
 
     /**
      * @param  ObjectManager                    $objectManager
+     * @param  UserRepositoryInterface          $userRepository
      * @param  PasswordResetRepositoryInterface $passwordResetRepository
      * @param  PasswordResetOptionsInterface    $passwordResetOptions
      */
     public function __construct(
         ObjectManager $objectManager,
+        UserRepositoryInterface $userRepository,
         PasswordResetRepositoryInterface $passwordResetRepository,
         PasswordResetOptionsInterface $passwordResetOptions
     ) {
         $this->objectManager           = $objectManager;
+        $this->userRepository          = $userRepository;
         $this->passwordResetRepository = $passwordResetRepository;
         $this->passwordResetOptions    = $passwordResetOptions;
     }
@@ -73,13 +82,15 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function createResetPasswordRequest($email)
     {
+        $user = $this->userRepository->findOneByEmail($email);
+
+        if (null === $user) {
+            return null;
+        }
+
         // We first check if a token already exists for the given mail, so that we can reuse it.
         $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
-
-        if (null === $passwordReset) {
-            $passwordReset = new PasswordResetRequest();
-            $passwordReset->setEmail($email);
-        }
+        $passwordReset = $passwordReset ?: new PasswordResetRequest($user);
 
         // If the token does not exist OR has expired (which is the case when the same reset password
         // request is reused).
