@@ -11,6 +11,8 @@ namespace BaconUserTest\Service;
 
 use BaconUser\Entity\PasswordResetRequest;
 use BaconUser\Options\PasswordResetOptions;
+use BaconUser\Repository\PasswordResetRepositoryInterface;
+use BaconUser\Repository\UserRepositoryInterface;
 use BaconUser\Service\PasswordResetEvent;
 use BaconUser\Service\PasswordResetService;
 use DateInterval;
@@ -30,29 +32,41 @@ class PasswordResetServiceTest extends TestCase
     protected $service;
 
     /**
-     * @var ObjectRepository
+     * @var UserRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $repository;
+    protected $userRepository;
+
+    /**
+     * @var PasswordResetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $passwordRepository;
 
     public function setUp()
     {
-        $objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $this->repository = $this->getMock('BaconUser\Repository\PasswordResetRepositoryInterface');
+        $objectManager            = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->userRepository     = $this->getMock('BaconUser\Repository\UserRepositoryInterface');
+        $this->passwordRepository = $this->getMock('BaconUser\Repository\PasswordResetRepositoryInterface');
 
-        $this->service = new PasswordResetService($objectManager, $this->repository, new PasswordResetOptions(array(
-            'token_validity_interval' => '+24 hours'
-        )));
+        $this->service = new PasswordResetService(
+            $objectManager,
+            $this->userRepository,
+            $this->passwordRepository,
+            new PasswordResetOptions(array('token_validity_interval' => '+24 hours'))
+        );
     }
 
     public function testCanCreatePasswordResetRequest()
     {
-        $this->repository->expects($this->once())
-                         ->method('findOneByEmail')
-                         ->with('test@example.com')
-                         ->will($this->returnValue(null));
+        $this
+            ->passwordRepository
+            ->expects($this->once())
+            ->method('findOneByEmail')
+            ->with('test@example.com')
+            ->will($this->returnValue(null));
 
         $passwordRequest = $this->service->createResetPasswordRequest('test@example.com');
 
+        $this->assertInstanceOf('BaconUser\Entity\PasswordResetRequest', $passwordRequest);
         $this->assertEquals(24, strlen($passwordRequest->getToken()));
         $this->assertEquals('test@example.com', $passwordRequest->getEmail());
     }
@@ -83,8 +97,8 @@ class PasswordResetServiceTest extends TestCase
             ->method('setExpirationDate')
             ->with($this->isInstanceOf('DateTime'));
         $this
-            ->repository
-            ->expects($this->once())
+            ->passwordRepository
+            ->expects($this->any())
             ->method('findOneByEmail')
             ->with('test@example.com')
             ->will($this->returnValue($passwordResetRequest));
@@ -94,29 +108,24 @@ class PasswordResetServiceTest extends TestCase
 
     public function testEventIsTriggeredWhenPasswordResetRequestIsCreated()
     {
-        $eventIsCalled = false;
-
+        $callback     = $this->getMock('stdLib', array('__invoke'));
         $eventManager = $this->service->getEventManager();
-        $eventManager->attach(PasswordResetEvent::EVENT_CREATED, function() use (&$eventIsCalled) {
-            $eventIsCalled = true;
-        });
 
-        $this->repository->expects($this->once())
-                         ->method('findOneByEmail')
-                         ->with('test@example.com')
-                         ->will($this->returnValue(null));
+        $callback->expects($this->once())->method('__invoke');
+        $eventManager->attach(PasswordResetEvent::EVENT_CREATED, $callback);
+
+        $this
+            ->passwordRepository
+            ->expects($this->any())
+            ->method('findOneByEmail')
+            ->with('test@example.com')
+            ->will($this->returnValue(null));
 
         $this->service->createResetPasswordRequest('test@example.com');
-
-        $this->assertTrue($eventIsCalled);
     }
 
     public function testNotFoundResetRequestDoesNotValidateToken()
     {
-        $this->repository->expects($this->once())
-                         ->method('findOneByEmail')
-                         ->with('test@example.com');
-
         $this->assertFalse($this->service->isTokenValid('test@example.com', 'my-token'));
     }
 
@@ -138,7 +147,7 @@ class PasswordResetServiceTest extends TestCase
             ->will($this->returnValue(false));
 
         $this
-            ->repository
+            ->passwordRepository
             ->expects($this->any())
             ->method('findOneByEmail')
             ->with('test@example.com')
@@ -150,9 +159,15 @@ class PasswordResetServiceTest extends TestCase
 
     public function testIdentifiersAreAddedToEventManager()
     {
-        $eventManager = new EventManager();
+        $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
+
+        $eventManager
+            ->expects($this->once())
+            ->method('setIdentifiers')
+            ->with($this->contains('BaconUser\Service\PasswordResetService'));
+
         $this->service->setEventManager($eventManager);
 
-        $this->assertContains('BaconUser\Service\PasswordResetService', $eventManager->getIdentifiers());
+        $this->assertSame($eventManager, $this->service->getEventManager());
     }
 }
