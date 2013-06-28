@@ -36,7 +36,7 @@ class UserRepositoryFactoryTest extends TestCase
             ->will($this->returnValue($objectManager));
 
         $factory = new UserRepositoryFactory();
-        
+
         $this->assertInstanceOf('BaconUser\Repository\UserRepository', $factory->createService($serviceLocator));
     }
 }
