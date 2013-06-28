@@ -59,19 +59,37 @@ class PasswordResetServiceTest extends TestCase
 
     public function testReuseSameRequestIfItAlreadyExists()
     {
-        $existingPasswordReset = new PasswordResetRequest();
-        $existingPasswordReset->setEmail('test@example.com');
+        $passwordResetRequest = $this
+            ->getMockBuilder('BaconUser\Entity\PasswordResetRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->repository->expects($this->once())
-                         ->method('findOneByEmail')
-                         ->with('test@example.com')
-                         ->will($this->returnValue($existingPasswordReset));
+        $passwordResetRequest
+            ->expects($this->any())
+            ->method('isExpired')
+            ->will($this->returnValue(true));
+        $passwordResetRequest
+            ->expects($this->once())
+            ->method('setToken')
+            ->with(
+                $this->callback(
+                    function ($token) {
+                        return 24 === strlen($token);
+                    }
+                )
+            );
+        $passwordResetRequest
+            ->expects($this->once())
+            ->method('setExpirationDate')
+            ->with($this->isInstanceOf('DateTime'));
+        $this
+            ->repository
+            ->expects($this->once())
+            ->method('findOneByEmail')
+            ->with('test@example.com')
+            ->will($this->returnValue($passwordResetRequest));
 
-        $passwordRequest = $this->service->createResetPasswordRequest('test@example.com');
-
-        $this->assertEquals(24, strlen($passwordRequest->getToken()));
-        $this->assertEquals('test@example.com', $passwordRequest->getEmail());
-        $this->assertSame($existingPasswordReset, $passwordRequest);
+        $this->assertSame($passwordResetRequest, $this->service->createResetPasswordRequest('test@example.com'));
     }
 
     public function testEventIsTriggeredWhenPasswordResetRequestIsCreated()
@@ -104,19 +122,27 @@ class PasswordResetServiceTest extends TestCase
 
     public function testCanValidateToken()
     {
-        $existingPasswordReset = new PasswordResetRequest();
+        $existingRequest = $this
+            ->getMockBuilder('BaconUser\Entity\PasswordResetRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        // Set an expiration date in the future so that token is not validated
-        $expirationDateInFuture = new DateTime();
-        $expirationDateInFuture->add(new DateInterval('P1D'));
+        $existingRequest
+            ->expects($this->any())
+            ->method('getToken')
+            ->will($this->returnValue('valid-token'));
 
-        $existingPasswordReset->setToken('valid-token')
-                              ->setExpirationDate($expirationDateInFuture);
+        $existingRequest
+            ->expects($this->any())
+            ->method('isExpired')
+            ->will($this->returnValue(false));
 
-        $this->repository->expects($this->exactly(2))
-                         ->method('findOneByEmail')
-                         ->with('test@example.com')
-                         ->will($this->returnValue($existingPasswordReset));
+        $this
+            ->repository
+            ->expects($this->any())
+            ->method('findOneByEmail')
+            ->with('test@example.com')
+            ->will($this->returnValue($existingRequest));
 
         $this->assertTrue($this->service->isTokenValid('test@example.com', 'valid-token'));
         $this->assertFalse($this->service->isTokenValid('test@example.com', 'invalid-token'));
