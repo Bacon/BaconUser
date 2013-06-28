@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
  *
  * @author Marco Pivetta <ocramius@gmail.com>
  */
-class UserRepository implements UserRepositoryInterface
+class UserRepository implements UserRepositoryInterface, ObjectRepository
 {
     /**
      * @var ObjectRepository
@@ -42,5 +42,45 @@ class UserRepository implements UserRepositoryInterface
     public function findOneByEmail($email)
     {
         return $this->userRepository->findOneBy(array('email' => $email));
+    }
+
+    /**
+     * @see ObjectRepository::find()
+     */
+    public function find($id)
+    {
+        return $this->userRepository->find($id);
+    }
+
+    /**
+     * @see ObjectRepository::findAll()
+     */
+    public function findAll()
+    {
+        return $this->userRepository->findAll();
+    }
+
+    /**
+     * @see ObjectRepository::findBy()
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->userRepository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @see ObjectRepository::findOneBy()
+     */
+    public function findOneBy(array $criteria)
+    {
+        return $this->userRepository->findBy($criteria);
+    }
+
+    /**
+     * @see ObjectRepository::getClassName()
+     */
+    public function getClassName()
+    {
+        return $this->userRepository->getClassName();
     }
 }
