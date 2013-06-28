@@ -42,14 +42,14 @@ class PasswordResetService implements EventManagerAwareInterface
     protected $objectManager;
 
     /**
-     * @var PasswordResetRepositoryInterface
-     */
-    protected $passwordResetRepository;
-
-    /**
      * @var UserRepositoryInterface
      */
-    protected $userRepository;
+    protected $userRepo;
+
+    /**
+     * @var PasswordResetRepositoryInterface
+     */
+    protected $passwordResetRepo;
 
     /**
      * @var PasswordResetOptionsInterface
@@ -59,19 +59,19 @@ class PasswordResetService implements EventManagerAwareInterface
     /**
      * @param  ObjectManager                    $objectManager
      * @param  UserRepositoryInterface          $userRepository
-     * @param  PasswordResetRepositoryInterface $passwordResetRepository
+     * @param  PasswordResetRepositoryInterface $passwordResetRepo
      * @param  PasswordResetOptionsInterface    $passwordResetOptions
      */
     public function __construct(
         ObjectManager $objectManager,
         UserRepositoryInterface $userRepository,
-        PasswordResetRepositoryInterface $passwordResetRepository,
+        PasswordResetRepositoryInterface $passwordResetRepo,
         PasswordResetOptionsInterface $passwordResetOptions
     ) {
-        $this->objectManager           = $objectManager;
-        $this->userRepository          = $userRepository;
-        $this->passwordResetRepository = $passwordResetRepository;
-        $this->passwordResetOptions    = $passwordResetOptions;
+        $this->objectManager        = $objectManager;
+        $this->userRepo             = $userRepository;
+        $this->passwordResetRepo    = $passwordResetRepo;
+        $this->passwordResetOptions = $passwordResetOptions;
     }
 
     /**
@@ -82,14 +82,14 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function createResetPasswordRequest($email)
     {
-        $user = $this->userRepository->findOneByEmail($email);
+        $user = $this->userRepo->findOneByEmail($email);
 
         if (null === $user) {
             return null;
         }
 
         // We first check if a token already exists for the given mail, so that we can reuse it.
-        $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
+        $passwordReset = $this->passwordResetRepo->findOneByEmail($email);
         $passwordReset = $passwordReset ?: new PasswordResetRequest($user);
 
         // If the token does not exist OR has expired (which is the case when the same reset password
@@ -124,7 +124,7 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function isTokenValid($email, $token)
     {
-        $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
+        $passwordReset = $this->passwordResetRepo->findOneByEmail($email);
 
         if (null === $passwordReset) {
             return false;
