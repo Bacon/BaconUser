@@ -10,6 +10,7 @@
 namespace BaconUser\Repository;
 
 use BaconUser\Entity\PasswordResetRequest;
+use BaconUser\Entity\UserInterface;
 
 /**
  * Generic interface for password reset repositories.
@@ -17,10 +18,10 @@ use BaconUser\Entity\PasswordResetRequest;
 interface PasswordResetRepositoryInterface
 {
     /**
-     * Finds a single password request by email address.
+     * Finds a single password request by user..
      *
-     * @param  string $email
+     * @param  UserInterface $user
      * @return PasswordResetRequest|null
      */
-    public function findOneByEmail($email);
+    public function findOneByUser(UserInterface $user);
 }

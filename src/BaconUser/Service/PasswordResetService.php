@@ -10,6 +10,7 @@
 namespace BaconUser\Service;
 
 use BaconUser\Entity\PasswordResetRequest;
+use BaconUser\Entity\UserInterface;
 use BaconUser\Options\PasswordResetOptionsInterface;
 use BaconUser\Repository\PasswordResetRepositoryInterface;
 use BaconUser\Repository\UserRepositoryInterface;
@@ -84,12 +85,12 @@ class PasswordResetService implements EventManagerAwareInterface
     {
         $user = $this->userRepo->findOneByEmail($email);
 
-        if (null === $user) {
+        if (!$user instanceof UserInterface) {
             return null;
         }
 
         // We first check if a token already exists for the given mail, so that we can reuse it.
-        $passwordReset = $this->passwordResetRepo->findOneByEmail($email);
+        $passwordReset = $this->passwordResetRepo->findOneByUser($user);
         $passwordReset = $passwordReset ?: new PasswordResetRequest($user);
 
         // If the token does not exist OR has expired (which is the case when the same reset password
@@ -124,9 +125,15 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function isTokenValid($email, $token)
     {
-        $passwordReset = $this->passwordResetRepo->findOneByEmail($email);
+        $user = $this->userRepo->findOneByEmail($email);
 
-        if (null === $passwordReset) {
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        $passwordReset = $this->passwordResetRepo->findOneByUser($user);
+
+        if (!$passwordReset instanceof PasswordResetRequest) {
             return false;
         }
 

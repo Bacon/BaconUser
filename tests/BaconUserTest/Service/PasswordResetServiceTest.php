@@ -158,8 +158,26 @@ class PasswordResetServiceTest extends TestCase
         $this->assertFalse($this->service->isTokenValid('test@example.com', 'my-token'));
     }
 
+    public function testCannotValidateTokenWithNoUser()
+    {
+        $this
+            ->userRepository
+            ->expects($this->any())
+            ->method('findOneByEmail')
+            ->with('test@example.com')
+            ->will($this->returnValue(null));
+
+        $this
+            ->passwordRepository
+            ->expects($this->never())
+            ->method('findOneByUser');
+
+        $this->assertFalse($this->service->isTokenValid('test@example.com', 'valid-token'));
+    }
+
     public function testCanValidateToken()
     {
+        $user            = $this->getMock('BaconUser\Entity\UserInterface');
         $existingRequest = $this
             ->getMockBuilder('BaconUser\Entity\PasswordResetRequest')
             ->disableOriginalConstructor()
@@ -174,10 +192,16 @@ class PasswordResetServiceTest extends TestCase
             ->method('isExpired')
             ->will($this->returnValue(false));
         $this
-            ->passwordRepository
+            ->userRepository
             ->expects($this->any())
             ->method('findOneByEmail')
             ->with('test@example.com')
+            ->will($this->returnValue($user));
+        $this
+            ->passwordRepository
+            ->expects($this->any())
+            ->method('findOneByUser')
+            ->with($user)
             ->will($this->returnValue($existingRequest));
 
         $this->assertTrue($this->service->isTokenValid('test@example.com', 'valid-token'));

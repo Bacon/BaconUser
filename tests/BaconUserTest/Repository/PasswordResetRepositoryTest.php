@@ -19,20 +19,21 @@ class PasswordResetRepositoryTest extends TestCase
 {
     public function testCanRetrieveObject()
     {
-        $adapter       = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $repository    = new PasswordResetRepository($adapter);
-        $passwordReset = $this
+        $user           = $this->getMock('BaconUser\Entity\UserInterface');
+        $baseRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $passwordReset  = $this
             ->getMockBuilder('BaconUser\Entity\PasswordResetRequest')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $adapter->expects($this->once())
-                ->method('findOneBy')
-                ->with(array('email' => 'test@test.com'))
-                ->will($this->returnValue($passwordReset));
+        $baseRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(array('user' => $user))
+            ->will($this->returnValue($passwordReset));
 
-        $password = $repository->findOneByEmail('test@test.com');
+        $repository = new PasswordResetRepository($baseRepository);
 
-        $this->assertSame($passwordReset, $password);
+        $this->assertSame($passwordReset, $repository->findOneByUser($user));
     }
 }
