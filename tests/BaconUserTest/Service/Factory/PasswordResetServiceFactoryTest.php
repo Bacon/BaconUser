@@ -21,17 +21,30 @@ class PasswordResetServiceFactoryTest extends TestCase
 {
     public function testFactoryProcessesWithoutErrors()
     {
-        $objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $repository       = $this->getMock('BaconUser\Repository\PasswordResetRepositoryInterface');
-        $options          = $this->getMock('BaconUser\Options\PasswordResetOptionsInterface');
+        $serviceLocator   = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $services         = array(
+            'BaconUser\ObjectManager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'BaconUser\Repository\UserRepository'
+                => $this->getMock('BaconUser\Repository\UserRepositoryInterface'),
+            'BaconUser\Repository\PasswordResetRepository'
+                => $this->getMock('BaconUser\Repository\PasswordResetRepositoryInterface'),
+            'BaconUser\Options\PasswordResetOptions'
+                => $this->getMock('BaconUser\Options\PasswordResetOptionsInterface'),
+        );
 
-        $locator = new ServiceManager();
-        $locator->setService('BaconUser\ObjectManager', $objectManager);
-        $locator->setService('BaconUser\Repository\PasswordResetRepository', $repository);
-        $locator->setService('BaconUser\Options\PasswordResetOptions', $options);
+        $serviceLocator
+            ->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->returnCallback(
+                    function ($serviceName) use ($services) {
+                        return $services[$serviceName];
+                    }
+                )
+            );
 
         $factory = new PasswordResetServiceFactory();
-        $factory->createService($locator);
-        // Expect no exceptions or errors.
+
+        $this->assertInstanceOf('BaconUser\Service\PasswordResetService', $factory->createService($serviceLocator));
     }
 }

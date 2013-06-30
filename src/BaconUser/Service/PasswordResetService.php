@@ -10,8 +10,10 @@
 namespace BaconUser\Service;
 
 use BaconUser\Entity\PasswordResetRequest;
+use BaconUser\Entity\UserInterface;
 use BaconUser\Options\PasswordResetOptionsInterface;
 use BaconUser\Repository\PasswordResetRepositoryInterface;
+use BaconUser\Repository\UserRepositoryInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Zend\EventManager\EventManager;
@@ -41,6 +43,11 @@ class PasswordResetService implements EventManagerAwareInterface
     protected $objectManager;
 
     /**
+     * @var UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    /**
      * @var PasswordResetRepositoryInterface
      */
     protected $passwordResetRepository;
@@ -52,15 +59,18 @@ class PasswordResetService implements EventManagerAwareInterface
 
     /**
      * @param  ObjectManager                    $objectManager
+     * @param  UserRepositoryInterface          $userRepository
      * @param  PasswordResetRepositoryInterface $passwordResetRepository
      * @param  PasswordResetOptionsInterface    $passwordResetOptions
      */
     public function __construct(
         ObjectManager $objectManager,
+        UserRepositoryInterface $userRepository,
         PasswordResetRepositoryInterface $passwordResetRepository,
         PasswordResetOptionsInterface $passwordResetOptions
     ) {
         $this->objectManager           = $objectManager;
+        $this->userRepository          = $userRepository;
         $this->passwordResetRepository = $passwordResetRepository;
         $this->passwordResetOptions    = $passwordResetOptions;
     }
@@ -73,32 +83,34 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function createResetPasswordRequest($email)
     {
-        // We first check if a token already exists for the given mail, so that we can reuse it.
-        $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
+        $user = $this->userRepository->findOneByEmail($email);
 
-        if (null === $passwordReset) {
-            $passwordReset = new PasswordResetRequest();
-            $passwordReset->setEmail($email);
+        if (!$user instanceof UserInterface) {
+            return null;
         }
+
+        // We first check if a token already exists for the given mail, so that we can reuse it.
+        $passwordResetRequest = $this->passwordResetRepository->findOneByUser($user);
+        $passwordResetRequest = $passwordResetRequest ?: new PasswordResetRequest($user);
 
         // If the token does not exist OR has expired (which is the case when the same reset password
         // request is reused).
-        if ($passwordReset->isExpired()) {
-            $passwordReset->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
+        if ($passwordResetRequest->isExpired()) {
+            $passwordResetRequest->setToken(Math\Rand::getString(24, static::HASH_CHAR_LIST));
         }
 
         $now              = new DateTime();
         $validityInterval = $this->passwordResetOptions->getTokenValidityInterval();
 
-        $passwordReset->setExpirationDate($now->add($validityInterval));
+        $passwordResetRequest->setExpirationDate($now->add($validityInterval));
 
-        $this->objectManager->persist($passwordReset);
-        $this->objectManager->flush($passwordReset);
+        $this->objectManager->persist($passwordResetRequest);
+        $this->objectManager->flush($passwordResetRequest);
 
         // Trigger an event so that user can send a mail to the user in response.
-        $this->getEventManager()->trigger(new PasswordResetEvent($passwordReset));
+        $this->getEventManager()->trigger(new PasswordResetEvent($passwordResetRequest));
 
-        return $passwordReset;
+        return $passwordResetRequest;
     }
 
     /**
@@ -113,13 +125,19 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function isTokenValid($email, $token)
     {
-        $passwordReset = $this->passwordResetRepository->findOneByEmail($email);
+        $user = $this->userRepository->findOneByEmail($email);
 
-        if (null === $passwordReset) {
+        if (!$user instanceof UserInterface) {
             return false;
         }
 
-        if (!$passwordReset->isExpired() && Utils::compareStrings($passwordReset->getToken(), $token)) {
+        $passwordResetRequest = $this->passwordResetRepository->findOneByUser($user);
+
+        if (!$passwordResetRequest instanceof PasswordResetRequest) {
+            return false;
+        }
+
+        if (!$passwordResetRequest->isExpired() && Utils::compareStrings($passwordResetRequest->getToken(), $token)) {
             return true;
         }
 
@@ -135,10 +153,7 @@ class PasswordResetService implements EventManagerAwareInterface
      */
     public function setEventManager(EventManagerInterface $eventManager)
     {
-        $eventManager->setIdentifiers(array(
-            __CLASS__,
-            get_called_class()
-        ));
+        $eventManager->setIdentifiers(array(__CLASS__, get_class($this)));
 
         $this->eventManager = $eventManager;
     }

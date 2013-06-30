@@ -22,9 +22,9 @@ class PasswordResetRequest
     protected $id;
 
     /**
-     * @var string
+     * @var UserInterface
      */
-    protected $email;
+    protected $user;
 
     /**
      * @var string
@@ -37,6 +37,14 @@ class PasswordResetRequest
     protected $expirationDate;
 
     /**
+     * @param UserInterface $user
+     */
+    public function __construct(UserInterface $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -45,21 +53,11 @@ class PasswordResetRequest
     }
 
     /**
-     * @return string
+     * @return UserInterface
      */
-    public function getEmail()
+    public function getUser()
     {
-        return $this->email;
-    }
-
-    /**
-     * @param  string $email
-     * @return PasswordResetRequest
-     */
-    public function setEmail($email)
-    {
-        $this->email = (string) $email;
-        return $this;
+        return $this->user;
     }
 
     /**

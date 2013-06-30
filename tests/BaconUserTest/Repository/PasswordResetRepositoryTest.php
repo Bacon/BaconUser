@@ -9,7 +9,6 @@
 
 namespace BaconUserTest\Repository;
 
-use BaconUser\Entity\PasswordResetRequest;
 use BaconUser\Repository\PasswordResetRepository;
 use PHPUnit_Framework_TestCase as TestCase;
 
@@ -20,16 +19,21 @@ class PasswordResetRepositoryTest extends TestCase
 {
     public function testCanRetrieveObject()
     {
-        $adapter    = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $repository = new PasswordResetRepository($adapter);
+        $user           = $this->getMock('BaconUser\Entity\UserInterface');
+        $baseRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $passwordReset  = $this
+            ->getMockBuilder('BaconUser\Entity\PasswordResetRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $adapter->expects($this->once())
-                ->method('findOneBy')
-                ->with(array('email' => 'test@test.com'))
-                ->will($this->returnValue(new PasswordResetRequest()));
+        $baseRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(array('user' => $user))
+            ->will($this->returnValue($passwordReset));
 
-        $password = $repository->findOneByEmail('test@test.com');
+        $repository = new PasswordResetRepository($baseRepository);
 
-        $this->assertInstanceOf('BaconUser\Entity\PasswordResetRequest', $password);
+        $this->assertSame($passwordReset, $repository->findOneByUser($user));
     }
 }
