@@ -14,8 +14,6 @@ use Doctrine\Common\Persistence\ObjectRepository;
 
 /**
  * User repository.
- *
- * @author Marco Pivetta <ocramius@gmail.com>
  */
 class UserRepository implements UserRepositoryInterface, ObjectRepository
 {
@@ -46,6 +44,9 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
 
     /**
      * @see ObjectRepository::find()
+     *
+     * @param int $id The identifier.
+     * @return object The object.
      */
     public function find($id)
     {
@@ -54,6 +55,8 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
 
     /**
      * @see ObjectRepository::findAll()
+     *
+     * @return mixed The objects.
      */
     public function findAll()
     {
@@ -62,6 +65,15 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
 
     /**
      * @see ObjectRepository::findBy()
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     *
+     * @return mixed The objects.
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
@@ -70,6 +82,9 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
 
     /**
      * @see ObjectRepository::findOneBy()
+     *
+     * @param array $criteria
+     * @return object The object.
      */
     public function findOneBy(array $criteria)
     {
@@ -78,6 +93,8 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
 
     /**
      * @see ObjectRepository::getClassName()
+     *
+     * @return string
      */
     public function getClassName()
     {

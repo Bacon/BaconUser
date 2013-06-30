@@ -9,7 +9,6 @@
 
 namespace BaconUserTest\Repository;
 
-use BaconUser\Repository\PasswordResetRepository;
 use BaconUser\Repository\UserRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
 use PHPUnit_Framework_TestCase as TestCase;

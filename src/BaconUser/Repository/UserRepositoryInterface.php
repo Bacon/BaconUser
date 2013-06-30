@@ -13,8 +13,6 @@ use BaconUser\Entity\UserInterface;
 
 /**
  * Generic interface for user repositories.
- *
- * @author Marco Pivetta <ocramius@gmail.com>
  */
 interface UserRepositoryInterface
 {
