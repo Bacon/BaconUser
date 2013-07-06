@@ -51,9 +51,9 @@ class RegistrationFilter extends UserFilter
 
         // Add specific validation rules
         $usernameValidators = $this->get('username')->getValidatorChain();
-        $usernameValidators->addValidator($usernameUniqueValidator);
+        $usernameValidators->attach($usernameUniqueValidator);
 
         $emailValidators = $this->get('email')->getValidatorChain();
-        $emailValidators->addValidator($emailUniqueValidator);
+        $emailValidators->attach($emailUniqueValidator);
     }
 }
