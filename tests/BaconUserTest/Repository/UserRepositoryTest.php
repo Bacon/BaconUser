@@ -54,16 +54,12 @@ class UserRepositoryTest extends TestCase
 
     /**
      * @dataProvider getProxiedMethods
-     *
-     * @param string $method
-     * @param array $parameters
+     * @param         string $method
+     * @param         array  $parameters
      */
     public function testProxiedMethodCalls($method, array $parameters)
     {
-        $matcher = $this->objectRepository->expects($this->once())->method($method)->will($this->returnValue('foo'));
-
-        //$matcher->parameterMatcher = new \PHPUnit_Framework_MockObject_Matcher_Parameters($parameters);
-
+        $this->objectRepository->expects($this->once())->method($method)->will($this->returnValue('foo'));
         $this->assertSame('foo', call_user_func_array(array($this->userRepository, $method), $parameters));
     }
 

@@ -18,7 +18,7 @@ use BaconUser\Entity\UserInterface;
 interface PasswordResetRepositoryInterface
 {
     /**
-     * Finds a single password request by user..
+     * Finds a single password request by user.
      *
      * @param  UserInterface $user
      * @return PasswordResetRequest|null

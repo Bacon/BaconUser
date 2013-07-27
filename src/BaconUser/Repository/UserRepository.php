@@ -43,10 +43,11 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
     }
 
     /**
-     * @see ObjectRepository::find()
+     * find(): defined by ObjectRepository.
      *
-     * @param int $id The identifier.
-     * @return object The object.
+     * @see    ObjectRepository::find()
+     * @param  int $id
+     * @return UserInterface|null
      */
     public function find($id)
     {
@@ -54,9 +55,10 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
     }
 
     /**
-     * @see ObjectRepository::findAll()
+     * findAll(): defined by ObjectRepository.
      *
-     * @return mixed The objects.
+     * @see    ObjectRepository::findAll()
+     * @return UserInterface[]
      */
     public function findAll()
     {
@@ -64,16 +66,14 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
     }
 
     /**
-     * @see ObjectRepository::findBy()
+     * findBy(): defined by ObjectRepository.
      *
-     * @throws \UnexpectedValueException
-     *
-     * @param array $criteria
-     * @param array|null $orderBy
-     * @param int|null $limit
-     * @param int|null $offset
-     *
-     * @return mixed The objects.
+     * @see    ObjectRepository::findBy()
+     * @param  array      $criteria
+     * @param  array|null $orderBy
+     * @param  int|null   $limit
+     * @param  int|null   $offset
+     * @return UserInterface[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
@@ -81,10 +81,11 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
     }
 
     /**
-     * @see ObjectRepository::findOneBy()
+     * findOneBy(): defined by ObjectRepository.
      *
-     * @param array $criteria
-     * @return object The object.
+     * @see    ObjectRepository::findOneBy()
+     * @param  array $criteria
+     * @return UserInterface|null
      */
     public function findOneBy(array $criteria)
     {
@@ -92,8 +93,9 @@ class UserRepository implements UserRepositoryInterface, ObjectRepository
     }
 
     /**
-     * @see ObjectRepository::getClassName()
+     * getClassName(): defined by ObjectRepository.
      *
+     * @see    ObjectRepository::getClassName()
      * @return string
      */
     public function getClassName()

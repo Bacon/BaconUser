@@ -23,7 +23,6 @@ class UserRepositoryFactory implements FactoryInterface
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     *
      * @return UserRepository
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
