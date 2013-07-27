@@ -10,6 +10,7 @@
 namespace BaconUser\Repository;
 
 use BaconUser\Entity\PasswordResetRequest;
+use BaconUser\Entity\UserInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 /**
@@ -31,14 +32,14 @@ class PasswordResetRepository implements PasswordResetRepositoryInterface
     }
 
     /**
-     * findOneByEmail(): defined by PasswordResetRepositoryInterface.
+     * findOneByUser(): defined by PasswordResetRepositoryInterface.
      *
-     * @see    PasswordResetRepositoryInterface::findOneByEmail()
-     * @param  string $email
+     * @see    PasswordResetRepositoryInterface::findOneByUser()
+     * @param  UserInterface $user
      * @return PasswordResetRequest|null
      */
-    public function findOneByEmail($email)
+    public function findOneByUser(UserInterface $user)
     {
-        return $this->passwordResetRepository->findOneBy(array('email' => $email));
+        return $this->passwordResetRepository->findOneBy(array('user' => $user));
     }
 }

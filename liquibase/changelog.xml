@@ -29,7 +29,7 @@
             <column name="password_reset_request_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="email" type="varchar(255)">
+            <column name="user_id" type="int">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="token" type="varchar(24)">
@@ -39,5 +39,15 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="password_reset_request"
+            baseColumnNames="user_id"
+            constraintName="password_reset_request_user_id"
+            referencedTableName="user"
+            referencedColumnNames="user_id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+        />
     </changeSet>
 </databaseChangeLog>

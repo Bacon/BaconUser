@@ -20,13 +20,9 @@ use ReflectionClass;
  */
 class PasswordResetRequestTest extends TestCase
 {
-    public static function setterGetterProvider()
+    public function setterGetterProvider()
     {
         return array(
-            array(
-                'Email',
-                'foobar@example.com',
-            ),
             array(
                 'Token',
                 'azertylol',
@@ -38,9 +34,18 @@ class PasswordResetRequestTest extends TestCase
         );
     }
 
+    public function testGetUser()
+    {
+        $user = $this->getMock('BaconUser\Entity\UserInterface');
+
+        $passwordResetRequest = new PasswordResetRequest($user);
+
+        $this->assertSame($user, $passwordResetRequest->getUser());
+    }
+
     public function testId()
     {
-        $passwordResetRequest = new PasswordResetRequest();
+        $passwordResetRequest = new PasswordResetRequest($this->getMock('BaconUser\Entity\UserInterface'));
         $this->assertNull($passwordResetRequest->getId());
 
         $reflector = new ReflectionClass($passwordResetRequest);
@@ -53,12 +58,12 @@ class PasswordResetRequestTest extends TestCase
 
     /**
      * @dataProvider setterGetterProvider
-     * @param        string $name
-     * @param        mixed  $value
+     * @param         string $name
+     * @param         mixed  $value
      */
     public function testSetterGetter($name, $value)
     {
-        $passwordResetRequest = new PasswordResetRequest();
+        $passwordResetRequest = new PasswordResetRequest($this->getMock('BaconUser\Entity\UserInterface'));
         $this->assertNull($passwordResetRequest->{'get' . $name}());
         $passwordResetRequest->{'set' . $name}($value);
         $this->assertEquals($value, $passwordResetRequest->{'get' . $name}());
@@ -66,7 +71,7 @@ class PasswordResetRequestTest extends TestCase
 
     public function testTokenExpirationLogic()
     {
-        $passwordResetRequest = new PasswordResetRequest();
+        $passwordResetRequest = new PasswordResetRequest($this->getMock('BaconUser\Entity\UserInterface'));
 
         $expirationInFuture = new DateTime();
         $expirationInFuture->add(new DateInterval('P1D'));

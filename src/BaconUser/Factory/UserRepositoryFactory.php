@@ -9,6 +9,7 @@
 
 namespace BaconUser\Factory;
 
+use BaconUser\Repository\UserRepository;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -22,14 +23,12 @@ class UserRepositoryFactory implements FactoryInterface
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return UserRepository
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $userRepository = $serviceLocator->get('BaconUser\ObjectManager')->getRepository(
-            'BaconUser\Entity\User'
+        return new UserRepository(
+            $serviceLocator->get('BaconUser\ObjectManager')->getRepository('BaconUser\Entity\User')
         );
-
-        return $userRepository;
     }
 }

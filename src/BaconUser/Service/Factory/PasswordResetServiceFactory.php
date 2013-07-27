@@ -29,6 +29,7 @@ class PasswordResetServiceFactory implements FactoryInterface
     {
         $passwordResetService = new PasswordResetService(
             $serviceLocator->get('BaconUser\ObjectManager'),
+            $serviceLocator->get('BaconUser\Repository\UserRepository'),
             $serviceLocator->get('BaconUser\Repository\PasswordResetRepository'),
             $serviceLocator->get('BaconUser\Options\PasswordResetOptions')
         );

@@ -20,8 +20,11 @@ class PasswordResetEventTest extends TestCase
 {
     public function testCanCreateEvent()
     {
-        $passwordResetRequest = new PasswordResetRequest();
-        $event                = new PasswordResetEvent($passwordResetRequest);
+        $passwordResetRequest = $this
+            ->getMockBuilder('BaconUser\Entity\PasswordResetRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event = new PasswordResetEvent($passwordResetRequest);
 
         $this->assertSame($passwordResetRequest, $event->getPasswordResetRequest());
         $this->assertEquals(PasswordResetEvent::EVENT_CREATED, $event->getName());
