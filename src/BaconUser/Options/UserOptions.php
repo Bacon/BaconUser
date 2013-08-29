@@ -24,11 +24,6 @@ class UserOptions extends AbstractOptions implements UserOptionsInterface
     /**
      * @var bool
      */
-    protected $enableDisplayName = true;
-
-    /**
-     * @var bool
-     */
     protected $enableUserState = true;
 
     /**
@@ -56,24 +51,6 @@ class UserOptions extends AbstractOptions implements UserOptionsInterface
     public function setEnableUsername($enableUsername)
     {
         $this->enableUsername = $enableUsername;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getEnableDisplayName()
-    {
-        return $this->enableDisplayName;
-    }
-
-    /**
-     * @param  bool $enableDisplayName
-     * @return UserOptions
-     */
-    public function setEnableDisplayName($enableDisplayName)
-    {
-        $this->enableDisplayName = $enableDisplayName;
         return $this;
     }
 

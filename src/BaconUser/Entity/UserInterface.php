@@ -54,17 +54,6 @@ interface UserInterface
     /**
      * @return string|null
      */
-    public function getDisplayName();
-
-    /**
-     * @param  string|null $displayName
-     * @return UserInterface
-     */
-    public function setDisplayName($displayName);
-
-    /**
-     * @return string|null
-     */
     public function getState();
 
     /**

@@ -34,7 +34,6 @@ class RegistrationHydratorTest extends TestCase
                 'email'        => 'foobar@example.com',
                 'password'     => 'foobar',
                 'username'     => 'example',
-                'display_name' => 'Example',
             ),
             $user
         );
@@ -42,6 +41,5 @@ class RegistrationHydratorTest extends TestCase
         $this->assertEquals('foobar@example.com', $user->getEmail());
         $this->assertEquals('bazbat', $user->getPasswordHash());
         $this->assertEquals('example', $user->getUsername());
-        $this->assertEquals('Example', $user->getDisplayName());
     }
 }
