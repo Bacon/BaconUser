@@ -15,13 +15,21 @@ use BaconUser\Exception;
 use BaconUser\Form\RegistrationForm;
 use BaconUser\Options\UserOptionsInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Form\FormInterface;
 
 /**
  * Service managing the registration of users.
  */
-class RegistrationService
+class RegistrationService implements EventManagerAwareInterface
 {
+    /**
+     * @var EventManagerInterface
+     */
+    protected $eventManager;
+
     /**
      * @var RegistrationForm
      */
@@ -86,6 +94,9 @@ class RegistrationService
         $this->objectManager->persist($user);
         $this->objectManager->flush();
 
+        // Trigger an event so that we can send an email, for instance
+        $this->getEventManager()->trigger(new RegistrationEvent($user));
+
         return $user;
     }
 
@@ -109,5 +120,34 @@ class RegistrationService
     {
         $this->userPrototype = $userPrototype;
         return $this;
+    }
+
+    /**
+     * setEventManager(): defined by EventManagerAwareInterface.
+     *
+     * @see    EventManagerAwareInterface::setEventManager()
+     * @param  EventManagerInterface $eventManager
+     * @return void
+     */
+    public function setEventManager(EventManagerInterface $eventManager)
+    {
+        $eventManager->setIdentifiers(array(__CLASS__, get_class($this)));
+
+        $this->eventManager = $eventManager;
+    }
+
+    /**
+     * getEventManager(): defined by EventManagerAwareInterface.
+     *
+     * @see    EventManagerAwareInterface::getEventManager()
+     * @return EventManagerInterface
+     */
+    public function getEventManager()
+    {
+        if (null === $this->eventManager) {
+            $this->setEventManager(new EventManager());
+        }
+
+        return $this->eventManager;
     }
 }
