@@ -24,16 +24,6 @@ interface UserOptionsInterface
     public function getEnableUsername();
 
     /**
-     * Returns whether display names are enabled.
-     *
-     * If enabled, the display name will be displayed in public instead of
-     * the username or the email address.
-     *
-     * @return bool
-     */
-    public function getEnableDisplayName();
-
-    /**
      * Returns whether user states are enabled.
      *
      * These are useful to keep track of email confirmation or disabled users.
