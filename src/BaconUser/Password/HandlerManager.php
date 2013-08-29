@@ -44,7 +44,7 @@ class HandlerManager extends AbstractPluginManager
      * @see    AbstractPluginManager::validatePlugin()
      * @param  mixed $plugin
      * @return void
-     * @throws RuntimeException
+     * @throws Exception\RuntimeException
      */
     public function validatePlugin($plugin)
     {

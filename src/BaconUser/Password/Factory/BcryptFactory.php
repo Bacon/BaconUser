@@ -28,13 +28,8 @@ class BcryptFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $config = $serviceLocator->getServiceLocator()->get('BaconUser\Config');
         $bcrypt = new Bcrypt();
-
-        if ($serviceLocator instanceof AbstractPluginManager) {
-            $config = $serviceLocator->getServiceLocator()->get('BaconUser\Config');
-        } else {
-            $config = $serviceLocator->get('BaconUser\Config');
-        }
 
         if (isset($config['password']['bcrypt'])) {
             $config = $config['password']['bcrypt'];
