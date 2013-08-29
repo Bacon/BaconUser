@@ -45,7 +45,7 @@ class PasswordHandlerAggregateOptions extends AbstractOptions implements Passwor
 
     /**
      * @param  array $hashingMethods
-     * @return HandlerAggregate
+     * @return \BaconUser\Password\HandlerAggregate
      */
     public function setHashingMethods(array $hashingMethods)
     {
@@ -63,7 +63,7 @@ class PasswordHandlerAggregateOptions extends AbstractOptions implements Passwor
 
     /**
      * @param  string $defaultHashingMethod
-     * @return HandlerAggregate
+     * @return \BaconUser\Password\HandlerAggregate
      */
     public function setDefaultHashingMethod($defaultHashingMethod)
     {
@@ -81,7 +81,7 @@ class PasswordHandlerAggregateOptions extends AbstractOptions implements Passwor
 
     /**
      * @param  bool $migrateToDefaultHashingMethod
-     * @return HandlerAggregate
+     * @return \BaconUser\Password\HandlerAggregate
      */
     public function setMigrateToDefaultHashingMethod($migrateToDefaultHashingMethod)
     {

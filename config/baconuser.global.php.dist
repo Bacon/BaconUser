@@ -1,6 +1,21 @@
 <?php
 return array(
     'bacon_user' => array(
+        // User settings
+        'user' => array(
+            // Enable or disable the username field for users
+            'enable_username' => true,
+
+            // Enable or disable the user state
+            'enable_user_state' => true,
+
+            // Default user state (the state must be in allowed_login_states array)
+            'default_user_state' => 1,
+
+            // The allowed login states
+            'allowed_login_states' => array(null, 1)
+        ),
+
         // Password settings
         'password' => array(
             // This is a Zend\ServiceManager compatible configuration containing
