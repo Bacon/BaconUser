@@ -50,23 +50,6 @@ class UserFilter extends InputFilter
             ),
         ));
 
-        if ($options->getEnableDisplayName()) {
-            $this->add(array(
-                'name'       => 'display_name',
-                'required'   => false,
-                'filters'    => array(array('name' => 'StringTrim')),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'min' => 3,
-                            'max' => 255,
-                        ),
-                    ),
-                ),
-            ));
-        }
-
         $this->add(array(
             'name'       => 'password',
             'required'   => true,

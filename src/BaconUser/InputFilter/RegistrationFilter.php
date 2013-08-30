@@ -10,6 +10,7 @@
 namespace BaconUser\InputFilter;
 
 use BaconUser\Options\UserOptionsInterface;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\Validator\ValidatorInterface;
 
 /**
@@ -18,15 +19,11 @@ use Zend\Validator\ValidatorInterface;
 class RegistrationFilter extends UserFilter
 {
     /**
-     * @param ValidatorInterface   $emailUniqueValidator
-     * @param ValidatorInterface   $usernameUniqueValidator
+     * @param ObjectRepository     $objectRepository
      * @param UserOptionsInterface $options
      */
-    public function __construct(
-        ValidatorInterface   $emailUniqueValidator,
-        ValidatorInterface   $usernameUniqueValidator,
-        UserOptionsInterface $options
-    ) {
+    public function __construct(ObjectRepository $objectRepository, UserOptionsInterface $options)
+    {
         parent::__construct($options);
 
         if ($options->getEnableUsername()) {
@@ -42,7 +39,13 @@ class RegistrationFilter extends UserFilter
                             'max' => 255,
                         ),
                     ),
-                    $usernameUniqueValidator,
+                    array(
+                        'name'    => 'DoctrineModule\Validator\NoObjectExists',
+                        'options' => array(
+                            'object_repository' => $objectRepository,
+                            'fields'            => 'username'
+                        )
+                    )
                 ),
             ));
         }
@@ -55,12 +58,18 @@ class RegistrationFilter extends UserFilter
                 array(
                     'name' => 'EmailAddress'
                 ),
-                $emailUniqueValidator,
+                array(
+                    'name'    => 'DoctrineModule\Validator\NoObjectExists',
+                    'options' => array(
+                        'object_repository' => $objectRepository,
+                        'fields'            => 'email'
+                    )
+                )
             ),
         ));
 
         $this->add(array(
-            'name'       => 'password_verification',
+            'name'       => 'passwordVerification',
             'required'   => true,
             'filters'    => array(array('name' => 'StringTrim')),
             'validators' => array(
@@ -78,12 +87,5 @@ class RegistrationFilter extends UserFilter
                 ),
             ),
         ));
-
-        // Add specific validation rules
-        $usernameValidators = $this->get('username')->getValidatorChain();
-        $usernameValidators->attach($usernameUniqueValidator);
-
-        $emailValidators = $this->get('email')->getValidatorChain();
-        $emailValidators->attach($emailUniqueValidator);
     }
 }

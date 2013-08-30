@@ -47,7 +47,7 @@ class RegistrationForm extends Form
         $userFieldset = $this->get('user');
         $userFieldset->add(array(
             'type'    => 'Password',
-            'name'    => 'password_verification',
+            'name'    => 'passwordVerification',
             'options' => array(
                 'label' => 'Verify password'
             ),
