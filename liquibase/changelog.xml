@@ -21,8 +21,32 @@
             <column name="username" type="varchar(255)">
                 <constraints unique="true"/>
             </column>
-            <column name="display_name" type="varchar(255)"/>
             <column name="state" type="tinyint(3)"/>
         </createTable>
+
+        <createTable tableName="password_reset_request">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="token" type="varchar(24)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="password_reset_request"
+            baseColumnNames="user_id"
+            constraintName="password_reset_request_user_id"
+            referencedTableName="user"
+            referencedColumnNames="user_id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+        />
     </changeSet>
 </databaseChangeLog>

@@ -9,26 +9,30 @@
 
 namespace BaconUser\Factory;
 
-use BaconUser\Repository\UserRepository;
+use BaconUser\Options\PasswordResetOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see \Doctrine\Common\Persistence\ObjectRepository}.
+ * Service factory that instantiates {@see PasswordResetOptions}.
  */
-class UserRepositoryFactory implements FactoryInterface
+class PasswordResetOptionsFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return UserRepository
+     * @return PasswordResetOptions
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new UserRepository(
-            $serviceLocator->get('BaconUser\ObjectManager')->getRepository('BaconUser\Entity\User')
-        );
+        $config = $serviceLocator->get('BaconUser\Config');
+
+        if (isset($config['password_reset'])) {
+            return new PasswordResetOptions($config['password_reset']);
+        }
+
+        return new PasswordResetOptions();
     }
 }

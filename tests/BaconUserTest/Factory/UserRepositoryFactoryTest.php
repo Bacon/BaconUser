@@ -20,16 +20,23 @@ class UserRepositoryFactoryTest extends TestCase
 {
     public function testFactoryReturnsRepositoryFromObjectManager()
     {
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectManager->expects($this->once())
-                      ->method('getRepository')
-                      ->with($this->equalTo('BaconUser\Entity\User'))
-                      ->will($this->returnValue('foo'));
+        $objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $serviceLocator   = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
 
-        $locator = new ServiceManager();
-        $locator->setService('BaconUser\ObjectManager', $objectManager);
+        $objectManager
+            ->expects($this->any())
+            ->method('getRepository')
+            ->with($this->equalTo('BaconUser\Entity\User'))
+            ->will($this->returnValue($objectRepository));
+        $serviceLocator
+            ->expects($this->any())
+            ->method('get')
+            ->with('BaconUser\ObjectManager')
+            ->will($this->returnValue($objectManager));
 
         $factory = new UserRepositoryFactory();
-        $this->assertEquals('foo', $factory->createService($locator));
+
+        $this->assertInstanceOf('BaconUser\Repository\UserRepository', $factory->createService($serviceLocator));
     }
 }

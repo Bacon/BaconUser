@@ -49,18 +49,6 @@ class UserFieldset extends Fieldset
             )
         ));
 
-        if ($options->getEnableDisplayName()) {
-            $this->add(array(
-                'name' => 'display_name',
-                'options' => array(
-                    'label' => 'Display name',
-                ),
-                'attributes' => array(
-                    'required' => 'required'
-                ),
-            ));
-        }
-
         $this->add(array(
             'type' => 'Password',
             'name' => 'password',

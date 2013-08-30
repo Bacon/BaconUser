@@ -29,6 +29,36 @@ class RegistrationFilter extends UserFilter
     ) {
         parent::__construct($options);
 
+        if ($options->getEnableUsername()) {
+            $this->add(array(
+                'name' => 'username',
+                'required' => true,
+                'filters' => array(array('name' => 'StringTrim')),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'min' => 3,
+                            'max' => 255,
+                        ),
+                    ),
+                    $usernameUniqueValidator,
+                ),
+            ));
+        }
+
+        $this->add(array(
+            'name' => 'email',
+            'required' => true,
+            'filters' => array(array('name' => 'StringTrim')),
+            'validators' => array(
+                array(
+                    'name' => 'EmailAddress'
+                ),
+                $emailUniqueValidator,
+            ),
+        ));
+
         $this->add(array(
             'name'       => 'password_verification',
             'required'   => true,
