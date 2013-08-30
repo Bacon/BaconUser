@@ -34,10 +34,6 @@ class UserTest extends TestCase
                 'foobar',
             ),
             array(
-                'DisplayName',
-                'foobar',
-            ),
-            array(
                 'State',
                 '1',
             ),

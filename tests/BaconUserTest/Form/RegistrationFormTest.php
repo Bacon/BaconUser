@@ -23,7 +23,6 @@ class RegistrationFormTest extends TestCase
         $form = new RegistrationForm(
             new UserOptions(array(
                 'enable_username'     => true,
-                'enable_display_name' => true,
             ))
         );
 
@@ -31,7 +30,6 @@ class RegistrationFormTest extends TestCase
         $this->assertTrue($form->has('email'), 'Email field missing');
         $this->assertTrue($form->has('password'), 'Password field missing');
         $this->assertTrue($form->has('password_verification'), 'Password verification field missing');
-        $this->assertTrue($form->has('display_name'), 'Display name field missing');
         $this->assertTrue($form->has('submit'), 'Submit field missing');
     }
 
@@ -40,22 +38,9 @@ class RegistrationFormTest extends TestCase
         $form = new RegistrationForm(
             new UserOptions(array(
                 'enable_username'     => false,
-                'enable_display_name' => true,
             ))
         );
 
         $this->assertFalse($form->has('username'), 'Username field exists');
-    }
-
-    public function testFormWithDisplayNameDisabled()
-    {
-        $form = new RegistrationForm(
-            new UserOptions(array(
-                'enable_username'     => true,
-                'enable_display_name' => false,
-            ))
-        );
-
-        $this->assertFalse($form->has('display_name'), 'Display name field exists');
     }
 }

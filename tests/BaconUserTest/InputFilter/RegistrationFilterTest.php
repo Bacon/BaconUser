@@ -27,14 +27,12 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
             ),
             'space-padded-valid-input' => array(
@@ -44,14 +42,12 @@ class RegistrationFilterTest extends TestCase
                     // @todo Bug with identical validator (compares filtered against raw value)
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => ' Example ',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
             ),
             'duplicate-email' => array(
@@ -60,10 +56,8 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
                 null,
-                true,
                 true,
                 false,
                 true
@@ -74,10 +68,8 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
                 null,
-                true,
                 true,
                 true,
                 false
@@ -88,7 +80,6 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => 'foobar@example.com',
                     'password'              => 'foobar',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
             ),
             'invalid-with-enabled-username' => array(
@@ -96,7 +87,6 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
             ),
             'valid-with-disabled-username' => array(
@@ -104,45 +94,12 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
                     'password_verification' => 'bazbat',
-                    'display_name'          => 'Example',
                 ),
-                false
-            ),
-            'valid-with-enabled-display-name' => array(
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
-                ),
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
-                    'display_name'          => null,
-                ),
-            ),
-            'valid-with-disabled-display-name' => array(
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
-                ),
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
-                ),
-                true,
                 false
             ),
         );
@@ -153,7 +110,6 @@ class RegistrationFilterTest extends TestCase
      * @param        array      $input
      * @param        array|null $output
      * @param        bool       $enableUsername
-     * @param        bool       $enableDisplayName
      * @param        bool       $emailIsUnique
      * @param        bool       $usernameIsUnique
      * @return       void
@@ -162,7 +118,6 @@ class RegistrationFilterTest extends TestCase
         array $input,
         array $output = null,
         $enableUsername = true,
-        $enableDisplayName = true,
         $emailIsUnique = true,
         $usernameIsUnique = true
     ) {
@@ -171,7 +126,6 @@ class RegistrationFilterTest extends TestCase
             $this->getMockValidator($usernameIsUnique),
             new UserOptions(array(
                 'enable_username'     => $enableUsername,
-                'enable_display_name' => $enableDisplayName,
             ))
         );
 

@@ -21,7 +21,6 @@
             <column name="username" type="varchar(255)">
                 <constraints unique="true"/>
             </column>
-            <column name="display_name" type="varchar(255)"/>
             <column name="state" type="tinyint(3)"/>
         </createTable>
 

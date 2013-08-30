@@ -35,11 +35,6 @@ class User implements UserInterface
     protected $username;
 
     /**
-     * @var string|null
-     */
-    protected $displayName;
-
-    /**
      * @var int|null
      */
     protected $state;
@@ -103,24 +98,6 @@ class User implements UserInterface
     public function setUsername($username)
     {
         $this->username = ($username === null ? null : (string) $username);
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDisplayName()
-    {
-        return $this->displayName;
-    }
-
-    /**
-     * @param  null|string $displayName
-     * @return User
-     */
-    public function setDisplayName($displayName)
-    {
-        $this->displayName = ($displayName === null ? null : (string) $displayName);
         return $this;
     }
 
