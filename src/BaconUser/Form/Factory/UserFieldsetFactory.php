@@ -29,9 +29,9 @@ class UserFieldsetFactory implements FactoryInterface
     {
         $parentLocator = $serviceLocator->getServiceLocator();
         $options       = $parentLocator->get('BaconUser\Options\UserOptions');
+        $hydrator      = $parentLocator->get('HydratorManager')->get('BaconUser\Hydrator\UserHydrator');
 
-        $fieldset = new UserFieldset($options);
-        $fieldset->setHydrator($parentLocator->get('HydratorManager')->get('BaconUser\Hydrator\RegistrationHydrator'));
+        $fieldset = new UserFieldset($hydrator, $options);
 
         return $fieldset;
     }

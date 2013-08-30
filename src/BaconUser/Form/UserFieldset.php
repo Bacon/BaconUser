@@ -11,6 +11,7 @@ namespace BaconUser\Form;
 
 use BaconUser\Options\UserOptionsInterface;
 use Zend\Form\Fieldset;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Base fieldset for user
@@ -20,11 +21,13 @@ class UserFieldset extends Fieldset
     /**
      * Constructor
      *
+     * @param HydratorInterface    $hydrator
      * @param UserOptionsInterface $options
      */
-    public function __construct(UserOptionsInterface $options)
+    public function __construct(HydratorInterface $hydrator, UserOptionsInterface $options)
     {
         parent::__construct('user');
+        $this->setHydrator($hydrator);
 
         if ($options->getEnableUsername()) {
             $this->add(array(

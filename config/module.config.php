@@ -44,7 +44,7 @@ return array(
 
     'hydrators' => array(
         'factories' => array(
-            'BaconUser\Hydrator\RegistrationHydrator' => 'BaconUser\Hydrator\Factory\RegistrationHydratorFactory'
+            'BaconUser\Hydrator\UserHydrator' => 'BaconUser\Hydrator\Factory\UserHydrator'
         )
     ),
 

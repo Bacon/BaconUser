@@ -17,9 +17,9 @@ use Zend\Form\Form;
  */
 class RegistrationForm extends Form
 {
-    public function __construct()
+    public function init()
     {
-        parent::__construct('registration-form');
+        $this->setName('registration-form');
 
         $this->add(array(
             'type'    => 'BaconUser\Form\UserFieldset',

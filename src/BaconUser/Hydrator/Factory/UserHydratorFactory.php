@@ -10,27 +10,27 @@
 namespace BaconUser\Hydrator\Factory;
 
 use BaconUser\Form\PasswordHashingStrategy;
-use BaconUser\Hydrator\RegistrationHydrator;
+use BaconUser\Hydrator\UserHydrator;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see RegistrationHydrator}.
+ * Service factory that instantiates {@see UserHydrator}.
  */
-class RegistrationHydratorFactory implements FactoryInterface
+class UserHydratorFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return RegistrationHydrator
+     * @return UserHydrator
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $parentLocator = $serviceLocator->getServiceLocator();
 
-        $hydrator = new RegistrationHydrator(
+        $hydrator = new UserHydrator(
             new PasswordHashingStrategy(
                 $parentLocator->get('BaconUser\Password\HandlerInterface')
             )

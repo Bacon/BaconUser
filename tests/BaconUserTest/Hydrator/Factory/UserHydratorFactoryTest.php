@@ -9,15 +9,15 @@
 
 namespace BaconUserTest\Hydrator\Factory;
 
-use BaconUser\Hydrator\Factory\RegistrationHydratorFactory;
+use BaconUser\Hydrator\Factory\UserHydratorFactory;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\Hydrator\HydratorPluginManager;
 
 /**
- * @covers BaconUser\Hydrator\Factory\RegistrationHydratorFactory
+ * @covers BaconUser\Hydrator\Factory\UserHydratorFactory
  */
-class RegistrationHydratorFactoryTest extends TestCase
+class UserHydratorFactoryTest extends TestCase
 {
     public function testFactoryProcessesWithoutErrors()
     {
@@ -29,7 +29,7 @@ class RegistrationHydratorFactoryTest extends TestCase
         $hydratorManager = new HydratorPluginManager();
         $hydratorManager->setServiceLocator($parentLocator);
 
-        $factory = new RegistrationHydratorFactory();
+        $factory = new UserHydratorFactory();
         $factory->createService($hydratorManager);
         // Expect no exceptions or errors.
     }

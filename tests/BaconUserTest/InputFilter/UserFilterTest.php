@@ -9,16 +9,16 @@
 
 namespace BaconUserTest\InputFilter;
 
-use BaconUser\InputFilter\RegistrationFilter;
+use BaconUser\InputFilter\UserFilter;
 use BaconUser\Options\UserOptions;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * @covers BaconUser\InputFilter\RegistrationFilter
+ * @covers BaconUser\InputFilter\UserFilter
  */
-class RegistrationFilterTest extends TestCase
+class UserFilterTest extends TestCase
 {
-    /*public static function formDataProvider()
+    public static function formDataProvider()
     {
         return array(
             'completely-valid-input' => array(
@@ -26,28 +26,23 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
             ),
             'space-padded-valid-input' => array(
                 array(
                     'username'              => ' foobar ',
                     'email'                 => ' foobar@example.com ',
-                    // @todo Bug with identical validator (compares filtered against raw value)
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
             ),
             'duplicate-email' => array(
@@ -55,32 +50,20 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
                 null,
                 true,
                 false,
-                true
             ),
             'duplicate-username' => array(
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
                 null,
                 true,
                 true,
-                false
-            ),
-            'non-identical-passwords' => array(
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'foobar',
-                    'password_verification' => 'bazbat',
-                ),
             ),
             'invalid-with-enabled-username' => array(
                 array(
@@ -103,7 +86,7 @@ class RegistrationFilterTest extends TestCase
                 false
             ),
         );
-    }*/
+    }
 
     /**
      * @dataProvider formDataProvider
@@ -114,16 +97,14 @@ class RegistrationFilterTest extends TestCase
      * @param        bool       $usernameIsUnique
      * @return       void
      */
-    /*public function testInputFilter(
+    public function testInputFilter(
         array $input,
         array $output = null,
         $enableUsername = true,
         $emailIsUnique = true,
         $usernameIsUnique = true
     ) {
-        $filter = new RegistrationFilter(
-            $this->getMockValidator($emailIsUnique),
-            $this->getMockValidator($usernameIsUnique),
+        $filter = new UserFilter(
             new UserOptions(array(
                 'enable_username'     => $enableUsername,
             ))
@@ -137,7 +118,7 @@ class RegistrationFilterTest extends TestCase
             $this->assertTrue($filter->isValid(), 'Input must be valid');
             $this->assertEquals($output, $filter->getValues());
         }
-    }*/
+    }
 
     /**
      * @param  bool $validates
