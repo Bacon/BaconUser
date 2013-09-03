@@ -32,6 +32,16 @@ class RegistrationFilterFactory implements FactoryInterface
         $userRepository = $parentLocator->get('BaconUser\Repository\UserRepository');
         $options        = $parentLocator->get('BaconUser\Options\UserOptions');
 
-        return new RegistrationFilter($userRepository, $options);
+        $usernameValidator = new NoObjectExists(array(
+            'object_repository' => $userRepository,
+            'fields'            => 'username'
+        ));
+
+        $emailValidator = new NoObjectExists(array(
+            'object_repository' => $userRepository,
+            'fields'            => 'email'
+        ));
+
+        return new RegistrationFilter($userRepository, $usernameValidator, $emailValidator, $options);
     }
 }

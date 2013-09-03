@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase as TestCase;
  */
 class RegistrationFilterTest extends TestCase
 {
-    /*public static function formDataProvider()
+    public static function formDataProvider()
     {
         return array(
             'completely-valid-input' => array(
@@ -26,13 +26,13 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'space-padded-valid-input' => array(
@@ -41,21 +41,21 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => ' foobar@example.com ',
                     // @todo Bug with identical validator (compares filtered against raw value)
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'duplicate-email' => array(
                 array(
                     'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
+                    'email'                 => 'nfoobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 null,
                 true,
@@ -67,7 +67,7 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 null,
                 true,
@@ -79,31 +79,31 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'foobar',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'invalid-with-enabled-username' => array(
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'valid-with-disabled-username' => array(
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 false
             ),
         );
-    }*/
+    }
 
     /**
      * @dataProvider formDataProvider
@@ -114,18 +114,21 @@ class RegistrationFilterTest extends TestCase
      * @param        bool       $usernameIsUnique
      * @return       void
      */
-    /*public function testInputFilter(
+    public function testInputFilter(
         array $input,
         array $output = null,
         $enableUsername = true,
         $emailIsUnique = true,
         $usernameIsUnique = true
     ) {
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
         $filter = new RegistrationFilter(
-            $this->getMockValidator($emailIsUnique),
+            $objectRepository,
             $this->getMockValidator($usernameIsUnique),
+            $this->getMockValidator($emailIsUnique),
             new UserOptions(array(
-                'enable_username'     => $enableUsername,
+                'enable_username' => $enableUsername,
             ))
         );
 
@@ -137,13 +140,13 @@ class RegistrationFilterTest extends TestCase
             $this->assertTrue($filter->isValid(), 'Input must be valid');
             $this->assertEquals($output, $filter->getValues());
         }
-    }*/
+    }
 
     /**
      * @param  bool $validates
      * @return \Zend\Validator\ValidatorInterface
      */
-    /*protected function getMockValidator($validates)
+    protected function getMockValidator($validates)
     {
         $validator = $this->getMock('Zend\Validator\ValidatorInterface');
         $validator->expects($this->any())
@@ -157,5 +160,5 @@ class RegistrationFilterTest extends TestCase
         }
 
         return $validator;
-    }*/
+    }
 }

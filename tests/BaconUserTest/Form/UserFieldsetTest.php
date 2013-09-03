@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUserTest\InputFilter;
+namespace BaconUserTest\Form;
 
 use BaconUser\Form\UserFieldset;
 use BaconUser\Options\UserOptions;

@@ -45,43 +45,20 @@ class UserFilterTest extends TestCase
                     'password'              => 'bazbat',
                 ),
             ),
-            'duplicate-email' => array(
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'bazbat',
-                ),
-                null,
-                true,
-                false,
-            ),
-            'duplicate-username' => array(
-                array(
-                    'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
-                    'password'              => 'bazbat',
-                ),
-                null,
-                true,
-                true,
-            ),
             'invalid-with-enabled-username' => array(
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
             ),
             'valid-with-disabled-username' => array(
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
                 ),
                 false
             ),
@@ -93,20 +70,16 @@ class UserFilterTest extends TestCase
      * @param        array      $input
      * @param        array|null $output
      * @param        bool       $enableUsername
-     * @param        bool       $emailIsUnique
-     * @param        bool       $usernameIsUnique
      * @return       void
      */
     public function testInputFilter(
         array $input,
         array $output = null,
-        $enableUsername = true,
-        $emailIsUnique = true,
-        $usernameIsUnique = true
+        $enableUsername = true
     ) {
         $filter = new UserFilter(
             new UserOptions(array(
-                'enable_username'     => $enableUsername,
+                'enable_username' => $enableUsername,
             ))
         );
 

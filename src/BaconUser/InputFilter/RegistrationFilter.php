@@ -19,54 +19,26 @@ use Zend\Validator\ValidatorInterface;
 class RegistrationFilter extends UserFilter
 {
     /**
-     * @param ObjectRepository     $objectRepository
+     * @param ObjectRepository   $objectRepository
+     * @param ValidatorInterface $usernameValidator
+     * @param ValidatorInterface $emailValidator
      * @param UserOptionsInterface $options
      */
-    public function __construct(ObjectRepository $objectRepository, UserOptionsInterface $options)
-    {
+    public function __construct(
+        ObjectRepository $objectRepository,
+        ValidatorInterface $usernameValidator,
+        ValidatorInterface $emailValidator,
+        UserOptionsInterface $options
+    ) {
         parent::__construct($options);
 
         if ($options->getEnableUsername()) {
-            $this->add(array(
-                'name' => 'username',
-                'required' => true,
-                'filters' => array(array('name' => 'StringTrim')),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'min' => 3,
-                            'max' => 255,
-                        ),
-                    ),
-                    array(
-                        'name'    => 'DoctrineModule\Validator\NoObjectExists',
-                        'options' => array(
-                            'object_repository' => $objectRepository,
-                            'fields'            => 'username'
-                        )
-                    )
-                ),
-            ));
+            $usernameInput = $this->get('username');
+            $usernameInput->getValidatorChain()->attach($usernameValidator);
         }
 
-        $this->add(array(
-            'name' => 'email',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
-            'validators' => array(
-                array(
-                    'name' => 'EmailAddress'
-                ),
-                array(
-                    'name'    => 'DoctrineModule\Validator\NoObjectExists',
-                    'options' => array(
-                        'object_repository' => $objectRepository,
-                        'fields'            => 'email'
-                    )
-                )
-            ),
-        ));
+        $emailInput = $this->get('email');
+        $emailInput->getValidatorChain()->attach($emailValidator);
 
         $this->add(array(
             'name'       => 'passwordVerification',
