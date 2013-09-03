@@ -92,24 +92,4 @@ class UserFilterTest extends TestCase
             $this->assertEquals($output, $filter->getValues());
         }
     }
-
-    /**
-     * @param  bool $validates
-     * @return \Zend\Validator\ValidatorInterface
-     */
-    /*protected function getMockValidator($validates)
-    {
-        $validator = $this->getMock('Zend\Validator\ValidatorInterface');
-        $validator->expects($this->any())
-                  ->method('isValid')
-                  ->will($this->returnValue($validates));
-
-        if (!$validates) {
-            $validator->expects($this->any())
-                      ->method('getMessages')
-                      ->will($this->returnValue(array()));
-        }
-
-        return $validator;
-    }*/
 }
