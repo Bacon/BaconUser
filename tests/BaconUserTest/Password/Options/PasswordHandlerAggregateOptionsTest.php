@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUserTest\Password\Options\PasswordHandlerAggregateOptions;
+namespace BaconUserTest\Password\Options;
 
 use BaconUser\Password\Options\PasswordHandlerAggregateOptions;
 use PHPUnit_Framework_TestCase as TestCase;
