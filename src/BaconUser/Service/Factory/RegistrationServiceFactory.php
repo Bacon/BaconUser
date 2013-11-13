@@ -28,7 +28,7 @@ class RegistrationServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $registrationService = new RegistrationService(
-            $serviceLocator->get('BaconUser\Form\RegistrationForm'),
+            $serviceLocator->get('BaconUser\Form\User\RegistrationForm'),
             $serviceLocator->get('BaconUser\ObjectManager'),
             $serviceLocator->get('BaconUser\Options\UserOptions')
         );
