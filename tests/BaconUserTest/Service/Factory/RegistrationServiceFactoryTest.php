@@ -26,7 +26,7 @@ class RegistrationServiceFactoryTest extends TestCase
         $userPrototype    = $this->getMock('BaconUser\Entity\UserInterface');
 
         $locator = new ServiceManager();
-        $locator->setService('BaconUser\Form\RegistrationForm', $registrationForm);
+        $locator->setService('BaconUser\Form\User\RegistrationForm', $registrationForm);
         $locator->setService('BaconUser\ObjectManager', $objectManager);
         $locator->setService('BaconUser\Options\UserOptions', $options);
         $locator->setService('BaconUser\Entity\UserPrototype', $userPrototype);
