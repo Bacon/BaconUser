@@ -11,6 +11,7 @@ namespace BaconUserTest\Service;
 
 use BaconUser\Entity\User;
 use BaconUser\Options\UserOptions;
+use BaconUser\Service\RegistrationEvent;
 use BaconUser\Service\RegistrationService;
 use PHPUnit_Framework_TestCase as TestCase;
 
@@ -70,6 +71,14 @@ class RegistrationServiceTest extends TestCase
                       ->method('flush');
 
         $service = new RegistrationService($form, $objectManager, new UserOptions());
+
+        // Event should be triggered
+        $callback     = $this->getMock('stdLib', array('__invoke'));
+        $eventManager = $service->getEventManager();
+
+        $callback->expects($this->once())->method('__invoke');
+        $eventManager->attach(RegistrationEvent::EVENT_USER_REGISTERED, $callback);
+
         $result  = $service->register(array());
         $this->assertSame($user, $result);
     }
@@ -88,6 +97,14 @@ class RegistrationServiceTest extends TestCase
                       ->method('flush');
 
         $service = new RegistrationService($form, $objectManager, new UserOptions());
+
+        // Event should not be triggered if registration is invalid
+        $callback     = $this->getMock('stdLib', array('__invoke'));
+        $eventManager = $service->getEventManager();
+
+        $callback->expects($this->never())->method('__invoke');
+        $eventManager->attach(RegistrationEvent::EVENT_USER_REGISTERED, $callback);
+
         $result  = $service->register(array());
         $this->assertNull($result);
     }
