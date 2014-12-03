@@ -13,7 +13,7 @@ use BaconUser\Password\Options\PasswordHandlerAggregateOptions;
 use BaconUser\Password\Options\PasswordHandlerAggregateOptionsInterface;
 
 /**
- * Aggregate password handler for using multiple hashing methods parallely.
+ * Aggregate password handler for using multiple hashing methods in parallel.
  */
 class HandlerAggregate implements HandlerInterface
 {
@@ -87,7 +87,7 @@ class HandlerAggregate implements HandlerInterface
         $handler = $this->getHandlerByHash($hash);
 
         if ($handler === null) {
-            // Hash is not uspported by any method, migration recommended.
+            // Hash is not supported by any method, migration recommended.
             return true;
         }
 
@@ -107,7 +107,7 @@ class HandlerAggregate implements HandlerInterface
     }
 
     /**
-     * @return HashManager
+     * @return HandlerManager
      */
     public function getHandlerManager()
     {
@@ -156,11 +156,11 @@ class HandlerAggregate implements HandlerInterface
      */
     protected function getHandlerByName($hashingMethod)
     {
-        if (!isset($this->hashCache[$hashingMethod])) {
-            $this->hashCache[$hashingMethod] = $this->getHandlerManager()->get($hashingMethod);
+        if (!isset($this->handlerCache[$hashingMethod])) {
+            $this->handlerCache[$hashingMethod] = $this->getHandlerManager()->get($hashingMethod);
         }
 
-        return $this->hashCache[$hashingMethod];
+        return $this->handlerCache[$hashingMethod];
     }
 
     /**

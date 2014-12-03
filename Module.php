@@ -16,11 +16,9 @@ class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface
 {
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -32,6 +30,19 @@ class Module implements
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfig()
+    {
+        return include __DIR__ . '/config/module.config.php';
+    }
+
+    /**
+     * Get the Liquibase path
+     *
+     * @return string
+     */
     public function getLiquibasePath()
     {
         return __DIR__ . '/liquibase/changelog.xml';

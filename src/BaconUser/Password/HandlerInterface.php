@@ -45,7 +45,7 @@ interface HandlerInterface
      *
      * This is used primarily by the authentication adapter, which will verify
      * whether it should re-hash the plain-text password. This is useful if you
-     * are migrating to a more secure algorythm, or when the parameters for your
+     * are migrating to a more secure algorithm, or when the parameters for your
      * current hash changed.
      *
      * @param  string $hash

@@ -18,15 +18,6 @@ use Zend\ServiceManager\ServiceManager;
  */
 class BcryptFactoryTest extends TestCase
 {
-    public function testFactoryFromServiceLocator()
-    {
-        $locator = new ServiceManager();
-        $locator->setService('BaconUser\Config', array());
-
-        $factory = new BcryptFactory();
-        $this->assertInstanceOf('BaconUser\Password\Bcrypt', $factory->createService($locator));
-    }
-
     public function testFactoryFromPluginManager()
     {
         $locator = new ServiceManager();
@@ -46,7 +37,12 @@ class BcryptFactoryTest extends TestCase
         $locator = new ServiceManager();
         $locator->setService('BaconUser\Config', array('password' => array('bcrypt' => array('cost' => 4))));
 
+        $pluginManager = $this->getMock('Zend\ServiceManager\AbstractPluginManager');
+        $pluginManager->expects($this->once())
+                      ->method('getServiceLocator')
+                      ->will($this->returnValue($locator));
+
         $factory = new BcryptFactory();
-        $this->assertInstanceOf('BaconUser\Password\Bcrypt', $factory->createService($locator));
+        $this->assertInstanceOf('BaconUser\Password\Bcrypt', $factory->createService($pluginManager));
     }
 }
