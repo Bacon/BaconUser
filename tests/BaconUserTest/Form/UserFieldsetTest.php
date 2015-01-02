@@ -9,35 +9,35 @@
 
 namespace BaconUserTest\Form;
 
-use BaconUser\Form\RegistrationForm;
+use BaconUser\Form\UserFieldset;
 use BaconUser\Options\UserOptions;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * @covers BaconUser\Form\RegistrationForm
+ * @covers BaconUser\Form\UserFieldset
  */
-class RegistrationFormTest extends TestCase
+class UserFieldsetTest extends TestCase
 {
-    public function testFormWithAllFieldsEnabled()
+    public function testFieldsetWithAllFieldsEnabled()
     {
-        $form = new RegistrationForm(
+        $form = new UserFieldset(
+            $this->getMock('Zend\Stdlib\Hydrator\HydratorInterface'),
             new UserOptions(array(
-                'enable_username'     => true,
+                'enable_username' => true,
             ))
         );
 
         $this->assertTrue($form->has('username'), 'Username field missing');
         $this->assertTrue($form->has('email'), 'Email field missing');
         $this->assertTrue($form->has('password'), 'Password field missing');
-        $this->assertTrue($form->has('password_verification'), 'Password verification field missing');
-        $this->assertTrue($form->has('submit'), 'Submit field missing');
     }
 
     public function testFormWithUsernameDisabled()
     {
-        $form = new RegistrationForm(
+        $form = new UserFieldset(
+            $this->getMock('Zend\Stdlib\Hydrator\HydratorInterface'),
             new UserOptions(array(
-                'enable_username'     => false,
+                'enable_username' => false,
             ))
         );
 

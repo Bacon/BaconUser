@@ -10,81 +10,49 @@
 namespace BaconUser\InputFilter;
 
 use BaconUser\Options\UserOptionsInterface;
-use Zend\InputFilter\InputFilter;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\Validator\ValidatorInterface;
 
 /**
  * Input filter for the {@see RegistrationForm}.
  */
-class RegistrationFilter extends InputFilter
+class RegistrationFilter extends UserFilter
 {
     /**
-     * @param ValidatorInterface   $emailUniqueValidator
-     * @param ValidatorInterface   $usernameUniqueValidator
+     * @param ObjectRepository   $objectRepository
+     * @param ValidatorInterface $usernameValidator
+     * @param ValidatorInterface $emailValidator
      * @param UserOptionsInterface $options
      */
     public function __construct(
-        ValidatorInterface   $emailUniqueValidator,
-        ValidatorInterface   $usernameUniqueValidator,
+        ObjectRepository $objectRepository,
+        ValidatorInterface $usernameValidator,
+        ValidatorInterface $emailValidator,
         UserOptionsInterface $options
     ) {
+        parent::__construct($options);
+
         if ($options->getEnableUsername()) {
-            $this->add(array(
-                'name' => 'username',
-                'required' => true,
-                'filters' => array(array('name' => 'StringTrim')),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'min' => 3,
-                            'max' => 255,
-                        ),
-                    ),
-                    $usernameUniqueValidator,
-                ),
-            ));
+            $usernameInput = $this->get('username');
+            $usernameInput->getValidatorChain()->attach($usernameValidator);
         }
 
-        $this->add(array(
-            'name' => 'email',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
-            'validators' => array(
-                array(
-                    'name' => 'EmailAddress'
-                ),
-                $emailUniqueValidator,
-            ),
-        ));
+        $emailInput = $this->get('email');
+        $emailInput->getValidatorChain()->attach($emailValidator);
 
         $this->add(array(
-            'name' => 'password',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
+            'name'       => 'passwordVerification',
+            'required'   => true,
+            'filters'    => array(array('name' => 'StringTrim')),
             'validators' => array(
                 array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'min' => 6,
-                    ),
-                ),
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'password_verification',
-            'required' => true,
-            'filters' => array(array('name' => 'StringTrim')),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
+                    'name'    => 'StringLength',
                     'options' => array(
                         'min' => 6,
                     ),
                 ),
                 array(
-                    'name' => 'Identical',
+                    'name'    => 'Identical',
                     'options' => array(
                         'token' => 'password',
                     ),

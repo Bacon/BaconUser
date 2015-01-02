@@ -10,16 +10,24 @@
 namespace BaconUser\Form;
 
 use BaconUser\Options\UserOptionsInterface;
-use Zend\Form\Form;
+use Zend\Form\Fieldset;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
- * Generic registration form.
+ * Base fieldset for user
  */
-class RegistrationForm extends Form
+class UserFieldset extends Fieldset
 {
-    public function __construct(UserOptionsInterface $options)
+    /**
+     * Constructor
+     *
+     * @param HydratorInterface    $hydrator
+     * @param UserOptionsInterface $options
+     */
+    public function __construct(HydratorInterface $hydrator, UserOptionsInterface $options)
     {
-        parent::__construct(null);
+        parent::__construct('user');
+        $this->setHydrator($hydrator);
 
         if ($options->getEnableUsername()) {
             $this->add(array(
@@ -28,51 +36,31 @@ class RegistrationForm extends Form
                     'label' => 'Username',
                 ),
                 'attributes' => array(
-                    'type' => 'text',
+                    'required' => 'required',
                 ),
             ));
         }
 
         $this->add(array(
+            'type' => 'Email',
             'name' => 'email',
             'options' => array(
                 'label' => 'Email',
             ),
             'attributes' => array(
-                'type' => 'text'
-            ),
+                'required' => 'required'
+            )
         ));
 
         $this->add(array(
+            'type' => 'Password',
             'name' => 'password',
             'options' => array(
                 'label' => 'Password',
             ),
             'attributes' => array(
-                'type' => 'password'
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'password_verification',
-            'options' => array(
-                'label' => 'Verify password',
-            ),
-            'attributes' => array(
-                'type' => 'password'
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'submit',
-            'options' => array(
-                'label' => 'Register',
-            ),
-            'attributes' => array(
-                'type' => 'submit',
-            ),
-        ), array(
-            'priority' => -100
+                'required' => 'required'
+            )
         ));
     }
 }

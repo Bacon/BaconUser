@@ -37,13 +37,14 @@ return array(
 
     'form_elements' => array(
         'factories' => array(
-            'BaconUser\Form\RegistrationForm' => 'BaconUser\Form\Factory\RegistrationFormFactory'
+            'BaconUser\Form\UserFieldset'          => 'BaconUser\Form\Factory\UserFieldsetFactory',
+            'BaconUser\Form\User\RegistrationForm' => 'BaconUser\Form\Factory\RegistrationFormFactory'
         )
     ),
 
     'hydrators' => array(
         'factories' => array(
-            'BaconUser\Hydrator\RegistrationHydrator' => 'BaconUser\Hydrator\Factory\RegistrationHydratorFactory'
+            'BaconUser\Hydrator\UserHydrator' => 'BaconUser\Hydrator\Factory\UserHydrator'
         )
     ),
 

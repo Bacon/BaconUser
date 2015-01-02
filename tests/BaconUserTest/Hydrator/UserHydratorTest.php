@@ -10,13 +10,13 @@
 namespace BaconUserTest\Hydrator;
 
 use BaconUser\Entity\User;
-use BaconUser\Hydrator\RegistrationHydrator;
+use BaconUser\Hydrator\UserHydrator;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * @covers BaconUser\Hydrator\RegistrationHydrator
+ * @covers BaconUser\Hydrator\UserHydrator
  */
-class RegistrationHydratorTest extends TestCase
+class UserHydratorTest extends TestCase
 {
     public function testHydrate()
     {
@@ -26,7 +26,7 @@ class RegistrationHydratorTest extends TestCase
                         ->with($this->equalTo('foobar'))
                         ->will($this->returnValue('bazbat'));
 
-        $hydrator = new RegistrationHydrator($hashingStrategy);
+        $hydrator = new UserHydrator($hashingStrategy);
         $user     = new User();
 
         $hydrator->hydrate(

@@ -26,13 +26,13 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'space-padded-valid-input' => array(
@@ -41,21 +41,21 @@ class RegistrationFilterTest extends TestCase
                     'email'                 => ' foobar@example.com ',
                     // @todo Bug with identical validator (compares filtered against raw value)
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 array(
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'duplicate-email' => array(
                 array(
                     'username'              => 'foobar',
-                    'email'                 => 'foobar@example.com',
+                    'email'                 => 'nfoobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 null,
                 true,
@@ -67,7 +67,7 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 null,
                 true,
@@ -79,26 +79,26 @@ class RegistrationFilterTest extends TestCase
                     'username'              => 'foobar',
                     'email'                 => 'foobar@example.com',
                     'password'              => 'foobar',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'invalid-with-enabled-username' => array(
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
             ),
             'valid-with-disabled-username' => array(
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 array(
                     'email'                 => 'foobar@example.com',
                     'password'              => 'bazbat',
-                    'password_verification' => 'bazbat',
+                    'passwordVerification'  => 'bazbat',
                 ),
                 false
             ),
@@ -121,11 +121,14 @@ class RegistrationFilterTest extends TestCase
         $emailIsUnique = true,
         $usernameIsUnique = true
     ) {
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
         $filter = new RegistrationFilter(
-            $this->getMockValidator($emailIsUnique),
+            $objectRepository,
             $this->getMockValidator($usernameIsUnique),
+            $this->getMockValidator($emailIsUnique),
             new UserOptions(array(
-                'enable_username'     => $enableUsername,
+                'enable_username' => $enableUsername,
             ))
         );
 

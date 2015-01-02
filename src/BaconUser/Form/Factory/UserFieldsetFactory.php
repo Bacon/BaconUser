@@ -7,35 +7,32 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace BaconUser\Hydrator\Factory;
+namespace BaconUser\Form\Factory;
 
-use BaconUser\Form\PasswordHashingStrategy;
-use BaconUser\Hydrator\RegistrationHydrator;
+use BaconUser\Form\UserFieldset;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Service factory that instantiates {@see RegistrationHydrator}.
+ * Service factory that instantiates {@see UserFieldset}.
  */
-class RegistrationHydratorFactory implements FactoryInterface
+class UserFieldsetFactory implements FactoryInterface
 {
     /**
      * createService(): defined by FactoryInterface.
      *
      * @see    FactoryInterface::createService()
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return RegistrationHydrator
+     * @return UserFieldset
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $parentLocator = $serviceLocator->getServiceLocator();
+        $options       = $parentLocator->get('BaconUser\Options\UserOptions');
+        $hydrator      = $parentLocator->get('HydratorManager')->get('BaconUser\Hydrator\UserHydrator');
 
-        $hydrator = new RegistrationHydrator(
-            new PasswordHashingStrategy(
-                $parentLocator->get('BaconUser\Password\HandlerInterface')
-            )
-        );
+        $fieldset = new UserFieldset($hydrator, $options);
 
-        return $hydrator;
+        return $fieldset;
     }
 }
