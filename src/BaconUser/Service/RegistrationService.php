@@ -23,7 +23,7 @@ use Zend\Form\FormInterface;
 class RegistrationService
 {
     /**
-     * @var RegistrationForm
+     * @var FormInterface
      */
     protected $registrationForm;
 
